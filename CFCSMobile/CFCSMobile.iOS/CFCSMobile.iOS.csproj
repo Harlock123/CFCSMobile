@@ -153,8 +153,11 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\CFCSMobile\CFCSMobile.csproj">
-      <Project>{FB4D90E5-3BAB-4BFF-BAE1-5372A5213745}</Project>
+      <Project>{C0C4EA36-6333-4F3F-A40F-2225D5DABCF4}</Project>
       <Name>CFCSMobile</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CFCSMainLogo.png" />
   </ItemGroup>
 </Project>

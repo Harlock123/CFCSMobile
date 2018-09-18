@@ -83,6 +83,11 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\drawable\CFCSMainLogo.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\CFCSMainLogo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\CFCSMainLogo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\CFCSMainLogo.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\CFCSMainLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -93,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CFCSMobile\CFCSMobile.csproj">
-      <Project>{FB4D90E5-3BAB-4BFF-BAE1-5372A5213745}</Project>
+      <Project>{C0C4EA36-6333-4F3F-A40F-2225D5DABCF4}</Project>
       <Name>CFCSMobile</Name>
     </ProjectReference>
   </ItemGroup>

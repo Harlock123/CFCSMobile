@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CFCSMobile"
@@ -18,7 +18,7 @@
         
         <Button Grid.Row="4" Clicked="Button_Clicked" Text="Test" BackgroundColor="Beige" BorderRadius="5"></Button>
 
-        <Entry  Grid.Row =" 3" x:Name="txtEntry" Text="ChangeMe123" ></Entry>
+        <Entry  Grid.Row =" 3" x:Name="txtEntry" Text="ChangeMe123" IsPassword="true" ></Entry>
         
         <Label Grid.Row="2" x:Name="lblOUT" ClassId="lblOUT" Text="TheHashGoesHere" Font="Small"/>
 
