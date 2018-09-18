@@ -4,11 +4,29 @@
              xmlns:local="clr-namespace:CFCSMobile"
              x:Class="CFCSMobile.MainPage">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="1" Text="A Test of the Crypto Diddy"></Label>
+        
+        <Button Grid.Row="4" Clicked="Button_Clicked" Text="Test" BackgroundColor="Beige" BorderRadius="5"></Button>
+
+        <Entry  Grid.Row =" 3" x:Name="txtEntry" Text="ChangeMe123" ></Entry>
+        
+        <Label Grid.Row="2" x:Name="lblOUT" ClassId="lblOUT" Text="TheHashGoesHere" Font="Small"/>
+
+
+
+
+    </Grid>
+    
+
 
 </ContentPage>
