@@ -14,12 +14,12 @@ namespace CFCSMobile
 	{
 		public Login ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

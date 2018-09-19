@@ -7,11 +7,22 @@ namespace CFCSMobile
 {
     public partial class App : Application
     {
+        public Boolean isLoggedIn = false;
+
         public App()
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            if (!isLoggedIn)
+            {
+                MainPage = new Login();
+            }
+            else
+            {
+                MainPage = new MainPage();
+            }
+
+            //MainPage = new MainPage();
         }
 
         protected override void OnStart()
