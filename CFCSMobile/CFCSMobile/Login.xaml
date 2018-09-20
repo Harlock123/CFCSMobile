@@ -5,7 +5,15 @@
              BackgroundColor="Beige"
              >
     <ContentPage.Content>
-        <Grid Padding="5">
+        <Grid>
+            
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,20,0,0" />
+                    <!--<On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />-->
+                </OnPlatform>
+            </Grid.Margin>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
