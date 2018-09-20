@@ -25,6 +25,20 @@ namespace CFCSMobileWebServices.Controllers
             return Json(InternalGetLoginDetails("lwatson"));
         }
 
+        [Route("api/Login/DoLogin/{uname}/{pw}")]
+        [HttpGet]
+        public JsonResult<LoginResult>DoLogin(string uname, string pw)
+        {
+            bool res = DBLocked();
+
+            LoginResult result = new LoginResult();
+
+            result.Address1 = pw;
+            result.UserName = uname;
+            
+            return Json(result);
+        }
+
         // GET: api/Login/5
         //public string Get(int id)
         //{
@@ -986,7 +1000,19 @@ namespace CFCSMobileWebServices.Controllers
         public string other = "";
     }
 
-
+    public class LoginResult
+    {
+        public bool Success = false;
+        public string UserName = "";
+        public string FirstName = "";
+        public string LastName = "";
+        public string Address1 = "";
+        public string Address2 = "";
+        public string City = "";
+        public string State = "";
+        public string ZipCode = "";
+    }
+    
     public class UserLogins
     {
         public string ContactNum = "";
