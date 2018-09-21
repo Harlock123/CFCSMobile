@@ -30,12 +30,28 @@ namespace CFCSMobileWebServices.Controllers
         public JsonResult<LoginResult>DoLogin(string uname, string pw)
         {
             bool res = DBLocked();
+                      
 
             LoginResult result = new LoginResult();
 
-            result.Address1 = pw;
-            result.UserName = uname;
-            
+            result.Success = false;
+
+            if (USERAuthorized(uname, pw))
+            {
+                UserLogins log = InternalGetLoginDetails(uname);
+
+                result.Address1 = log.Address1;
+                result.Address2 = log.Address2;
+                result.City = log.City;
+                result.FirstName = log.FirstName;
+                result.LastName = log.LastName;
+                result.State = log.State;
+                result.Success = true;
+                result.UserName = uname;
+                result.ZipCode = log.ZipCode;
+
+            }
+
             return Json(result);
         }
 
@@ -58,6 +74,45 @@ namespace CFCSMobileWebServices.Controllers
         // DELETE: api/Login/5
         public void Delete(int id)
         {
+        }
+
+        private bool USERAuthorized(string uname, string encryptedpw)
+        {
+            bool result = false;
+
+            try
+            {
+                string sql = "SELECT FIRSTNAME from TBLUSERLOGINS " +
+                    "WHERE USERNAME = @UNAME AND USERPASSWORD = @PW AND (LOGINATTEMPTS <= 3 OR LOGINATTEMPTS IS NULL) " +
+                    "AND DEACTIVE <> 'Y'"; 
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@UNAME", System.Data.SqlDbType.VarChar, 20, "USERNAME").Value = uname;
+                cmd.Parameters.Add("@PW", System.Data.SqlDbType.VarChar, 100, "USERPASSWORD").Value = encryptedpw;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    result = true; // we got a login that passes password checks and is not deactivated or locked
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                               
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
+            return result;
         }
 
         public UserLogins InternalGetLoginDetails(string Username)
