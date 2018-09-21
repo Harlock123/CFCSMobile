@@ -1,32 +1,68 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:CFCSMobile"
-             x:Class="CFCSMobile.MainPage">
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-
-        </Grid.RowDefinitions>
-
-        <Label Grid.Row="1" Text="A Test of the Crypto Diddy"></Label>
-        
-        <Button Grid.Row="4" Clicked="Button_Clicked" Text="Test" BackgroundColor="Beige" BorderRadius="5"></Button>
-
-        <Entry  Grid.Row =" 3" x:Name="txtEntry" Text="ChangeMe123" IsPassword="true" ></Entry>
-        
-        <Label Grid.Row="2" x:Name="lblOUT" ClassId="lblOUT" Text="TheHashGoesHere" Font="Small"/>
-
-
-
-
-    </Grid>
-    
-
-
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:CFCSMobile" 
+             x:Class="CFCSMobile.MainPage"
+             BackgroundColor="Beige">
+    <ScrollView>
+        <Grid>
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,20,0,0" />
+                    <!--<On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />-->
+                </OnPlatform>
+            </Grid.Margin>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <StackLayout Grid.Row="0" Orientation="Horizontal">
+            
+                <Label x:Name="lblWelcome" Text="Welcome {fname} {lname}" 
+                       VerticalOptions="Center"
+                       TextColor="Black"
+                       FontSize="Small" FontAttributes="Italic"></Label>
+                
+                <Button WidthRequest="40" HeightRequest="40" 
+                        HorizontalOptions="EndAndExpand" Text="X"
+                        Clicked="Handle_Clicked"  x:Name="btnLogout"
+                        >
+                        
+                </Button>
+                
+            </StackLayout>
+            
+            <StackLayout Orientation="Horizontal" Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        
+                    </Grid.ColumnDefinitions>
+            
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Column="0" Text="MOTD " 
+                           TextColor="DarkGray" FontAttributes="Bold"
+                           FontSize="Small" VerticalTextAlignment="Center"></Label>
+                    <Label Grid.Column="1" x:Name="txtMOTD" 
+                           Text="The Message of the day will appear here. Long messages will word wrap to accomodate the available space" 
+                           TextColor="DarkGray" FontAttributes="Italic"
+                           LineBreakMode="WordWrap"></Label>
+                </Grid>
+            </StackLayout>
+            
+            
+        </Grid>
+    </ScrollView>
 </ContentPage>

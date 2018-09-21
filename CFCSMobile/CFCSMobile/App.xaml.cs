@@ -13,6 +13,17 @@ namespace CFCSMobile
         {
             InitializeComponent();
 
+            // http://30.68.44.146:53557/api
+
+            if (Application.Current.Properties.ContainsKey("BASEURL"))
+            {
+                Application.Current.Properties["BASEURL"] = "http://30.68.44.146:53557/api";
+            }
+            else
+            {
+                Application.Current.Properties.Add("BASEURL", "http://30.68.44.146:53557/api");
+            }
+
             if (!isLoggedIn)
             {
                 MainPage = new Login();
@@ -33,6 +44,8 @@ namespace CFCSMobile
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+
+            isLoggedIn = false;
         }
 
         protected override void OnResume()
