@@ -14,22 +14,22 @@ namespace CFCSMobile
         {
             InitializeComponent();
 
-            
+            if (Application.Current.Properties.ContainsKey("LOGGEDIN"))
+            {
+                lblWelcome.Text = "Welcome " + (string)Application.Current.Properties["FIRSTNAME"] + " " + (string)Application.Current.Properties["LASTNAME"];
+            }
+            else
+            {
+                Application.Current.MainPage = new Login();
+            }
 
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+
+        void Handle_Clicked(object sender, System.EventArgs e)
         {
-            byte[] hash;
-
-            SHA256Managed alg = new SHA256Managed();
-
-            hash = alg.ComputeHash(System.Text.Encoding.UTF8.GetBytes(txtEntry.Text));
-
-            lblOUT.Text = Convert.ToBase64String(hash);
-
-
-
+            Application.Current.Properties.Clear();
+            Application.Current.MainPage = new Login();
         }
     }
 }

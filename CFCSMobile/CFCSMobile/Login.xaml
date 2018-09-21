@@ -1,55 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CFCSMobile.Login"
              BackgroundColor="Beige"
              >
     <ContentPage.Content>
-        <Grid>
-            
-            <Grid.Margin>
-                <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="0,20,0,0" />
-                    <!--<On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />-->
-                </OnPlatform>
-            </Grid.Margin>
-            
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <Grid.RowDefinitions>
+        <ScrollView>
+            <Grid>
                 
-                <RowDefinition Height="Auto"  />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <Grid.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0,20,0,0" />
+                        <!--<On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />-->
+                    </OnPlatform>
+                </Grid.Margin>
                 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    
+                    <RowDefinition Height="Auto"  />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    
 
-            </Grid.RowDefinitions>
-        
-            <Image Source="CFCSMainLogo.png" Grid.Row="0" 
-                   VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="150"/>
+                </Grid.RowDefinitions>
             
-            <StackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Start">
-                <Entry x:Name="txtUserName" Placeholder="User Name Goes Here" PlaceholderColor="Gray" BackgroundColor="White" />
-                <Label TextColor="Black" Text="User Name" FontSize="Medium" HorizontalTextAlignment="Center" />
-            </StackLayout>
+                <Image Source="CFCSMainLogo.png" Grid.Row="0" 
+                       VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="150"/>
+                
+                <StackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Start">
+                    <Entry x:Name="txtUserName" Placeholder="User Name Goes Here" PlaceholderColor="Gray" BackgroundColor="White" />
+                    <Label TextColor="Black" Text="User Name" FontSize="Medium" HorizontalTextAlignment="Center" />
+                </StackLayout>
 
-            <StackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Start">
-                <Entry x:Name="txtPassword" Placeholder="User Password Here" PlaceholderColor="Gray" BackgroundColor="White"
-                       IsPassword="True"/>
-                <Label TextColor="Black" Text="Password" FontSize="Medium" HorizontalTextAlignment="Center" />
-            </StackLayout>
+                <StackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Start">
+                    <Entry x:Name="txtPassword" Placeholder="User Password Here" PlaceholderColor="Gray" BackgroundColor="White"
+                           IsPassword="True"/>
+                    <Label TextColor="Black" Text="Password" FontSize="Medium" HorizontalTextAlignment="Center" />
+                </StackLayout>
 
-            <Button x:Name="btnLogin" BackgroundColor="LightBlue" 
-                    Text="Login" HorizontalOptions="Center" 
-                    WidthRequest="150" BorderRadius="20"
-                    TextColor="Black"
-                    Clicked="Button_Clicked"
-                    Grid.Row="3"></Button>
+                <Button x:Name="btnLogin" BackgroundColor="LightBlue" 
+                        Text="Login" HorizontalOptions="Center" 
+                        WidthRequest="150" BorderRadius="20"
+                        TextColor="Black"
+                        Clicked="Button_Clicked"
+                        Grid.Row="3"></Button>
 
-        </Grid>
+            </Grid>
+        </ScrollView>
             
     </ContentPage.Content>
 </ContentPage>
