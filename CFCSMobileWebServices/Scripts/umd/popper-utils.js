@@ -1,10 +1,6 @@
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
-<<<<<<< Updated upstream
- * @version 1.14.0
-=======
  * @version 1.14.3
->>>>>>> Stashed changes
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -97,42 +93,6 @@ function getScrollParent(element) {
   return getScrollParent(getParentNode(element));
 }
 
-<<<<<<< Updated upstream
-/**
- * Tells if you are running Internet Explorer
- * @method
- * @memberof Popper.Utils
- * @argument {number} version to check
- * @returns {Boolean} isIE
- */
-var cache = {};
-
-var isIE = function () {
-  var version = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
-
-  version = version.toString();
-  if (cache.hasOwnProperty(version)) {
-    return cache[version];
-  }
-  switch (version) {
-    case '11':
-      cache[version] = navigator.userAgent.indexOf('Trident') !== -1;
-      break;
-    case '10':
-      cache[version] = navigator.appVersion.indexOf('MSIE 10') !== -1;
-      break;
-    case 'all':
-      cache[version] = navigator.userAgent.indexOf('Trident') !== -1 || navigator.userAgent.indexOf('MSIE') !== -1;
-      break;
-  }
-
-  //Set IE
-  cache.all = cache.all || Object.keys(cache).some(function (key) {
-    return cache[key];
-  });
-  return cache[version];
-};
-=======
 var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 
 var isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
@@ -154,7 +114,6 @@ function isIE(version) {
   }
   return isIE11 || isIE10;
 }
->>>>>>> Stashed changes
 
 /**
  * Returns the offset parent of the given element
@@ -663,10 +622,6 @@ function computeAutoPlacement(placement, refRect, popper, reference, boundariesE
   return computedPlacement + (variation ? '-' + variation : '');
 }
 
-<<<<<<< Updated upstream
-var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
-=======
->>>>>>> Stashed changes
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
