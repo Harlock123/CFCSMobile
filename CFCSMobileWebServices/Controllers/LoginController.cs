@@ -25,6 +25,21 @@ namespace CFCSMobileWebServices.Controllers
             return Json(InternalGetLoginDetails("lwatson"));
         }
 
+        [Route("api/Login/MOTD/{uname}")]
+        [HttpGet]
+        public JsonResult<string> MOTD(string uname)
+        {
+
+            string result = "This Message of the day was retrieved directly from the server " +
+                "and illustrates a convienient method for getting the word out to the Mobile " +
+                "user community supported by the CFCS System. These may be targeted to specific " +
+                "users or roles of users";
+
+            return Json(result);
+
+        }
+
+
         [Route("api/Login/DoLogin/{uname}/{pw}")]
         [HttpGet]
         public JsonResult<LoginResult>DoLogin(string uname, string pw)
