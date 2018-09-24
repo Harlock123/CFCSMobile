@@ -13,15 +13,16 @@ namespace CFCSMobile
         {
             InitializeComponent();
 
-            // http://30.68.44.146:53557/api
+            // http://192.168.12.48/CFCSMobileWebServices/api // MSI Big Boy
+            // http://30.68.44.146:53557/api  // MAC
 
             if (Application.Current.Properties.ContainsKey("BASEURL"))
             {
-                Application.Current.Properties["BASEURL"] = "http://30.68.44.146:53557/api";
+                Application.Current.Properties["BASEURL"] = "http://192.168.12.48/CFCSMobileWebServices/api";
             }
             else
             {
-                Application.Current.Properties.Add("BASEURL", "http://30.68.44.146:53557/api");
+                Application.Current.Properties.Add("BASEURL", "http://192.168.12.48/CFCSMobileWebServices/api");
             }
 
             if (!isLoggedIn)
