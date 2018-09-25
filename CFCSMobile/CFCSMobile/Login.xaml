@@ -28,10 +28,13 @@
                     
 
                 </Grid.RowDefinitions>
-            
-                <Image Source="CFCSMainLogo.png" Grid.Row="0" 
-                       VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="150"/>
-                
+
+                <Image Grid.Row="0" VerticalOptions="Start" 
+                       HorizontalOptions="Center" HeightRequest="150"
+                       Source="{OnPlatform Default='CFCSMainLogo.png',UWP='Assets/CFCSMainLogo.png'}">
+               
+                </Image>
+
                 <StackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Start">
                     <Entry x:Name="txtUserName" Placeholder="User Name Goes Here" PlaceholderColor="Gray" BackgroundColor="White" />
                     <Label TextColor="Black" Text="User Name" FontSize="Medium" HorizontalTextAlignment="Center" />
