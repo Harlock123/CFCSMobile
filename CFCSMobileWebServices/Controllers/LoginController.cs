@@ -580,6 +580,80 @@ namespace CFCSMobileWebServices.Controllers
             return locked;
         }
 
+        [Route("api/Login/GetCaseLoad/{userName}")]
+        [HttpGet]
+        public JsonResult<List<MemberDetailsShort>> GetCurrentCaseLoad(string userName)
+        {
+            List<MemberDetailsShort> members = new List<MemberDetailsShort>();
+            try
+            {
+                //string sql = "SELECT top 1000 MIN(MMID) as 'MMID',FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                //sql += "FROM tblMemberMain MM ";
+                //sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.SSN = MM.SSN ";
+                //sql += "LEFT OUTER JOIN tblMemberObservers OB ON OB.moSSN = MM.SSN ";
+                //sql += "WHERE AUS.CASEMANAGER = @CM ";
+                //sql += " AND OB.moCASEMANAGER = @CM ";
+                //sql += " AND (STARTDATE <= GETDATE() AND ENDDATE >= DATEADD(DAY,-1,GETDATE())) ";
+                //sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                //sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
+
+                //04292013 - per client show where staff is observer since staff is not linked to auths on import
+                //will revert later
+                string sql = "SELECT top 1000 MIN(MMID) as 'MMID',FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                sql += "FROM tblMemberMain MM ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.SSN = MM.SSN ";
+                sql += "LEFT OUTER JOIN tblMemberObservers OB ON OB.moSSN = MM.SSN ";
+                sql += "WHERE OB.moCASEMANAGER = @CM AND (OB.moEDATE IS NULL OR OB.moEDATE >= GETDATE()) ";
+                sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                //cmd.Parameters.Add("@CM", SqlDbType.VarChar).Value = HttpContext.Current.Session["UserName"].ToString();
+                cmd.Parameters.Add("@CM", SqlDbType.VarChar).Value = userName;
+
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    MemberDetailsShort mem = new MemberDetailsShort();
+                    if (r["MMID"] != DBNull.Value)
+                    {
+                        mem.MMID = Convert.ToInt64(r["MMID"]);
+                    }
+                    mem.FirstName = r["FIRSTNAME"].ToString() + "";
+                    mem.LastName = r["LASTNAME"].ToString() + "";
+                    mem.MiddleName = r["MIDDLENAME"].ToString() + "";
+                    if (r["DOB"] != DBNull.Value)
+                    {
+                        mem.DOB = r.GetDateTime(r.GetOrdinal("DOB")).ToShortDateString();
+                    }
+                    mem.Gender = r["GENDER"].ToString() + "";
+                    mem.Ethnicity = r["ETHNICITY"].ToString() + "";
+                    mem.Race = r["RACE"].ToString() + "";
+                    mem.SSN = r["SSN"].ToString() + "";
+
+                    members.Add(mem);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetCurrentCaseLoad", ex.Message);
+            }
+            return Json(members);
+
+        }
+
+
         private List<CodedDescriptor> GetListOfHierarchyFor(string UserName)
         {
             List<CodedDescriptor> result = new List<CodedDescriptor>();
@@ -1198,5 +1272,84 @@ namespace CFCSMobileWebServices.Controllers
 
 
         //public IHtmlString ToJson = JsonHelpers.ToJson<UserLogins>((object) this);
+    }
+
+    public class MemberDetailsShort
+    {
+        public string CaseManager = "";
+        public string CreatedBy = "";
+        public DateTime CreatedDate = Convert.ToDateTime(null);
+        public string CurrentCaseManager = "";
+        public string DOB;
+        public string Email = "";
+        public string Ethnicity = "";
+        public string FirstName = "";
+        public string Gender = "";
+        public string LastActiveStatus = "";
+        public string LastName = "";
+        public MemberAddress memberAddress;
+        public List<MemberAddress> memberAddressHistory;
+        //public List<ihsisMemberAdmissionEntry> MemberAdmissions;
+        //public List<ihsisMemberAlert> MemberAlerts;
+        //public List<AuthorizedService> memberAuths;
+        //public List<objtblMemberCommunitySupports> MemberCommunitySupports;
+        //public List<ihsisMEMBERCONTACTINFO> MemberContactList;
+        //public List<IhsisMemberContactEntry> MemberContacts;
+        //public List<ihsisMemberDMEProvider> MemberDMEProviders;
+        //public List<ihsisMemberEligibilityEntry> MemberEligibilityList;
+        //public List<MemberOtherSystemIDs> MemberOtherSystemIDs;
+        //public List<ihsisGroupInformation> MemberGroups;
+        //public List<ihsisImmunizationScreen> MemberImmunizations;
+        //public List<ihsisMemberLabs> MemberLabs;
+        //public List<IhsisMemberLanguageEntry> MemberLanguages;
+        //public List<ihsisMemberMeds> MemberMeds;
+        //public List<ihsisOtherSystemIDs> MemberOtherSystems;
+        //public List<ihsisMemberProgramMembershipEntry> MemberPrograms;
+        //public List<ProviderDesignation> memberProviders;
+        //public List<ihsisROI> MemberROIs;
+        //public List<ihsisBPRSGAFBundle> MemberScores;
+        //public List<ihsisMemberProvider> MemberServiceProviders;
+        //public List<MemberServices> MemberServices;
+        //public List<MemberRelationship> MemberSupports;
+        //public List<MemberTherapies> MemberTherapies;
+        //public List<ihsisMEMBERWATCHLISTENTRY> MemberWatchList;
+        public string MiddleName = "";
+        public Int64 MMID = 0;
+        public string ParentGuardian = "";
+        public string ParentGuardPhone = "";
+        public string Phone1 = "";
+        public string Phone1Ext = "";
+        public string Phone1Type = "";
+        public string Phone2 = "";
+        public string Phone2Ext = "";
+        public string Phone2Type = "";
+        public string Race = "";
+        public string SSN = "";
+        public string UpdatedBy = "";
+        public DateTime UpdatedDate = Convert.ToDateTime(null);
+        public DateTime LocationDate = Convert.ToDateTime(null);
+        public string MEMBERSTATUS = "";
+        public long MEMBERADDRESSHISTORYID = 0;
+        public long MEMBERADDRESSID = 0;
+        
+    }
+
+    public class MemberAddress
+    {
+        public string Address1 = "";
+        public string Address2 = "";
+        public string Address3 = "";
+        public string AddressType = "";
+        public string ApartmentSuite = "";
+        public string City = "";
+        public string County = "";
+        public string CreateBy = "";
+        public DateTime CreateDate;
+        public Int64 MAID = 0;
+        public string SSN = "";
+        public string State = "";
+        public DateTime UpdateDate;
+        public string UpdatedBy = "";
+        public string ZipCode = "";
     }
 }
