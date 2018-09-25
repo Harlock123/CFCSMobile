@@ -54,7 +54,32 @@ namespace CFCSMobile
 
             var theresult = JsonConvert.DeserializeObject<string>(response);
 
-            txtMOTD.Text = theresult;
+            if (theresult != "")
+            {
+                btnMOTD.IsVisible = true;
+
+                if (Application.Current.Properties.ContainsKey("MOTD"))
+                {
+                    Application.Current.Properties["MOTD"] = theresult;
+                }
+                else
+                {
+                    Application.Current.Properties.Add("MOTD", theresult);
+                }
+
+            }
+            else
+            {
+                btnMOTD.IsVisible = false;
+
+                if (Application.Current.Properties.ContainsKey("MOTD"))
+                {
+                    Application.Current.Properties["MOTD"] = "";
+                }
+                
+            }
+
+            //txtMOTD.Text = theresult;
 
         }
 
@@ -62,6 +87,18 @@ namespace CFCSMobile
         {
             Application.Current.Properties.Clear();
             Application.Current.MainPage = new Login();
+        }
+
+        void Handle_MOTDClicked(object sender, System.EventArgs e)
+        {
+            string motd = "";
+
+            if (Application.Current.Properties.ContainsKey("MOTD"))
+            {
+                motd = Application.Current.Properties["MOTD"] as string;
+            }
+
+            DisplayAlert("Message of the day", motd, "OK");
         }
     }
 }

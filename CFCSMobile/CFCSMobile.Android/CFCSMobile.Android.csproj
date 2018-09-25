@@ -89,12 +89,17 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\CFCSMainLogo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\CFCSMainLogo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\systemlogout.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CFCSMobile\CFCSMobile.csproj">
       <Project>{C0C4EA36-6333-4F3F-A40F-2225D5DABCF4}</Project>
       <Name>CFCSMobile</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\mailmessagenew.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

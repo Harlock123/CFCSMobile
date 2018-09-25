@@ -30,14 +30,23 @@
                        VerticalOptions="Center"
                        TextColor="Black"
                        FontSize="Small" FontAttributes="Italic"></Label>
-                
-                <Button WidthRequest="40" HeightRequest="40" 
-                        HorizontalOptions="EndAndExpand" Text="X"
-                        Clicked="Handle_Clicked"  x:Name="btnLogout"
-                        >
-                        
-                </Button>
-                
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                    <Button WidthRequest="40" HeightRequest="40" 
+                            HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                            Image="{x:OnPlatform Default='mail-message-new.png',Android='mailmessagenew.png', UWP='Assets/mail-message-new.png'}"
+                            Clicked="Handle_MOTDClicked"  x:Name="btnMOTD" IsVisible="False" >
+                    </Button>
+
+                    <Button WidthRequest="40" HeightRequest="40" 
+                            HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                            Image="{x:OnPlatform Default='system-log-out.png',Android='systemlogout.png', UWP='Assets/system-log-out.png'}"
+                            Clicked="Handle_Clicked"  x:Name="btnLogout" >
+
+                    </Button>
+                </StackLayout>
+
+
             </StackLayout>
             
             <StackLayout Orientation="Horizontal" Grid.Row="1">
@@ -52,13 +61,13 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     
-                    <Label Grid.Column="0" Text="MOTD " 
+                    <!--<Label Grid.Column="0" Text="MOTD " 
                            TextColor="DarkGray" FontAttributes="Bold"
                            FontSize="Small" VerticalTextAlignment="Center"></Label>
                     <Label Grid.Column="1" x:Name="txtMOTD" 
                            Text="The Message of the day will appear here. Long messages will word wrap to accomodate the available space" 
                            TextColor="DarkGray" FontAttributes="Italic"
-                           LineBreakMode="WordWrap"></Label>
+                           LineBreakMode="WordWrap"></Label>-->
                 </Grid>
             </StackLayout>
             

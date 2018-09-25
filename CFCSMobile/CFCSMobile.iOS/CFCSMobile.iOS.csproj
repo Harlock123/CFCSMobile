@@ -160,4 +160,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\CFCSMainLogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\system-log-out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mail-message-new.png" />
+  </ItemGroup>
 </Project>
