@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:local="clr-namespace:CFCSMobile.Controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    HorizontalOptions="FillAndExpand"
+    x:Class="CFCSMobile.Controls.MemberPlacard">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="50"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Button x:Name="PicButton" Text="{Binding Gender}" Grid.Row="0" Grid.Column="0" 
+            WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"
+            FontSize="Micro" BackgroundColor="Green" TextColor="White"
+            BorderRadius="10"/>
+    <Image Grid.Column="0" Grid.RowSpan="2" />
+    <Label x:Name="MemberFN" TextColor="Silver"
+           FontAttributes="Bold"
+           FontSize="16"
+           Grid.Row="0" Grid.Column="1"
+           Text="{Binding FirstName}"/>
+    <Label x:Name="MemberLN" TextColor="Silver"
+           FontAttributes="Bold"
+           FontSize="16"
+           Grid.Row="1" Grid.Column="1"
+           Text="{Binding LastName}"/>
+
+</Grid>

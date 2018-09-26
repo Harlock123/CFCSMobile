@@ -51,10 +51,10 @@ namespace CFCSMobile
             }
             else
             {
-                Application.Current.Properties.Add("BASEURL", "http://192.168.1.250/CFCSMobileWebServices/api");
+                Application.Current.Properties.Add("BASEURL", "http://192.168.12.48/CFCSMobileWebServices/api");
 
                 URL = Application.Current.Properties["BASEURL"] as string;
-                //URL = "http://192.168.1.250/CFCSMobileWebServices/api";  // just in case
+                //URL = "http://192.168.12.48/CFCSMobileWebServices/api";  // just in case
             }
 
             URL += "/Login/DoLogin/" + u + "/" + p;
