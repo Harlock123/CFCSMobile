@@ -632,7 +632,24 @@ namespace CFCSMobileWebServices.Controllers
                     {
                         mem.DOB = r.GetDateTime(r.GetOrdinal("DOB")).ToShortDateString();
                     }
-                    mem.Gender = r["GENDER"].ToString() + "";
+
+                    if ((r["GENDER"].ToString() + "") == "1" )
+                    {
+                        mem.Gender = "M";
+                    }
+                    else
+                    {
+                        if ((r["GENDER"].ToString() + "") == "2")
+                        {
+                            mem.Gender = "F";
+                        }
+                        else
+                        {
+                            mem.Gender = "U";
+                        }
+                    }
+
+                    //mem.Gender = r["GENDER"].ToString() + "";
                     mem.Ethnicity = r["ETHNICITY"].ToString() + "";
                     mem.Race = r["RACE"].ToString() + "";
                     mem.SSN = r["SSN"].ToString() + "";
@@ -652,8 +669,7 @@ namespace CFCSMobileWebServices.Controllers
             return Json(members);
 
         }
-
-
+        
         private List<CodedDescriptor> GetListOfHierarchyFor(string UserName)
         {
             List<CodedDescriptor> result = new List<CodedDescriptor>();
