@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CFCSMobile
 {
-    class MemberDetailsShort
+    public class MemberDetailsShort
     {
         public string CaseManager { get; set; }
         public string CreatedBy { get; set; }

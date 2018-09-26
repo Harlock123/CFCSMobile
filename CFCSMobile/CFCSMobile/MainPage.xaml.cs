@@ -21,11 +21,48 @@ namespace CFCSMobile
                 lblWelcome.Text = "Welcome " + (string)Application.Current.Properties["FIRSTNAME"] + " " + (string)Application.Current.Properties["LASTNAME"];
 
                 GetMOTD();
+                GetMyCaseLoad();
             }
             else
             {
                 Application.Current.MainPage = new Login();
             }
+
+        }
+
+        async void GetMyCaseLoad()
+        {
+            string URL = "";
+            string u = "";
+
+            if (Application.Current.Properties.ContainsKey("BASEURL"))
+            {
+                URL = Application.Current.Properties["BASEURL"] as string;
+                u = Application.Current.Properties["USERNAME"] as string;
+            }
+            else
+            {
+                URL = "http://30.68.44.146:53557/api";  // just in case
+            }
+
+            URL += "/Login/GetCaseLoad/" + u;
+
+            HttpClient c = new HttpClient();
+
+            var response = await c.GetStringAsync(URL);
+
+            var theresult = JsonConvert.DeserializeObject<List<MemberDetailsShort>>(response);
+
+            foreach (MemberDetailsShort s in theresult)
+            {
+                Controls.MemberPlacard m = new Controls.MemberPlacard(s.FirstName,s.LastName,s);
+
+
+                lstMyCaseLoad.Children.Add(m);
+
+            }
+
+            //lvMYCASELOAD.ItemsSource = theresult;
 
         }
 

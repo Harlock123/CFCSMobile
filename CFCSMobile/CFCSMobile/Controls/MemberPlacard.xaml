@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Grid xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:local="clr-namespace:CFCSMobile.Controls"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -17,12 +17,12 @@
             FontSize="Micro" BackgroundColor="Green" TextColor="White"
             BorderRadius="10"/>
     <Image Grid.Column="0" Grid.RowSpan="2" />
-    <Label x:Name="MemberFN" TextColor="Silver"
-           FontAttributes="Bold"
+    <Label x:Name="MemberFN" TextColor="Black"
+           FontAttributes="Bold" 
            FontSize="16"
            Grid.Row="0" Grid.Column="1"
            Text="{Binding FirstName}"/>
-    <Label x:Name="MemberLN" TextColor="Silver"
+    <Label x:Name="MemberLN" TextColor="Black"
            FontAttributes="Bold"
            FontSize="16"
            Grid.Row="1" Grid.Column="1"

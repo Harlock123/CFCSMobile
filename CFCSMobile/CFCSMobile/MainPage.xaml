@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:local="clr-namespace:CFCSMobile" 
+             xmlns:controls="clr-namespace:CFCSMobile.Controls"
              x:Class="CFCSMobile.MainPage"
              BackgroundColor="Beige">
-    <ScrollView>
+    
         <Grid>
             <Grid.Margin>
                 <OnPlatform x:TypeArguments="Thickness">
@@ -35,7 +36,7 @@
                     <Button WidthRequest="40" HeightRequest="40" 
                             HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
                             Image="{x:OnPlatform Default='mail-message-new.png',Android='mailmessagenew.png', UWP='Assets/mail-message-new.png'}"
-                            Clicked="Handle_MOTDClicked"  x:Name="btnMOTD" IsVisible="False" >
+                            Clicked="Handle_MOTDClicked"  x:Name="btnMOTD" IsVisible="True" >
                     </Button>
 
                     <Button WidthRequest="40" HeightRequest="40" 
@@ -49,29 +50,12 @@
 
             </StackLayout>
             
-            <StackLayout Orientation="Horizontal" Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        
-                    </Grid.ColumnDefinitions>
-            
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    
-                    <!--<Label Grid.Column="0" Text="MOTD " 
-                           TextColor="DarkGray" FontAttributes="Bold"
-                           FontSize="Small" VerticalTextAlignment="Center"></Label>
-                    <Label Grid.Column="1" x:Name="txtMOTD" 
-                           Text="The Message of the day will appear here. Long messages will word wrap to accomodate the available space" 
-                           TextColor="DarkGray" FontAttributes="Italic"
-                           LineBreakMode="WordWrap"></Label>-->
-                </Grid>
-            </StackLayout>
+        <ScrollView Grid.Row="1" x:Name="svMYCASELOAD" Orientation="Vertical">
+            <StackLayout x:Name="lstMyCaseLoad" Orientation="Vertical"></StackLayout>
+        </ScrollView>
+        
             
             
         </Grid>
-    </ScrollView>
+    
 </ContentPage>
