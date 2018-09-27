@@ -25,6 +25,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     
 
                 </Grid.RowDefinitions>
@@ -52,6 +53,8 @@
                         TextColor="Black"
                         Clicked="Button_Clicked"
                         Grid.Row="3"></Button>
+                
+                <ActivityIndicator x:Name="ActWorking" HorizontalOptions="Center" Grid.Row="4" IsVisible="False" IsRunning="False" />
 
             </Grid>
         </ScrollView>

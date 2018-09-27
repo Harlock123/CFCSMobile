@@ -44,7 +44,7 @@ namespace CFCSMobile
         {
 
             string URL = "";
-
+                        
             if (Application.Current.Properties.ContainsKey("BASEURL"))
             {
                 URL = Application.Current.Properties["BASEURL"] as string;
@@ -62,12 +62,17 @@ namespace CFCSMobile
 
             try
             {
+                ActWorking.IsVisible = true;
+                ActWorking.IsRunning = true;
 
                 HttpClient c = new HttpClient();
 
                 var response = await c.GetStringAsync(URL);
 
                 var theresult = JsonConvert.DeserializeObject<PersonLoggedIn>(response);
+
+                ActWorking.IsVisible = false;
+                ActWorking.IsRunning = false;
 
                 if (theresult.Success)
                 {
@@ -116,12 +121,18 @@ namespace CFCSMobile
                     txtPassword.Text = "";
                     txtUserName.Text = "";
 
+                    ActWorking.IsVisible = false;
+                    ActWorking.IsRunning = false;
+
                 }
             }
             catch (Exception ex)
             {
                 txtPassword.Text = "";
                 txtUserName.Text = "";
+
+                ActWorking.IsVisible = false;
+                ActWorking.IsRunning = false;
             }
 
         }
