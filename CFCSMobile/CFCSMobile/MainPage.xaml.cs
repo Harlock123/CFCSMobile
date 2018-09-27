@@ -16,9 +16,9 @@ namespace CFCSMobile
         {
             InitializeComponent();
 
-            if (Application.Current.Properties.ContainsKey("LOGGEDIN"))
+            if (Settings.LOGGEDIN)
             {
-                lblWelcome.Text = "Welcome " + (string)Application.Current.Properties["FIRSTNAME"] + " " + (string)Application.Current.Properties["LASTNAME"];
+                lblWelcome.Text = "Welcome " + Settings.FIRSTNAME + " " + Settings.LASTNAME;
 
                 GetMOTD();
                 GetMyCaseLoad();
@@ -32,19 +32,10 @@ namespace CFCSMobile
 
         async void GetMyCaseLoad()
         {
-            string URL = CFCSMobile.Settings.BASEURL;//"";
-            string u = "";
+            string URL = Settings.BASEURL;//"";
+            string u = Settings.USERNAME;
 
-            //if (Application.Current.Properties.ContainsKey("BASEURL"))
-            //{
-            //    URL = Application.Current.Properties["BASEURL"] as string;
-            //    u = Application.Current.Properties["USERNAME"] as string;
-            //}
-            //else
-            //{
-            //    URL = "http://30.68.44.146:53557/api";  // just in case
-            //}
-
+           
             URL += "/Login/GetCaseLoad/" + u;
 
             HttpClient c = new HttpClient();
@@ -69,18 +60,9 @@ namespace CFCSMobile
         async void GetMOTD()
         {
 
-            string URL = CFCSMobile.Settings.BASEURL; // "";
-            string u = "";
+            string URL = Settings.BASEURL; // "";
+            string u = Settings.USERNAME;
 
-            //if (Application.Current.Properties.ContainsKey("BASEURL"))
-            //{
-            //    URL = Application.Current.Properties["BASEURL"] as string;
-            //    u = Application.Current.Properties["USERNAME"] as string;
-            //}
-            //else
-            //{
-            //    URL = "http://30.68.44.146:53557/api";  // just in case
-            //}
 
             URL += "/Login/MOTD/" + u;
 
@@ -95,25 +77,13 @@ namespace CFCSMobile
             {
                 btnMOTD.IsVisible = true;
 
-                if (Application.Current.Properties.ContainsKey("MOTD"))
-                {
-                    Application.Current.Properties["MOTD"] = theresult;
-                }
-                else
-                {
-                    Application.Current.Properties.Add("MOTD", theresult);
-                }
-
+                Settings.MOTD = theresult;
             }
             else
             {
                 btnMOTD.IsVisible = false;
 
-                if (Application.Current.Properties.ContainsKey("MOTD"))
-                {
-                    Application.Current.Properties["MOTD"] = "";
-                }
-                
+                Settings.MOTD = "";
             }
 
             //txtMOTD.Text = theresult;
@@ -128,14 +98,7 @@ namespace CFCSMobile
 
         void Handle_MOTDClicked(object sender, System.EventArgs e)
         {
-            string motd = "";
-
-            if (Application.Current.Properties.ContainsKey("MOTD"))
-            {
-                motd = Application.Current.Properties["MOTD"] as string;
-            }
-
-            DisplayAlert("Message of the day", motd, "OK");
+            DisplayAlert("Message of the day", Settings.MOTD, "OK");
         }
     }
 }

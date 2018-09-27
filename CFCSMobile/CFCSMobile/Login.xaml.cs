@@ -44,21 +44,8 @@ namespace CFCSMobile
         {
 
             string URL = CFCSMobile.Settings.BASEURL; //"";
-                        
-            //if (Application.Current.Properties.ContainsKey("BASEURL"))
-            //{
-            //    URL = Application.Current.Properties["BASEURL"] as string;
-            //}
-            //else
-            //{
-            //    Application.Current.Properties.Add("BASEURL", "http://192.168.12.48/CFCSMobileWebServices/api");
-
-            //    URL = Application.Current.Properties["BASEURL"] as string;
-            //    //URL = "http://192.168.12.48/CFCSMobileWebServices/api";  // just in case
-            //}
-
+           
             URL += "/Login/DoLogin/" + u + "/" + p;
-
 
             try
             {
@@ -77,41 +64,10 @@ namespace CFCSMobile
                 if (theresult.Success)
                 {
 
-                    if (Application.Current.Properties.ContainsKey("USERNAME"))
-                    {
-                        Application.Current.Properties["USERNAME"] = theresult.UserName;
-                    }
-                    else
-                    {
-                        Application.Current.Properties.Add("USERNAME", theresult.UserName);
-                    }
-
-                    if (Application.Current.Properties.ContainsKey("FIRSTNAME"))
-                    {
-                        Application.Current.Properties["FIRSTNAME"] = theresult.FirstName;
-                    }
-                    else
-                    {
-                        Application.Current.Properties.Add("FIRSTNAME", theresult.FirstName);
-                    }
-
-                    if (Application.Current.Properties.ContainsKey("LASTNAME"))
-                    {
-                        Application.Current.Properties["LASTNAME"] = theresult.LastName;
-                    }
-                    else
-                    {
-                        Application.Current.Properties.Add("LASTNAME", theresult.LastName);
-                    }
-
-                    if (Application.Current.Properties.ContainsKey("LOGGEDIN"))
-                    {
-                        Application.Current.Properties["LOGGEDIN"] = theresult.Success;
-                    }
-                    else
-                    {
-                        Application.Current.Properties.Add("LOGGEDIN", theresult.Success);
-                    }
+                    Settings.USERNAME = theresult.UserName;
+                    Settings.FIRSTNAME = theresult.FirstName;
+                    Settings.LASTNAME = theresult.LastName;
+                    Settings.LOGGEDIN = true;
 
                     Application.Current.MainPage = new MainPage();
 
@@ -130,6 +86,8 @@ namespace CFCSMobile
             {
                 txtPassword.Text = "";
                 txtUserName.Text = "";
+
+                await DisplayAlert("Big trouble in little china", ex.Message, "OK");
 
                 ActWorking.IsVisible = false;
                 ActWorking.IsRunning = false;
