@@ -43,19 +43,19 @@ namespace CFCSMobile
         async void DoLogin(string u, string p)
         {
 
-            string URL = "";
+            string URL = CFCSMobile.Settings.BASEURL; //"";
                         
-            if (Application.Current.Properties.ContainsKey("BASEURL"))
-            {
-                URL = Application.Current.Properties["BASEURL"] as string;
-            }
-            else
-            {
-                Application.Current.Properties.Add("BASEURL", "http://192.168.12.48/CFCSMobileWebServices/api");
+            //if (Application.Current.Properties.ContainsKey("BASEURL"))
+            //{
+            //    URL = Application.Current.Properties["BASEURL"] as string;
+            //}
+            //else
+            //{
+            //    Application.Current.Properties.Add("BASEURL", "http://192.168.12.48/CFCSMobileWebServices/api");
 
-                URL = Application.Current.Properties["BASEURL"] as string;
-                //URL = "http://192.168.12.48/CFCSMobileWebServices/api";  // just in case
-            }
+            //    URL = Application.Current.Properties["BASEURL"] as string;
+            //    //URL = "http://192.168.12.48/CFCSMobileWebServices/api";  // just in case
+            //}
 
             URL += "/Login/DoLogin/" + u + "/" + p;
 

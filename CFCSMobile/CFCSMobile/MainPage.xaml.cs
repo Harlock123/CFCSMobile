@@ -32,18 +32,18 @@ namespace CFCSMobile
 
         async void GetMyCaseLoad()
         {
-            string URL = "";
+            string URL = CFCSMobile.Settings.BASEURL;//"";
             string u = "";
 
-            if (Application.Current.Properties.ContainsKey("BASEURL"))
-            {
-                URL = Application.Current.Properties["BASEURL"] as string;
-                u = Application.Current.Properties["USERNAME"] as string;
-            }
-            else
-            {
-                URL = "http://30.68.44.146:53557/api";  // just in case
-            }
+            //if (Application.Current.Properties.ContainsKey("BASEURL"))
+            //{
+            //    URL = Application.Current.Properties["BASEURL"] as string;
+            //    u = Application.Current.Properties["USERNAME"] as string;
+            //}
+            //else
+            //{
+            //    URL = "http://30.68.44.146:53557/api";  // just in case
+            //}
 
             URL += "/Login/GetCaseLoad/" + u;
 
@@ -69,18 +69,18 @@ namespace CFCSMobile
         async void GetMOTD()
         {
 
-            string URL = "";
+            string URL = CFCSMobile.Settings.BASEURL; // "";
             string u = "";
 
-            if (Application.Current.Properties.ContainsKey("BASEURL"))
-            {
-                URL = Application.Current.Properties["BASEURL"] as string;
-                u = Application.Current.Properties["USERNAME"] as string;
-            }
-            else
-            {
-                URL = "http://30.68.44.146:53557/api";  // just in case
-            }
+            //if (Application.Current.Properties.ContainsKey("BASEURL"))
+            //{
+            //    URL = Application.Current.Properties["BASEURL"] as string;
+            //    u = Application.Current.Properties["USERNAME"] as string;
+            //}
+            //else
+            //{
+            //    URL = "http://30.68.44.146:53557/api";  // just in case
+            //}
 
             URL += "/Login/MOTD/" + u;
 
