@@ -24,8 +24,21 @@ namespace CFCSMobile.Controls
             FirstName = fn;
             LastName = ln;
 
-            MemberFN.Text = fn;
-            MemberLN.Text = ln;
+            MemberFN.Text = fn + " " + ln; ;
+            MemberLN.Text = s.DOB;
+
+            if (s.Gender == "M")
+            {
+                imgGender.Source = ImageSource.FromResource("Male.png");
+              
+            }
+
+            if (s.Gender == "F")
+            {
+                imgGender.Source = ImageSource.FromResource("FeMale.png");
+
+            }
+
 
             TheData = s;
 

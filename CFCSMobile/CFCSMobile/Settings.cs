@@ -11,6 +11,7 @@ namespace CFCSMobile
         static public string USERNAME = "";
         static public string FIRSTNAME = "";
         static public string LASTNAME = "";
+        static public string DOB = "";
         static public bool LOGGEDIN = false;
 
         static public string MOTD = "";

@@ -166,4 +166,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\mail-message-new.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\FeMale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Male.png" />
+  </ItemGroup>
 </Project>
