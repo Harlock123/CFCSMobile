@@ -632,6 +632,10 @@ namespace CFCSMobileWebServices.Controllers
                     {
                         mem.DOB = r.GetDateTime(r.GetOrdinal("DOB")).ToShortDateString();
                     }
+                    else
+                    {
+                        mem.DOB = Convert.ToDateTime(null).ToShortDateString(); ;
+                    }
 
                     if ((r["GENDER"].ToString() + "") == "1" )
                     {
