@@ -30,13 +30,20 @@ namespace CFCSMobile.Controls
             if (s.Gender == "M")
             {
                 imgGender.Source = ImageSource.FromFile("Male.png");
-              
+
             }
-
-            if (s.Gender == "F")
+            else
             {
-                imgGender.Source = ImageSource.FromFile("FeMale.png");
 
+                if (s.Gender == "F")
+                {
+                    imgGender.Source = ImageSource.FromFile("FeMale.png");
+
+                }
+                else
+                {
+                    imgGender.Source = ImageSource.FromFile("Unknown.png");
+                }
             }
 
 
