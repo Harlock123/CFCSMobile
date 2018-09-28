@@ -16,5 +16,7 @@ namespace CFCSMobile
 
         static public string MOTD = "";
 
+        
+
     }
 }

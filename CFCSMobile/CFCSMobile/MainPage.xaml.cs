@@ -44,10 +44,14 @@ namespace CFCSMobile
 
             var theresult = JsonConvert.DeserializeObject<List<MemberDetailsShort>>(response);
 
+            int evenodd = 0;
+
             foreach (MemberDetailsShort s in theresult)
             {
+                evenodd += 1;
                 Controls.MemberPlacard m = new Controls.MemberPlacard(s.FirstName,s.LastName,s);
 
+                m.SetBackground(evenodd);
 
                 lstMyCaseLoad.Children.Add(m);
 

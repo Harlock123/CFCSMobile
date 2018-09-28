@@ -29,19 +29,28 @@ namespace CFCSMobile.Controls
 
             if (s.Gender == "M")
             {
-                imgGender.Source = ImageSource.FromResource("Male.png");
+                imgGender.Source = ImageSource.FromFile("Male.png");
               
             }
 
             if (s.Gender == "F")
             {
-                imgGender.Source = ImageSource.FromResource("FeMale.png");
+                imgGender.Source = ImageSource.FromFile("FeMale.png");
 
             }
 
 
             TheData = s;
 
+        }
+
+        public void SetBackground(int evenodd)
+        {
+
+            if (evenodd % 2 == 0)
+                theGrid.BackgroundColor = Color.LightGreen;
+            else
+                theGrid.BackgroundColor = Color.LightYellow;
         }
 
         public string FirstName = "";
