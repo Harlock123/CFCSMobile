@@ -3,7 +3,9 @@
     xmlns:local="clr-namespace:CFCSMobile.Controls"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     HorizontalOptions="FillAndExpand"
-    x:Class="CFCSMobile.Controls.MemberPlacard" x:Name="theGrid" >
+    x:Class="CFCSMobile.Controls.MemberPlacard" x:Name="theGrid"
+      
+      >
     <Grid.RowDefinitions>
         <RowDefinition Height="20"/>
         <RowDefinition Height="30"/>

@@ -53,12 +53,22 @@ namespace CFCSMobile
 
                 m.SetBackground(evenodd);
 
+                TapGestureRecognizer trec = new TapGestureRecognizer();
+                trec.NumberOfTapsRequired = 1;
+                trec.Tapped += Trec_Tapped;
+
                 lstMyCaseLoad.Children.Add(m);
 
             }
 
             //lvMYCASELOAD.ItemsSource = theresult;
 
+        }
+
+        private void Trec_Tapped(object sender, EventArgs e)
+        {
+            DisplayAlert("Tapped", ((Controls.MemberPlacard)sender).FirstName + " " + ((Controls.MemberPlacard)sender).LastName + " Tapped On" +
+                ((Controls.MemberPlacard)sender).TheData.MMID, "OK");
         }
 
         async void GetMOTD()
