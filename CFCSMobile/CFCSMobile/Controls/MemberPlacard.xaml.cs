@@ -29,7 +29,17 @@ namespace CFCSMobile.Controls
 
             if (s.Gender == "M")
             {
-                imgGender.Source = ImageSource.FromFile("Male.png");
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.UWP:
+                        imgGender.Source = ImageSource.FromFile("Assets/Male.png");
+                        break;
+                    default:
+                        imgGender.Source = ImageSource.FromFile("Male.png");
+                        break;
+                }
+
+                //imgGender.Source = ImageSource.FromFile("Male.png");
 
             }
             else
@@ -37,12 +47,33 @@ namespace CFCSMobile.Controls
 
                 if (s.Gender == "F")
                 {
-                    imgGender.Source = ImageSource.FromFile("FeMale.png");
+
+                    switch (Device.RuntimePlatform)
+                    {
+                        case Device.UWP:
+                            imgGender.Source = ImageSource.FromFile("Assets/FeMale.png");
+                            break;
+                        default:
+                            imgGender.Source = ImageSource.FromFile("FeMale.png");
+                            break;
+                    }
+
+                    //imgGender.Source = ImageSource.FromFile("FeMale.png");
 
                 }
                 else
                 {
-                    imgGender.Source = ImageSource.FromFile("Unknown.png");
+                    switch (Device.RuntimePlatform)
+                    {
+                        case Device.UWP:
+                            imgGender.Source = ImageSource.FromFile("Assets/Unknown.png");
+                            break;
+                        default:
+                            imgGender.Source = ImageSource.FromFile("Unknown.png");
+                            break;
+                    }
+
+                    //imgGender.Source = ImageSource.FromFile("Unknown.png");
                 }
             }
 
