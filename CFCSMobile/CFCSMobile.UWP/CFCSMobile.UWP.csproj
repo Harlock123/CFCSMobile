@@ -105,6 +105,7 @@
   <ItemGroup>
     <Content Include="Assets\CFCSMainLogo.png" />
     <Content Include="Assets\FeMale.png" />
+    <Content Include="Assets\goprevious.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />

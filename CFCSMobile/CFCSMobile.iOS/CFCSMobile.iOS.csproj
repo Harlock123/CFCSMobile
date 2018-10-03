@@ -175,4 +175,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\Unknown.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\goprevious.png" />
+  </ItemGroup>
 </Project>

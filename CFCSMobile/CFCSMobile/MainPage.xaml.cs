@@ -69,8 +69,11 @@ namespace CFCSMobile
 
         private void Trec_Tapped(object sender, EventArgs e)
         {
-            DisplayAlert("Tapped", ((Controls.MemberPlacard)sender).FirstName + " " + ((Controls.MemberPlacard)sender).LastName + " Tapped On" +
-                ((Controls.MemberPlacard)sender).TheData.MMID, "OK");
+
+            Application.Current.MainPage = new MemberFunctionsPage();
+
+            //DisplayAlert("Tapped", ((Controls.MemberPlacard)sender).FirstName + " " + ((Controls.MemberPlacard)sender).LastName + " Tapped On" +
+            //    ((Controls.MemberPlacard)sender).TheData.MMID, "OK");
         }
 
         async void GetMOTD()

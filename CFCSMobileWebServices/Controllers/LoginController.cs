@@ -599,12 +599,12 @@ namespace CFCSMobileWebServices.Controllers
 
                 //04292013 - per client show where staff is observer since staff is not linked to auths on import
                 //will revert later
-                string sql = "SELECT top 1000 MIN(MMID) as 'MMID',FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                string sql = "SELECT top 1000 MIN(MMID) as 'MMID',FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN, PHONE1, PHONE2 ";
                 sql += "FROM tblMemberMain MM ";
                 sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.SSN = MM.SSN ";
                 sql += "LEFT OUTER JOIN tblMemberObservers OB ON OB.moSSN = MM.SSN ";
                 sql += "WHERE OB.moCASEMANAGER = @CM AND (OB.moEDATE IS NULL OR OB.moEDATE >= GETDATE()) ";
-                sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN,PHONE1,PHONE2 ";
                 sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
 
                 SqlConnection cn = new SqlConnection(DBCON());
@@ -657,6 +657,9 @@ namespace CFCSMobileWebServices.Controllers
                     mem.Ethnicity = r["ETHNICITY"].ToString() + "";
                     mem.Race = r["RACE"].ToString() + "";
                     mem.SSN = r["SSN"].ToString() + "";
+
+                    mem.Phone1 = r["PHONE1"].ToString() + "";
+                    mem.Phone2 = r["PHONE2"].ToString() + "";
 
                     members.Add(mem);
                 }

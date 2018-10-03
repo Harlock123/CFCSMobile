@@ -24,8 +24,10 @@ namespace CFCSMobile.Controls
             FirstName = fn;
             LastName = ln;
 
-            MemberFN.Text = fn + " " + ln; ;
-            MemberLN.Text = s.DOB;
+            MemberFN.Text = fn + " " + ln;
+            MemberLN.Text = "DOB: " + s.DOB;
+
+            MemberPHONE.Text = s.Phone1;
 
             if (s.Gender == "M")
             {
