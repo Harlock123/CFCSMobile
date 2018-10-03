@@ -57,6 +57,8 @@ namespace CFCSMobile
                 trec.NumberOfTapsRequired = 1;
                 trec.Tapped += Trec_Tapped;
 
+                m.GestureRecognizers.Add(trec);
+
                 lstMyCaseLoad.Children.Add(m);
 
             }
