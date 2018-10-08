@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CFCSMobile.MemberFunctionsPage">
@@ -16,6 +16,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -45,6 +46,20 @@
                 </StackLayout>
 
             </StackLayout>
+            
+            <ScrollView Grid.Row="1" x:Name="svMemberStuff" Orientation="Vertical">
+                <StackLayout x:Name="lstMemberStuff" Orientation="Vertical"></StackLayout>
+            </ScrollView>
+            
+            <Button Grid.Row="2" x:Name="btnEncounter" Text="Enter an Encounter" 
+                    BackgroundColor="#C0C000" TextColor="Black"
+                    Clicked="Handle_Encounter_Clicked" HeightRequest="100"></Button>
+            <Button Grid.Row="3" x:Name="btnCollateral" Text="Enter a Colleratal Note"
+                    BackgroundColor="#C0C000" TextColor="Black"
+                    Clicked="Handle_Collateral_Clicked" HeightRequest="100"></Button>
+            <Button Grid.Row="4" x:Name="btnAuths" Text="View Service Authorizations"
+                    BackgroundColor="#C0C000" TextColor="Black"
+                    Clicked="Handle_Auth_Clicked" HeightRequest="100"></Button>
 
         </Grid>
 

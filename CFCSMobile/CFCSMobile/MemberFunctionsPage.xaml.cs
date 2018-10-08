@@ -12,14 +12,41 @@ namespace CFCSMobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MemberFunctionsPage : ContentPage
 	{
+        private CFCSMobile.Controls.MemberPlacard SelectedMember = null;
+
 		public MemberFunctionsPage ()
 		{
 			InitializeComponent ();
 		}
 
+        public MemberFunctionsPage(Controls.MemberPlacard TheMember)
+        {
+            InitializeComponent();
+
+            SelectedMember = TheMember;
+
+            lstMemberStuff.Children.Add(SelectedMember);
+        }
+
         private void btnMOTD_Clicked(object sender, EventArgs e)
         {
             Application.Current.MainPage = new MainPage();
+        }
+
+        void Handle_Encounter_Clicked(object sender, System.EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        void Handle_Collateral_Clicked(object sender, System.EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Handle_Auth_Clicked(object sender, System.EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void btnLogout_Clicked(object sender, EventArgs e)

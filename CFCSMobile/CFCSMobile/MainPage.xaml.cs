@@ -70,7 +70,7 @@ namespace CFCSMobile
         private void Trec_Tapped(object sender, EventArgs e)
         {
 
-            Application.Current.MainPage = new MemberFunctionsPage();
+            Application.Current.MainPage = new MemberFunctionsPage((CFCSMobile.Controls.MemberPlacard)sender);
 
             //DisplayAlert("Tapped", ((Controls.MemberPlacard)sender).FirstName + " " + ((Controls.MemberPlacard)sender).LastName + " Tapped On" +
             //    ((Controls.MemberPlacard)sender).TheData.MMID, "OK");
