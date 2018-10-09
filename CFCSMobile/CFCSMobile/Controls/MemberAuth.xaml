@@ -41,7 +41,7 @@
 
     <Label x:Name="MemberDateRange" TextColor="Black"
            FontAttributes="Bold" 
-           FontSize="12"
+           FontSize="10"
            Grid.Row="1" Grid.Column="0"
            Text=""/>
 

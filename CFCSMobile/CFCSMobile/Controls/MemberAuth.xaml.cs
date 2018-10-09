@@ -27,7 +27,20 @@ namespace CFCSMobile.Controls
 
             MemberService.Text = s.COSTCENTERDESC;
             MemberFunder.Text = s.FUNDER;
-            MemberDateRange.Text = s.STARTDATE.ToShortDateString() + " - " + s.ENDDATE.ToShortDateString();
+
+            string ed = s.ENDDATE.ToShortDateString();
+
+            if (ed.Trim() == "")
+                ed = "Open";
+
+            MemberDateRange.Text = s.STARTDATE.ToShortDateString() + " - " + ed;
+
+            MemberUnits.Text = "Units: " + s.UNITS.ToString();
+
+            MemberRemainingUnits.Text = s.REMAININGUNITS.ToString() + " Remaining";
+
+            MemberProvider.Text = s.PROVIDERNAME;
+
 
         }
 
