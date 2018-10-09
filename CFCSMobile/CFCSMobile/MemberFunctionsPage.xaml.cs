@@ -35,18 +35,18 @@ namespace CFCSMobile
 
         void Handle_Encounter_Clicked(object sender, System.EventArgs e)
         {
-            throw new NotImplementedException();
+            DisplayAlert("Tapped", "Handle Encounter", "OK");
         }
 
 
         void Handle_Collateral_Clicked(object sender, System.EventArgs e)
         {
-            throw new NotImplementedException();
+            DisplayAlert("Tapped", "Handle Collateral", "OK");
         }
 
         void Handle_Auth_Clicked(object sender, System.EventArgs e)
         {
-            throw new NotImplementedException();
+            Application.Current.MainPage = new MemberAuths(SelectedMember);
         }
 
         private void btnLogout_Clicked(object sender, EventArgs e)

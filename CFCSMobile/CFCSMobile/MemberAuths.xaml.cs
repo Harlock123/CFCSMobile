@@ -7,14 +7,82 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using System.Net.Http;
+using Newtonsoft.Json;
+
 namespace CFCSMobile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MemberAuths : ContentPage
 	{
-		public MemberAuths ()
+        private CFCSMobile.Controls.MemberPlacard SelectedMember = null;
+
+        public MemberAuths ()
 		{
 			InitializeComponent ();
 		}
-	}
+
+        public MemberAuths(Controls.MemberPlacard TheMember)
+        {
+            InitializeComponent();
+
+            SelectedMember = TheMember;
+
+            lstMemberStuff.Children.Add(SelectedMember);
+
+            GetAuths();
+        }
+
+
+        private void btnMOTD_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new MemberFunctionsPage(SelectedMember);
+        }
+
+        private void btnLogout_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.Properties.Clear();
+            Application.Current.MainPage = new Login();
+        }
+
+        async void GetAuths()
+        {
+            string URL = Settings.BASEURL;//"";
+            string u = SelectedMember.TheData.SSN;
+
+
+            URL += "/Login/GetAuths/" + u;
+
+            HttpClient c = new HttpClient();
+
+            var response = await c.GetStringAsync(URL);
+
+            var theresult = JsonConvert.DeserializeObject<List<AuthorizedService>>(response);
+
+            int evenodd = 0;
+
+            foreach (AuthorizedService s in theresult)
+            {
+                evenodd += 1;
+
+                Controls.MemberAuth m = new Controls.MemberAuth(s);
+
+                m.SetBackground(evenodd);
+
+                //TapGestureRecognizer trec = new TapGestureRecognizer();
+                //trec.NumberOfTapsRequired = 1;
+                //trec.Tapped += Trec_Tapped;
+
+                //m.GestureRecognizers.Add(trec);
+
+                lstAuths.Children.Add(m);
+
+            }
+
+            //lvMYCASELOAD.ItemsSource = theresult;
+
+        }
+
+
+    }
 }
