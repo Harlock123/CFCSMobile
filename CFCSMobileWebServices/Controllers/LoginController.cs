@@ -1238,6 +1238,66 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
+
+        [Route("api/Login/GetAddress/{IDNUM}")]
+        [HttpGet]
+        public JsonResult<MemberAddress> GetMemberAddress(string IDNUM)
+        {
+            MemberAddress mem = new MemberAddress();
+
+            try
+            {
+                string sql = "SELECT maID,SSN,ADDRESS1,ADDRESS2,ADDRESS3,APARTMENT_SUITE,ADDRESSTYPE,CITY," +
+                    "COALESCE((SELECT top 1 COUNTY FROM tblLOOKUPZIPCOUNTYCITY B WHERE B.ZIP = ZIPCODE),'Unknown') as 'COUNTY',ZIPCODE,[STATE], " +
+                    "CREATEDATE,CREATEDBY,UPDATEDATE,UPDATEDBY FROM tblMemberAddress WHERE SSN=@SSN ";
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
+
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    if (r["maID"] != DBNull.Value)
+                    {
+                        mem.MAID = Convert.ToInt64(r["maID"]);
+                    }
+                    mem.SSN = r["SSN"].ToString() + "";
+                    mem.Address1 = r["ADDRESS1"].ToString() + "";
+                    mem.Address2 = r["ADDRESS2"].ToString() + "";
+                    mem.Address3 = r["ADDRESS3"].ToString() + "";
+                    mem.ApartmentSuite = r["APARTMENT_SUITE"].ToString() + "";
+                    mem.AddressType = r["ADDRESSTYPE"].ToString() + "";
+                    mem.City = r["CITY"].ToString() + "";
+                    mem.County = r["COUNTY"].ToString() + "";
+                    mem.ZipCode = r["ZIPCODE"].ToString() + "";
+                    mem.State = r["STATE"].ToString() + "";
+                    if (r["CREATEDATE"] != DBNull.Value)
+                    {
+                        mem.CreateDate = r.GetDateTime(r.GetOrdinal("CREATEDATE"));
+                    }
+                    mem.CreateBy = r["CreatedBy"].ToString() + "";
+                    if (r["UPDATEDATE"] != DBNull.Value)
+                    {
+                        mem.UpdateDate = r.GetDateTime(r.GetOrdinal("UPDATEDATE"));
+                    }
+                    mem.UpdatedBy = r["UPDATEDBY"].ToString() + "";
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetMemberAddress", ex.Message);
+            }
+            return Json(mem);
+        }
+
+
         public double GetUnitType(string UNITTYPE)
         {
             double numtype = 0;
@@ -1570,4 +1630,6 @@ namespace CFCSMobileWebServices.Controllers
         public string strENDDATE = "";
         public double DSPRATE = 0.0;
     }
+
+    
 }
