@@ -1295,7 +1295,294 @@ namespace CFCSMobileWebServices.Controllers
             }
             return mem;
         }
+        
+        public List<MemberObservers> GetListOfMemberObservers(string SSN)
+        {
+            List<MemberObservers> ret = new List<MemberObservers>();
 
+            try
+            {
+                //moID bigint NOT NULL IDENTITY (1, 1),
+                //moSSN varchar(10) NULL,
+                //moCASEMANAGER varchar(20) NULL,
+                //moSDATE datetime NULL,
+                //moEDATE datetime NULL,
+                //moCREATEDATE datetime NULL,
+                //moCREATEDBY varchar(20) NULL,
+                //moOBSTYPE varchar(5) NULL
+
+                //04292016 - changes in this grid result per client
+                //string sql = "SELECT moID,moSSN,moCASEMANAGER,moSDATE,moEDATE,moCREATEDATE,moCREATEDBY,moOBSTYPE " +
+                //    "FROM tblMemberObservers WHERE moSSN = @SSN  and  (moCASEMANAGER is NOT NUll and moCASEMANAGER <> '' ) ORDER BY moSDATE DESC,moEDATE DESC";
+
+                string sql = "SELECT DISTINCT moID,moSSN,(ul.FirstName + ' ' + ul.LastName) as STAFF, ";
+                //sql += "(SELECT FIRSTNAME + ' ' + LASTNAME FROM tblUserLogins WHERE sup.SupervisorName = Username) as SUPERVISOR, ";
+                sql += "ul.ContactNum,ul.Email, ";
+                sql += "(SELECT DESCRIPTION FROM tblLOOKUPUSERCREDENTIALS WHERE CODE = UL.CredentialType1) AS CREDENTIALONE, ";
+                sql += "(SELECT DESCRIPTION FROM tblLOOKUPUSERCREDENTIALS WHERE CODE = UL.CredentialType2) AS CREDENTIALTWO, ";
+                sql += "moSDATE,moEDATE,moCREATEDATE,moCREATEDBY,ul.username as USERNAME ";
+                sql += "FROM tblMemberObservers obs ";
+                sql += "INNER JOIN tblUserLogins ul on ul.Username = obs.moCASEMANAGER ";
+                sql += "left outer JOIN tblUsersSupervisor sup ON SUP.UserName = UL.Username ";
+                sql += "WHERE moSSN = @SSN ";
+                sql += "and  (moCASEMANAGER is NOT NUll and moCASEMANAGER <> '' ) ";
+                sql += "ORDER BY moSDATE DESC,moEDATE DESC ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    MemberObservers mo = new MemberObservers();
+
+                    //mo.ID = r.GetInt64(0);
+                    mo.ID = r.GetInt32(0);
+                    mo.SSN = r["moSSN"] + "";
+                    mo.OBSERVER = r["STAFF"] + "";
+                    mo.EMAIL = r["Email"] + "";
+                    mo.PHONE = r["ContactNum"] + "";
+                    mo.CREDENTIALONE = r["CREDENTIALONE"] + "";
+                    mo.CREDENTIALTWO = r["CREDENTIALTWO"] + "";
+                    if (r["moSDATE"] != DBNull.Value)
+                    {
+                        mo.SDATE = Convert.ToDateTime(r["moSDATE"]);
+                        mo.strSDATE = mo.SDATE.ToShortDateString();
+                    }
+                    else
+                    {
+                        mo.SDATE = Convert.ToDateTime(null);
+                        mo.strSDATE = "";
+                    }
+
+                    if (r["moEDATE"] != DBNull.Value)
+                    {
+                        mo.EDATE = Convert.ToDateTime(r["moEDATE"]);
+                        mo.strEDATE = mo.EDATE.ToShortDateString();
+                    }
+                    else
+                    {
+                        mo.EDATE = Convert.ToDateTime(null);
+                        mo.strEDATE = "";
+                    }
+
+                    if (r["moCREATEDATE"] != DBNull.Value)
+                        mo.CREATEDATE = Convert.ToDateTime(r["moCREATEDATE"]);
+                    else
+                        mo.CREATEDATE = Convert.ToDateTime(null);
+
+                    mo.AUTHOR = r["moCREATEDBY"] + "";
+                    mo.OBSTYPE = GetListOfAllSupervisorsForUser(r["USERNAME"] + "");
+                    //mo.OBSTYPE = r["SUPERVISOR"] + "";
+
+                    ret.Add(mo);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfMemberObservers", ex.Message);
+            }
+
+            return ret;
+        }
+
+        public string GetListOfAllSupervisorsForUser(string UserName)
+        {
+            string result = "";
+            UserName = UserName.TrimEnd(',', ' ');
+            UserName = UserName.Replace(",", "','");
+
+            try
+            {
+                string sql = "Select distinct SupervisorName  + ',' AS SupervisorName from tblUsersSupervisor ";
+                sql += "where UserName = '" + UserName + "'";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    result += r["SupervisorName"] + " ";
+                }
+
+                result = result.TrimEnd(',');
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfAllSupervisorsForUser", ex.Message);
+
+                result = "";
+            }
+
+            return result;
+        }
+
+        public List<MemberReferralSource> GetListOfMemberReferralSourceForMember(string ssn)
+        {
+            List<MemberReferralSource> result = new List<MemberReferralSource>();
+            try
+            {
+                //string sql = "SELECT RS.*, BB.*, ";
+                ////sql += "(SELECT TOP 1 RSLASTNAME FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS AGENCY, ";
+                //sql += "(SELECT TOP 1 RSADDRESS1 FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ADDRESS1, ";
+                //sql += "(SELECT TOP 1 RSCITY FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS CITY, ";
+                //sql += "(SELECT TOP 1 RSSTATE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS STATE, ";
+                //sql += "(SELECT TOP 1 RSZIP FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ZIP, ";
+                //sql += "(SELECT TOP 1 RSHOMEPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS HOMEPHONE, ";
+                //sql += "(SELECT TOP 1 RSWORKPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS WORKPHONE, ";
+                //sql += "(SELECT DESCRIPTION FROM tblLOOKUPSUPPORTSRELATIONSHIP WHERE CODE = RS.RSROLE) AS RELATIONSHIP, ";
+                //sql += "(SELECT DESCRIPTION FROM tblLOOKUPREFERRALSOURCE WHERE CODE = rs.RSAGENCYID) AS AGENCY ";
+                //sql += "FROM tblREFERRALSOURCE RS ";
+                //sql += "LEFT OUTER JOIN tblMEMBERREFERRALSBLUEBOOK BB ON BB.RSID = RS.RSID ";
+                //sql += "LEFT OUTER JOIN tblMEMBERREFERRALS MR ON MR.SSN = BB.MRSSN ";
+                ////sql += "WHERE (BB.MRSSN = @SSN AND MR.REFERRALSOURCE = RS.RSAGENCYID) ";
+                //sql += "WHERE (BB.MRSSN = @SSN) ";
+
+                string sql = "SELECT DISTINCT RS.*, BB.*, ";
+                //sql += "(SELECT TOP 1 RSLASTNAME FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS AGENCY, ";
+                //sql += "(SELECT TOP 1 RSADDRESS1 FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ADDRESS1, ";
+                //sql += "(SELECT TOP 1 RSCITY FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS CITY, ";
+                //sql += "(SELECT TOP 1 RSSTATE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS STATE, ";
+                //sql += "(SELECT TOP 1 RSZIP FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ZIP, ";
+                //sql += "(SELECT TOP 1 RSHOMEPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS HOMEPHONE, ";
+                //sql += "(SELECT TOP 1 RSWORKPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS WORKPHONE, ";
+                sql += "(SELECT DESCRIPTION FROM tblLOOKUPSUPPORTSRELATIONSHIP WHERE CODE = RS.RSROLE) AS RELATIONSHIP, ";
+                sql += "(SELECT DESCRIPTION FROM tblLOOKUPREFERRALSOURCE WHERE CODE = rs.RSAGENCYID) AS AGENCY ";
+                sql += "FROM tblREFERRALSOURCE RS ";
+                sql += "LEFT OUTER JOIN tblMEMBERREFERRALSBLUEBOOK BB ON BB.RSID = RS.RSID ";
+                sql += "LEFT OUTER JOIN tblMEMBERREFERRALS MR ON MR.SSN = BB.MRSSN ";
+                //sql += "WHERE (BB.MRSSN = @SSN AND MR.REFERRALSOURCE = RS.RSAGENCYID) ";
+                sql += "WHERE (BB.MRSSN = @SSN) ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar).Value = ssn;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    MemberReferralSource a = new MemberReferralSource();
+                    if (!Convert.IsDBNull(r["RSID"]))
+                    {
+                        a.RSID = Convert.ToInt64(r["RSID"]);
+                    }
+                    else
+                    {
+                        a.RSID = 0;
+                    }
+                    a.RSFIRSTNAME = r["RSFIRSTNAME"] + "";
+                    a.RSLASTNAME = r["RSLASTNAME"] + "";
+                    a.RSROLE = r["RSROLE"] + "";
+                    a.RSROLEDESCRIPTION = r["RELATIONSHIP"] + "";
+                    if (!Convert.IsDBNull(r["RSISAGENCY"]))
+                    {
+                        a.RSISAGENCY = Convert.ToBoolean(r["RSISAGENCY"]);
+                    }
+                    else
+                    {
+                        a.RSISAGENCY = false;
+                    }
+                    if (!Convert.IsDBNull(r["RSAGENCYID"]))
+                    {
+                        a.RSAGENCYID = Convert.ToInt64(r["RSAGENCYID"]);
+                    }
+                    else
+                    {
+                        a.RSAGENCYID = 0;
+                    }
+                    //a.RSADDRESS1 = r["ADDRESS1"] + "";
+                    //a.RSADDRESS2 = r["RSADDRESS2"] + "";
+                    //a.RSADDRESS3 = r["RSADDRESS3"] + "";
+                    //a.RSCITY = r["CITY"] + "";
+                    //a.RSSTATE = r["STATE"] + "";
+                    //a.RSZIP = r["ZIP"] + "";
+                    a.RSADDRESS1 = r["RSADDRESS1"] + "";
+                    a.RSADDRESS2 = r["RSADDRESS2"] + "";
+                    a.RSADDRESS3 = r["RSADDRESS3"] + "";
+                    a.RSCITY = r["RSCITY"] + "";
+                    a.RSSTATE = r["RSSTATE"] + "";
+                    a.RSZIP = r["RSZIP"] + "";
+                    a.RSCOUNTY = r["RSCOUNTY"] + "";
+                    a.RSEMAIL = r["RSEMAIL"] + "";
+                    a.RSHOMEPHONE = r["RSHOMEPHONE"] + "";
+                    a.RSWORKPHONE = r["RSWORKPHONE"] + "";
+                    if (!Convert.IsDBNull(r["RSACTIVE"]))
+                    {
+                        a.RSACTIVE = Convert.ToBoolean(r["RSACTIVE"]);
+                    }
+                    else
+                    {
+                        a.RSACTIVE = false;
+                    }
+                    a.RSCREATEDBY = r["RSCREATEDBY"] + "";
+                    if (!Convert.IsDBNull(r["RSCREATEDDATE"]))
+                    {
+                        a.RSCREATEDDATE = Convert.ToDateTime(r["RSCREATEDDATE"]);
+                    }
+                    else
+                    {
+                        a.RSCREATEDDATE = Convert.ToDateTime(null);
+                    }
+                    a.SSN = r["MRSSN"] + "";
+                    a.AGENCYDESC = r["AGENCY"] + "";
+                    if (!Convert.IsDBNull(r["RSSTARTDATE"]))
+                    {
+                        a.RSSTARTDATE = Convert.ToDateTime(r["RSSTARTDATE"]);
+                        a.strRSSTARTDATE = a.RSSTARTDATE.ToShortDateString();
+                    }
+                    else
+                    {
+                        a.RSSTARTDATE = Convert.ToDateTime(null);
+                        a.strRSSTARTDATE = "";
+                    }
+                    if (!Convert.IsDBNull(r["RSENDDATE"]))
+                    {
+                        a.RSENDDATE = Convert.ToDateTime(r["RSENDDATE"]);
+                        a.strRSENDDATE = a.RSENDDATE.ToShortDateString();
+                    }
+                    else
+                    {
+                        a.RSENDDATE = Convert.ToDateTime(null);
+                        a.strRSENDDATE = "";
+                    }
+                    a.RSEXTENSION = r["RSEXTENSION"] + "";
+
+                    result.Add(a);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblREFERRALSOURCE.GetListOftblREFERRALSOURCEForMember" + ex.ToString()));
+            }
+            return result;
+        }
 
         public double GetUnitType(string UNITTYPE)
         {
@@ -1630,5 +1917,97 @@ namespace CFCSMobileWebServices.Controllers
         public double DSPRATE = 0.0;
     }
 
-    
+    public class MemberObservers
+    {
+        public string AUTHOR = "";
+        public DateTime CREATEDATE = Convert.ToDateTime(null);
+        public DateTime EDATE = Convert.ToDateTime(null);
+        public long ID = -1;
+        public string OBSERVER = "";
+        public string OBSTYPE = "";
+        public DateTime SDATE = Convert.ToDateTime(null);
+        public string SSN = "";
+        public string PHONE = "";
+        public string EMAIL = "";
+        public string CREDENTIALONE = "";
+        public string CREDENTIALTWO = "";
+        public string USERNAME = "";
+        public string strSDATE = "";
+        public string strEDATE = "";
+    }
+
+    public class MemberReferralSource
+    {
+        public long RSID { get; set; }
+        public string RSFIRSTNAME { get; set; }
+        public string RSLASTNAME { get; set; }
+        public string RSROLE { get; set; }
+        public string RSROLEDESCRIPTION { get; set; }
+        public bool RSISAGENCY { get; set; }
+        public long RSAGENCYID { get; set; }
+        public string RSADDRESS1 { get; set; }
+        public string RSADDRESS2 { get; set; }
+        public string RSADDRESS3 { get; set; }
+        public string RSCITY { get; set; }
+        public string RSSTATE { get; set; }
+        public string RSZIP { get; set; }
+        public string RSCOUNTY { get; set; }
+        public string RSEMAIL { get; set; }
+        public string RSHOMEPHONE { get; set; }
+        public string RSWORKPHONE { get; set; }
+        public bool RSACTIVE { get; set; }
+        public string RSCREATEDBY { get; set; }
+        public DateTime RSCREATEDDATE { get; set; }
+        public string SSN { get; set; }
+        public long RSCASEMANAGER { get; set; }
+        public string AGENCYDESC { get; set; }
+        public DateTime RSSTARTDATE { get; set; }
+        public DateTime RSENDDATE { get; set; }
+        public string RSFULLNAME { get; set; }
+        public string ROLEFULLNAME { get; set; }
+        public string RSUSERNAME { get; set; }
+        public string ISEDITPERSON { get; set; }
+        public string strRSSTARTDATE { get; set; }
+        public string strRSENDDATE { get; set; }
+
+        public string RSEXTENSION { get; set; }
+
+        public MemberReferralSource()
+        {
+            RSID = 0;
+            RSCASEMANAGER = 0;
+            RSFIRSTNAME = "";
+            RSLASTNAME = "";
+            RSROLE = "";
+            RSROLEDESCRIPTION = "";
+            RSISAGENCY = false;
+            RSAGENCYID = 0;
+            RSADDRESS1 = "";
+            RSADDRESS2 = "";
+            RSADDRESS3 = "";
+            RSCITY = "";
+            RSSTATE = "";
+            RSZIP = "";
+            RSCOUNTY = "";
+            RSEMAIL = "";
+            RSHOMEPHONE = "";
+            RSWORKPHONE = "";
+            RSACTIVE = false;
+            RSCREATEDBY = "";
+            RSCREATEDDATE = Convert.ToDateTime(null);
+            SSN = "";
+            AGENCYDESC = "";
+            RSSTARTDATE = Convert.ToDateTime(null);
+            RSENDDATE = Convert.ToDateTime(null);
+            RSFULLNAME = "";
+            ROLEFULLNAME = "";
+            RSUSERNAME = "";
+            ISEDITPERSON = "";
+            strRSSTARTDATE = "";
+            strRSENDDATE = "";
+            RSEXTENSION = "";
+        }
+    }
+
+
 }
