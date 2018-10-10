@@ -653,11 +653,13 @@ namespace CFCSMobileWebServices.Controllers
                         }
                     }
 
+                   
+
                     //mem.Gender = r["GENDER"].ToString() + "";
                     mem.Ethnicity = r["ETHNICITY"].ToString() + "";
                     mem.Race = r["RACE"].ToString() + "";
                     mem.SSN = r["SSN"].ToString() + "";
-
+                    mem.memberAddress = GetMemberAddress(mem.SSN);
                     mem.Phone1 = r["PHONE1"].ToString() + "";
                     mem.Phone2 = r["PHONE2"].ToString() + "";
 
@@ -1237,11 +1239,8 @@ namespace CFCSMobileWebServices.Controllers
 
             return Json(result);
         }
-
-
-        [Route("api/Login/GetAddress/{IDNUM}")]
-        [HttpGet]
-        public JsonResult<MemberAddress> GetMemberAddress(string IDNUM)
+        
+        public MemberAddress GetMemberAddress(string IDNUM)
         {
             MemberAddress mem = new MemberAddress();
 
@@ -1294,7 +1293,7 @@ namespace CFCSMobileWebServices.Controllers
             {
                 LogError("GetMemberAddress", ex.Message);
             }
-            return Json(mem);
+            return mem;
         }
 
 
