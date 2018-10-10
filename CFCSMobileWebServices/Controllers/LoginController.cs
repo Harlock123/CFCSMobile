@@ -1295,8 +1295,10 @@ namespace CFCSMobileWebServices.Controllers
             }
             return mem;
         }
-        
-        public List<MemberObservers> GetListOfMemberObservers(string SSN)
+
+        [Route("api/Login/MemberObservers/{IDNUM}")]
+        [HttpGet]
+        public JsonResult<List<MemberObservers>> GetListOfMemberObservers(string IDNUM)
         {
             List<MemberObservers> ret = new List<MemberObservers>();
 
@@ -1332,7 +1334,7 @@ namespace CFCSMobileWebServices.Controllers
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
 
                 SqlDataReader r = cmd.ExecuteReader();
 
@@ -1391,7 +1393,7 @@ namespace CFCSMobileWebServices.Controllers
                 LogError("GetListOfMemberObservers", ex.Message);
             }
 
-            return ret;
+            return Json(ret);
         }
 
         public string GetListOfAllSupervisorsForUser(string UserName)
@@ -1439,47 +1441,26 @@ namespace CFCSMobileWebServices.Controllers
             return result;
         }
 
-        public List<MemberReferralSource> GetListOfMemberReferralSourceForMember(string ssn)
+        [Route("api/Login/MemberReferrals/{IDNUM}")]
+        [HttpGet]
+        public JsonResult<List<MemberReferralSource>> GetListOfMemberReferralSourceForMember(string IDNUM)
         {
             List<MemberReferralSource> result = new List<MemberReferralSource>();
             try
             {
-                //string sql = "SELECT RS.*, BB.*, ";
-                ////sql += "(SELECT TOP 1 RSLASTNAME FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS AGENCY, ";
-                //sql += "(SELECT TOP 1 RSADDRESS1 FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ADDRESS1, ";
-                //sql += "(SELECT TOP 1 RSCITY FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS CITY, ";
-                //sql += "(SELECT TOP 1 RSSTATE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS STATE, ";
-                //sql += "(SELECT TOP 1 RSZIP FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ZIP, ";
-                //sql += "(SELECT TOP 1 RSHOMEPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS HOMEPHONE, ";
-                //sql += "(SELECT TOP 1 RSWORKPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS WORKPHONE, ";
-                //sql += "(SELECT DESCRIPTION FROM tblLOOKUPSUPPORTSRELATIONSHIP WHERE CODE = RS.RSROLE) AS RELATIONSHIP, ";
-                //sql += "(SELECT DESCRIPTION FROM tblLOOKUPREFERRALSOURCE WHERE CODE = rs.RSAGENCYID) AS AGENCY ";
-                //sql += "FROM tblREFERRALSOURCE RS ";
-                //sql += "LEFT OUTER JOIN tblMEMBERREFERRALSBLUEBOOK BB ON BB.RSID = RS.RSID ";
-                //sql += "LEFT OUTER JOIN tblMEMBERREFERRALS MR ON MR.SSN = BB.MRSSN ";
-                ////sql += "WHERE (BB.MRSSN = @SSN AND MR.REFERRALSOURCE = RS.RSAGENCYID) ";
-                //sql += "WHERE (BB.MRSSN = @SSN) ";
-
+                
                 string sql = "SELECT DISTINCT RS.*, BB.*, ";
-                //sql += "(SELECT TOP 1 RSLASTNAME FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS AGENCY, ";
-                //sql += "(SELECT TOP 1 RSADDRESS1 FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ADDRESS1, ";
-                //sql += "(SELECT TOP 1 RSCITY FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS CITY, ";
-                //sql += "(SELECT TOP 1 RSSTATE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS STATE, ";
-                //sql += "(SELECT TOP 1 RSZIP FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS ZIP, ";
-                //sql += "(SELECT TOP 1 RSHOMEPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS HOMEPHONE, ";
-                //sql += "(SELECT TOP 1 RSWORKPHONE FROM tblREFERRALSOURCE B WHERE B.RSAGENCYID = RS.RSAGENCYID AND BB.MRSSN = @SSN) AS WORKPHONE, ";
                 sql += "(SELECT DESCRIPTION FROM tblLOOKUPSUPPORTSRELATIONSHIP WHERE CODE = RS.RSROLE) AS RELATIONSHIP, ";
                 sql += "(SELECT DESCRIPTION FROM tblLOOKUPREFERRALSOURCE WHERE CODE = rs.RSAGENCYID) AS AGENCY ";
                 sql += "FROM tblREFERRALSOURCE RS ";
                 sql += "LEFT OUTER JOIN tblMEMBERREFERRALSBLUEBOOK BB ON BB.RSID = RS.RSID ";
                 sql += "LEFT OUTER JOIN tblMEMBERREFERRALS MR ON MR.SSN = BB.MRSSN ";
-                //sql += "WHERE (BB.MRSSN = @SSN AND MR.REFERRALSOURCE = RS.RSAGENCYID) ";
                 sql += "WHERE (BB.MRSSN = @SSN) ";
 
                 SqlConnection cn = new SqlConnection(DBCON());
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar).Value = ssn;
+                cmd.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar).Value = IDNUM;
                 SqlDataReader r = cmd.ExecuteReader();
                 while (r.Read())
                 {
@@ -1581,7 +1562,7 @@ namespace CFCSMobileWebServices.Controllers
             {
                 throw (new Exception("tblREFERRALSOURCE.GetListOftblREFERRALSOURCEForMember" + ex.ToString()));
             }
-            return result;
+            return Json(result);
         }
 
         public double GetUnitType(string UNITTYPE)
@@ -1612,6 +1593,9 @@ namespace CFCSMobileWebServices.Controllers
         }
 
     }
+
+    #region Extra Classes
+
 
     public class CodedDescriptor
     {
@@ -2011,3 +1995,5 @@ namespace CFCSMobileWebServices.Controllers
 
 
 }
+
+#endregion
