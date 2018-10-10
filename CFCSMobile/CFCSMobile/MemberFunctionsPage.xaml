@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CFCSMobile.MemberFunctionsPage">
+             x:Class="CFCSMobile.MemberFunctionsPage"
+             BackgroundColor="Beige">
     <ContentPage.Content>
         <Grid>
             <Grid.Margin>
@@ -16,6 +17,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -60,6 +62,10 @@
             <Button Grid.Row="4" x:Name="btnAuths" Text="View Service Authorizations"
                     BackgroundColor="#C0C000" TextColor="Black"
                     Clicked="Handle_Auth_Clicked" HeightRequest="100"></Button>
+
+            <Button Grid.Row="5" x:Name="btnTeam" Text="View Members Team"
+                    BackgroundColor="#C0C000" TextColor="Black"
+                    Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
 
         </Grid>
 

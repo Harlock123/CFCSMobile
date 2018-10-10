@@ -17,7 +17,7 @@ namespace CFCSMobile
         public string Gender { get; set; }
         public string LastActiveStatus { get; set; }
         public string LastName { get; set; }
-        public object memberAddress { get; set; }
+        public MemberAddress memberAddress { get; set; }
         public object memberAddressHistory { get; set; }
         public string MiddleName { get; set; }
         public int MMID { get; set; }

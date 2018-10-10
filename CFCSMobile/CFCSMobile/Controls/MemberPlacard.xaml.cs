@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Newtonsoft.Json;
 
 namespace CFCSMobile.Controls
 {
@@ -29,7 +30,9 @@ namespace CFCSMobile.Controls
 
             MemberPHONE.Text = s.Phone1;
 
-            MemberAddress.Text = "Member Address Goes Here";
+            MemberAddress m = s.memberAddress;
+
+            MemberAddress.Text = m.Address1 + " " + m.Address2.Trim() + " " + m.City.Trim() + " " + m.State + "  " + m.ZipCode; 
 
             if (s.Gender == "M")
             {

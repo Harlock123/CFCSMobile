@@ -54,5 +54,10 @@ namespace CFCSMobile
             Application.Current.Properties.Clear();
             Application.Current.MainPage = new Login();
         }
+
+        private void btnTeam_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Tapped", "Handle Team", "OK");
+        }
     }
 }
