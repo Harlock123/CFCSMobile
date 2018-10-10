@@ -37,8 +37,8 @@
                 </StackLayout>
             </StackLayout>
             
-            <ScrollView Grid.Row="1" x:Name="svMemberStuff" Orientation="Vertical">
-                <StackLayout x:Name="lstMemberStuff" Orientation="Vertical"></StackLayout>
+            <ScrollView Grid.Row="1" x:Name="svMemberStuff" Orientation="Vertical">>
+                <StackLayout x:Name="lstMemberStuff" HeightRequest="60" Orientation="Vertical"></StackLayout>
             </ScrollView>
             
             <ScrollView Grid.Row="2" x:Name="svAuths" Orientation="Vertical">

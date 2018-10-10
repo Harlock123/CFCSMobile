@@ -8,7 +8,9 @@
     >
     <Grid.RowDefinitions>
         <RowDefinition Height="20"/>
-        <RowDefinition Height="30"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="16"/>
+        
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="50"/>
@@ -19,7 +21,7 @@
             WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"
             FontSize="Micro" BackgroundColor="Green" TextColor="White"
             BorderRadius="10"/>-->
-    <Image x:Name="imgGender" Grid.Column="0" Grid.RowSpan="2" HeightRequest="48" WidthRequest="48" 
+    <Image x:Name="imgGender" Grid.Column="0" Grid.RowSpan="3" HeightRequest="48" WidthRequest="48" 
            />
     <Label x:Name="MemberFN" TextColor="Black"
            FontAttributes="Bold" 
@@ -36,6 +38,12 @@
            FontAttributes="Bold"
            FontSize="14"
            Grid.Row="1" Grid.Column="2"
+           Text=""/>
+    
+    <Label x:Name="MemberAddress" TextColor="DarkGray"
+           FontAttributes="Bold"
+           FontSize="12"
+           Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
            Text=""/>
 
 </Grid>

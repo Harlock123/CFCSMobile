@@ -29,6 +29,8 @@ namespace CFCSMobile.Controls
 
             MemberPHONE.Text = s.Phone1;
 
+            MemberAddress.Text = "Member Address Goes Here";
+
             if (s.Gender == "M")
             {
                 switch (Device.RuntimePlatform)
