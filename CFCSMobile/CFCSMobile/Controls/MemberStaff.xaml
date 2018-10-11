@@ -5,7 +5,7 @@
         HorizontalOptions="FillAndExpand"
         x:Class="CFCSMobile.Controls.MemberStaff" 
         x:Name="theGrid"
-        BackgroundColor="LightSteelBlue"
+        BackgroundColor="#C8FCDF" Margin="4,0,4,0" 
     >
     <Grid.RowDefinitions>
         <RowDefinition Height="20"/>
@@ -42,7 +42,7 @@
 
     <Label x:Name="lblEmail" TextColor="Black"
            FontAttributes="Bold" 
-           FontSize="10"
+           FontSize="12"
            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
            Text=""/>
 

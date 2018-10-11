@@ -93,7 +93,7 @@ namespace CFCSMobile.Controls
         {
 
             if (evenodd % 2 == 0)
-                theGrid.BackgroundColor = Color.LightGreen;
+                theGrid.BackgroundColor = Color.FromHex("#FFB0EEB0");
             else
                 theGrid.BackgroundColor = Color.LightYellow;
         }
