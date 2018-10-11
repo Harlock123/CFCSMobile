@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid   xmlns="http://xamarin.com/schemas/2014/forms"
+        xmlns:local="clr-namespace:CFCSMobile.Controls"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        HorizontalOptions="FillAndExpand"
+        x:Class="CFCSMobile.Controls.MemberStaff" 
+        x:Name="theGrid"
+        BackgroundColor="LightSteelBlue"
+    >
+    <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!--<Button x:Name="PicButton" Text="img" Grid.Row="0" Grid.Column="0" 
+            WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"
+            FontSize="Micro" BackgroundColor="Green" TextColor="White"
+            BorderRadius="10"/>-->
+
+    <Label x:Name="lblStaff" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="0"
+           Text=""/>
+
+    <Label x:Name="lblSupervisor" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="1"
+           Text=""/>
+
+    <Label x:Name="lblPhone" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="2"
+           Text=""/>
+
+    <Label x:Name="lblEmail" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="10"
+           Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+           Text=""/>
+
+    <Label x:Name="lblEntryDate" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="12"
+           Grid.Row="2" Grid.Column="0"
+           Text=""/>
+
+    <Label x:Name="lblStartDate" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="12"
+           Grid.Row="2" Grid.Column="1"
+           Text=""/>
+
+    <Label x:Name="lblEndDate" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="12"
+           Grid.Row="2" Grid.Column="2"
+           Text=""/>
+
+</Grid>

@@ -57,7 +57,7 @@ namespace CFCSMobile
 
         private void btnTeam_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Tapped", "Handle Team", "OK");
+            Application.Current.MainPage = new MemberTeam(SelectedMember);
         }
     }
 }
