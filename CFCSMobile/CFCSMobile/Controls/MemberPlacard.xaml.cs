@@ -93,9 +93,9 @@ namespace CFCSMobile.Controls
         {
 
             if (evenodd % 2 == 0)
-                theGrid.BackgroundColor = Color.FromHex("#FFB0EEB0");
+                theGrid.BackgroundColor = Settings.EvenColor;
             else
-                theGrid.BackgroundColor = Color.LightYellow;
+                theGrid.BackgroundColor = Settings.OddColor;
         }
 
         public string FirstName = "";

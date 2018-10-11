@@ -16,12 +16,14 @@ namespace CFCSMobile.Controls
 
 		public MemberReferral ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
         public MemberReferral(MemberReferralSource src)
         {
             InitializeComponent();
+
+            theGrid.BackgroundColor = Settings.ReferralBackgroundColor;
 
             lblAddress.Text = src.RSADDRESS1.Trim() + " " + src.RSADDRESS2.Trim() + " " + 
                               src.RSADDRESS3.Trim() + " " + src.RSCITY.Trim() + " " + 
