@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Grid   xmlns="http://xamarin.com/schemas/2014/forms"
+        xmlns:local="clr-namespace:CFCSMobile.Controls"
+        xmlns:base="clr-namespace:CFCSMobile"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        HorizontalOptions="FillAndExpand"
+        x:Class="CFCSMobile.Controls.LabledDateControl" 
+        x:Name="theGrid"
+        BackgroundColor="Transparent" Margin="0" 
+    >
+    <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+
+    <Label x:Name="TheTitle" VerticalTextAlignment="Start" Text="" 
+           TextColor="{x:Static base:Settings.LabelColorForValueFields}" Grid.Row="0" Grid.Column="0" 
+           FontSize="{Binding TitleFontSize}"></Label>
+    
+    <Label x:Name="TheValue" VerticalTextAlignment="End" Text="" 
+           TextColor="Black" Grid.Row="0" Grid.Column="1" 
+           FontSize="{Binding ValueFontSize}"></Label>
+    
+</Grid>

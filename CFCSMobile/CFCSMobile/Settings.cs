@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace CFCSMobile
 {
-    static class Settings
+    public static class Settings
     {
         static public string BASEURL = "http://192.168.225.128/CFCSMobileWebServices/api"; // VM running in Work Mac
 
@@ -28,6 +28,7 @@ namespace CFCSMobile
         static public Color ReferralBackgroundColor = Color.FromHex("#C8F1FC");
         static public Color StaffBackgroundColor = Color.FromHex("#C8FCDF");
 
+        static public Color LabelColorForValueFields = Color.FromHex("#9090AO");
 
 
     }

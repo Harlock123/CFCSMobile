@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Grid   xmlns="http://xamarin.com/schemas/2014/forms"
         xmlns:local="clr-namespace:CFCSMobile.Controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -39,20 +39,45 @@
            FontSize="14"
            Grid.Row="0" Grid.Column="2"
            Text=""/>
+    
+    <local:LabledDateControl
+        Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+        x:Name="lblEmail" TitleText="Email:" TitleFontSize="10" ValueFontSize="12" ></local:LabledDateControl>
 
-    <Label x:Name="lblEmail" TextColor="Black"
+    <!--<Label x:Name="lblEmail" TextColor="Black"
            FontAttributes="Bold" 
            FontSize="12"
            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-           Text=""/>
+           Text=""/>-->
+    
+    <local:LabledDateControl
+        Grid.Row="2" Grid.Column="0" x:Name="lblEntryDate"  TitleText="Entry:" TitleFontSize="10"
+        ValueFontSize="12">
+        
+        
+    </local:LabledDateControl>
+    
+    <local:LabledDateControl
+        Grid.Row="2" Grid.Column="1" x:Name="lblStartDate"  TitleText="Start:" TitleFontSize="10"
+        ValueFontSize="12">
+        
+        
+    </local:LabledDateControl>
+    
+    <local:LabledDateControl
+        Grid.Row="2" Grid.Column="2" x:Name="lblEndDate"  TitleText="End:" TitleFontSize="10"
+        ValueFontSize="12">
+        
+        
+    </local:LabledDateControl>
 
-    <Label x:Name="lblEntryDate" TextColor="Black"
+    <!--<Label x:Name="lblEntryDate" TextColor="Black"
            FontAttributes="Bold" 
            FontSize="12"
            Grid.Row="2" Grid.Column="0"
-           Text=""/>
+           Text=""/>-->
 
-    <Label x:Name="lblStartDate" TextColor="Black"
+    <!--<Label x:Name="lblStartDate" TextColor="Black"
            FontAttributes="Bold" 
            FontSize="12"
            Grid.Row="2" Grid.Column="1"
@@ -62,6 +87,6 @@
            FontAttributes="Bold" 
            FontSize="12"
            Grid.Row="2" Grid.Column="2"
-           Text=""/>
+           Text=""/>-->
 
 </Grid>

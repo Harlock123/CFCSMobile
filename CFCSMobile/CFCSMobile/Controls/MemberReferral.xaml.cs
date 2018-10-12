@@ -25,17 +25,17 @@ namespace CFCSMobile.Controls
 
             theGrid.BackgroundColor = Settings.ReferralBackgroundColor;
 
-            lblAddress.Text = src.RSADDRESS1.Trim() + " " + src.RSADDRESS2.Trim() + " " + 
+            lblAddress.ValueText = src.RSADDRESS1.Trim() + " " + src.RSADDRESS2.Trim() + " " + 
                               src.RSADDRESS3.Trim() + " " + src.RSCITY.Trim() + " " + 
                               src.RSSTATE.Trim() + " " + src.RSZIP.Trim();
 
             lblAgency.Text = src.AGENCYDESC.Trim();
 
-            lblCellPhone.Text = "c-" + src.RSHOMEPHONE.Trim();
-            lblEmail.Text = src.RSEMAIL.Trim();
+            lblCellPhone.ValueText = src.RSHOMEPHONE.Trim();
+            lblEmail.ValueText = src.RSEMAIL.Trim();
             lblFullName.Text = src.RSFIRSTNAME.Trim() + " " + src.RSLASTNAME.Trim();
             lblRelationship.Text = src.RSROLEDESCRIPTION.Trim();
-            lblWorkPhone.Text = "w-" + src.RSWORKPHONE.Trim();
+            lblWorkPhone.ValueText = src.RSWORKPHONE.Trim();
 
             thereferral = src;
         }

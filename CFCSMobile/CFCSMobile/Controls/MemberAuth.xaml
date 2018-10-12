@@ -44,8 +44,10 @@
            FontSize="10"
            Grid.Row="1" Grid.Column="0"
            Text=""/>
-
-    <Label x:Name="MemberUnits" TextColor="Black"
+    
+    <local:LabledDateControl x:Name="MemberUnits" Grid.Row="1" Grid.Column="1" TitleText="Units:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="MemberRemainingUnits" Grid.Row="1" Grid.Column="2" TitleText="Remaining:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl> 
+    <!--<Label x:Name="MemberUnits" TextColor="Black"
            FontAttributes="Bold" 
            FontSize="12"
            Grid.Row="1" Grid.Column="1"
@@ -56,5 +58,5 @@
            FontSize="12"
            Grid.Row="1" Grid.Column="2"
            Text=""/>
-
+-->
 </Grid>

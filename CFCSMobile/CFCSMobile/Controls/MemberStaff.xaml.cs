@@ -29,10 +29,32 @@ namespace CFCSMobile.Controls
             lblStaff.Text = ob.OBSERVER + " " + ob.CREDENTIALONE.Trim() + " " + ob.CREDENTIALTWO.Trim();
             lblSupervisor.Text = ob.OBSTYPE;
             lblPhone.Text = ob.PHONE;
-            lblEmail.Text = ob.EMAIL;
-            lblEntryDate.Text = ob.CREATEDATE.ToShortDateString();
-            lblStartDate.Text = ob.strSDATE;
-            lblEndDate.Text = ob.strEDATE;           
+
+            lblEmail.TitleFontSize = 10;
+            lblEmail.ValueFontSize = 12;
+            lblEmail.ValueText = ob.EMAIL;
+            lblEmail.TitleText = "Email:";
+
+            //lblEmail.Text = ob.EMAIL;
+
+            lblEntryDate.TitleFontSize = 10;
+            lblEntryDate.ValueText = ob.CREATEDATE.ToShortDateString();
+            lblEntryDate.TitleText = "Entry:";
+            lblEntryDate.ValueFontSize = 12;
+
+            lblStartDate.TitleFontSize = 10;
+            lblStartDate.ValueText = ob.strSDATE;
+            lblStartDate.TitleText = "Start:";
+            lblStartDate.ValueFontSize = 12;
+
+            lblEndDate.TitleFontSize = 10;
+            lblEndDate.ValueText = ob.strEDATE;
+            lblEndDate.TitleText = "End:";
+            lblEndDate.ValueFontSize = 12;
+            //lblEntryDate = ob.CREATEDATE.ToShortDateString();
+
+            //lblStartDate.Text = ob.strSDATE;
+            //lblEndDate.Text = ob.strEDATE;           
         }
 	}
 }

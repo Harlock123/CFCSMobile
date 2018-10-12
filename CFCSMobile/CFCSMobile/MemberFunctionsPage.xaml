@@ -53,19 +53,27 @@
                 <StackLayout x:Name="lstMemberStuff" Orientation="Vertical"></StackLayout>
             </ScrollView>
             
-            <Button Grid.Row="2" x:Name="btnEncounter" Text="Enter an Encounter" 
-                    BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
-                    Clicked="Handle_Encounter_Clicked" HeightRequest="100"></Button>
-            <Button Grid.Row="3" x:Name="btnCollateral" Text="Enter a Colleratal Note"
-                    BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
-                    Clicked="Handle_Collateral_Clicked" HeightRequest="100"></Button>
-            <Button Grid.Row="4" x:Name="btnAuths" Text="View Service Authorizations"
-                    BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
-                    Clicked="Handle_Auth_Clicked" HeightRequest="100"></Button>
-
-            <Button Grid.Row="5" x:Name="btnTeam" Text="View Members Team"
-                    BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
-                    Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
+            <ScrollView Grid.Row="2">
+            
+                <StackLayout>
+                
+                    <Button x:Name="btnEncounter" Text="Enter an Encounter" 
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="Handle_Encounter_Clicked" HeightRequest="100"></Button>
+                    <Button x:Name="btnCollateral" Text="Enter a Colleratal Note"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="Handle_Collateral_Clicked" HeightRequest="100"></Button>
+                    <Button x:Name="btnAuths" Text="View Service Authorizations"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="Handle_Auth_Clicked" HeightRequest="100"></Button>
+                    <Button x:Name="btnTeam" Text="View Members Team"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
+              
+                </StackLayout>
+            
+            </ScrollView>
+            
 
         </Grid>
 

@@ -35,9 +35,9 @@ namespace CFCSMobile.Controls
 
             MemberDateRange.Text = s.STARTDATE.ToShortDateString() + " - " + ed;
 
-            MemberUnits.Text = "Units: " + s.UNITS.ToString();
+            MemberUnits.ValueText = s.UNITS.ToString();
 
-            MemberRemainingUnits.Text = s.REMAININGUNITS.ToString() + " Remaining";
+            MemberRemainingUnits.ValueText = s.REMAININGUNITS.ToString();
 
             MemberProvider.Text = s.PROVIDERNAME;
 
