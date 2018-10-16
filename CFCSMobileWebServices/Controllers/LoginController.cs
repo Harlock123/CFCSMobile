@@ -1592,6 +1592,329 @@ namespace CFCSMobileWebServices.Controllers
             return numtype;
         }
 
+        [Route("api/Login/EncounterProgressNotes/{IDNUM}")]
+        [HttpGet]
+        public JsonResult<List<MemberProgressNotes>> GetListOfProgressNotesForType(string IDNUM)
+
+        {
+            List<MemberProgressNotes> result = new List<MemberProgressNotes>();
+
+            try
+            {
+               
+                //03172016 - per client, do not show encounter notes here
+                // added some coalesces to simulate supervision approval business requirements change
+                string sql = "SELECT MPNID," +
+                    "COALESCE((SELECT TOP 1 DESCRIPTION FROM TBLLOOKUPPROGRESSNOTETYPES WHERE CODE = NOTETYPE)," +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPREMNOTETYPE] WHERE CODE = NOTETYPE)) as 'NTYPE'," +
+                    "CREATEDBY,CREATEDATE,NOTATION,SIGNED,SIGNDATE,COALESCE(SUPERAPPROV,CREATEDBY),COALESCE(SUPERAPPROVEDATE,CREATEDATE),SSN," +
+                    "COALESCE((SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPNOTECONTACTTYPE] WHERE CODE = NOTECONTACTTYPE)," +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPREMCONTACTWITH] WHERE CODE = NOTECONTACTTYPE)) as 'NCONTACTTYPE', " +
+                    "SUPERVISORNOTATION, SUPERVISORACK1, SUPERVISORACK2, SUPERVISORNOTATIONDATE,CONTACTDATE, TRAVELTIME, CONTACTTIME, " +
+                    "SAFETYASSESSMENT,SAFETYASSESSMENTLVL, " +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPSAFETYASSESSMENTLVL] WHERE CODE = SAFETYASSESSMENTLVL) as 'SALDESC', SERVICECODE " +
+                    //"FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
+                    "FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' AND NOTETYPE = '13' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
+
+                //we only want type 13 returned in this query 'Encounter'
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    MemberProgressNotes pn = new MemberProgressNotes();
+                    List<ServiceDescription> SVCS = GetListOfServiceDescriptions();
+
+                    pn.mpnID = r.GetInt64(0);
+                    pn.NOTETYPEDESC = r[1] + "";
+                    pn.AUTHOR = r[2] + "";
+                    pn.CREATEDATE = r.GetDateTime(3);
+                    pn.NOTATION = r[4] + "";
+
+                    pn.NOTATIONSHORT = Elipsis(pn.NOTATION, 200);
+
+                    pn.SIGNED = r[5] + "";
+
+                    if (!r.IsDBNull(6))
+                    {
+                        pn.SIGNEDDATE = r.GetDateTime(6);
+                    }
+
+                    pn.SUPERAPPROV = r[7] + "";
+
+                    if (!r.IsDBNull(8))
+                    {
+                        pn.SUPERAPPROVEDATE = r.GetDateTime(8);
+                    }
+
+                    pn.SSN = IDNUM;
+
+                    pn.NOTECONTACTDESC = r[10] + "";
+
+                    pn.SUPERVISORNOTATION = r[11] + "";
+
+                    pn.SUPERVISORACK1 = r[12] + "";
+
+                    pn.SUPERVISORACK2 = r[13] + "";
+
+                    if (!r.IsDBNull(14))
+                    {
+                        pn.SUPERVISORNOTATIONDATE = r.GetDateTime(14);
+                    }
+
+                    if (!r.IsDBNull(15))
+                    {
+                        pn.CONTACTDATE = r.GetDateTime(15);
+                        pn.strCONTACTDATE = r.GetDateTime(15).ToShortDateString();
+                    }
+                    else
+                    {
+                        pn.CONTACTDATE = Convert.ToDateTime(null);
+                        pn.strCONTACTDATE = "";
+                    }
+
+                    if (!r.IsDBNull(16))
+                    {
+                        pn.TRAVELMINUTES = r.GetInt32(16);
+                    }
+                    else
+                    {
+                        pn.TRAVELMINUTES = 0;
+                    }
+
+                    if (!r.IsDBNull(17))
+                    {
+                        pn.CONTACTMINUTES = r.GetInt32(17);
+                    }
+                    else
+                    {
+                        pn.CONTACTMINUTES = 0;
+                    }
+
+                    if (!r.IsDBNull(18))
+                    {
+                        pn.SAFETYASSESSMENT = r.GetDateTime(18);
+                    }
+                    else
+                    {
+                        pn.SAFETYASSESSMENT = Convert.ToDateTime(null);
+                    }
+
+                    pn.SAFETYASSESSMENTLVL = r[19] + "";
+                    pn.SAFETYASSESSMENTLVLDESC = r[20] + "";
+
+                    if (pn.SUPERAPPROV.Trim() == "")
+                    {
+                        pn.SUPERAPPROV = pn.AUTHOR;
+                        pn.SUPERAPPROVEDATE = pn.CREATEDATE;
+                    }
+
+                    pn.SERVICECODE = r[21] + "";
+
+                    foreach (ServiceDescription o in SVCS)
+                    {
+                        string tmp = o.COSTCENTER;
+                        //if (tmp.Length == 1)
+                        //    tmp = "0" + tmp;
+
+                        if (pn.SERVICECODE == tmp)
+                        {
+                            pn.SERVICEDESCRIPTION = o.SVCDESCRIPTION;
+                            break;
+                        }
+                    }
+
+                    result.Add(pn);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfProgressNotesForType", ex.Message);
+
+                MemberProgressNotes pn = new MemberProgressNotes();
+
+                pn.NOTATION = ex.Message;
+
+                result.Add(pn);
+            }
+
+            return Json(result);
+        }
+
+        private string Elipsis(string src, int len)
+        {
+            string result = "";
+
+            try
+            {
+                string[] delim = { System.Environment.NewLine, "\r", "\n" };
+
+                string[] arr = src.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+
+                int line = 0;
+
+                foreach (string s in arr)
+                {
+                    result += s;
+
+                    line += 1;
+
+                    if (result.Length < len)
+                    {
+                        result += System.Environment.NewLine;
+                    }
+                    else
+                    {
+                        result += "...";
+                        break;
+                    }
+
+                    if (line > 4)
+                    {
+                        break;
+                    }
+                }
+
+                if (result.Length > len)
+                {
+                    result = result.Substring(0, len) + "...";
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("Elipsis routine", ex.Message);
+
+                result = "";
+            }
+
+            return result;
+        }
+
+
+        [Route("api/Login/GetServiceDescriptions")]
+        [HttpGet]
+        public JsonResult<List<ServiceDescription>> TheServiceDescriptions()
+        {
+            List<ServiceDescription> TheList = GetListOfServiceDescriptions();
+
+            return Json(TheList);
+
+        }
+
+        private List<ServiceDescription> GetListOfServiceDescriptions()
+        {
+            List<ServiceDescription> result = new List<ServiceDescription>();
+
+            try
+            {
+                string sql = "SELECT [SvcID],[Funder],B.DESCRIPTION as 'FUNDERNAME',[CostCenter],[SvcCode]" +
+                    ",[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE]" +
+                    ",[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE] " +
+                    "FROM [dbo].[tblLOOKUPSERVICES] A " +
+                    "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE " +
+                    "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE " +
+                    "WHERE a.active = 'Y' ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ServiceDescription i = new ServiceDescription();
+
+                    i.ID = r.GetInt64(0);
+                    i.FUNDER = r["FUNDER"] + "";
+                    i.FUNDERDESCRIPTION = r["FUNDERNAME"] + "";
+                    i.COSTCENTER = r["COSTCENTER"] + "";
+                    i.SVCCODE = r["SVCCODE"] + "";
+                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
+                    i.UNITTYPE = r["UNITTYPE"] + "";
+                    i.UNITTYPEDESCRIPTION = r["UNITTYPEDESC"] + "";
+                    if (!r.IsDBNull(8))
+                    {
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.COSTPERUNIT = d;
+                        }
+                        else
+                        {
+                            i.COSTPERUNIT = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.COPAY = r["COPAY"] + "";
+                    i.MOD1 = r["MODIFIER1"] + "";
+                    i.MOD2 = r["MODIFIER2"] + "";
+                    i.MOD3 = r["MODIFIER3"] + "";
+                    i.MOD4 = r["MODIFIER4"] + "";
+
+                    if (!r.IsDBNull(16))
+                    {
+                        string v = r[16] + "";
+
+                        int d = -1;
+
+                        if (int.TryParse(v, out d))
+                        {
+                            i.AUTOUNIT = d;
+                        }
+                        else
+                        {
+                            i.AUTOUNIT = -1;
+                        }
+                    }
+
+                    if (!r.IsDBNull(17))
+                    {
+                        string v = r[17] + "";
+
+                        int d = 0;
+
+                        if (int.TryParse(v, out d))
+                        {
+                            i.ROUNDRULE = d;
+                        }
+                        else
+                        {
+                            i.ROUNDRULE = 0;
+                        }
+                    }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptions", ex.Message);
+            }
+
+            return result;
+        }
+
     }
 
     #region Extra Classes
@@ -1991,6 +2314,65 @@ namespace CFCSMobileWebServices.Controllers
             strRSENDDATE = "";
             RSEXTENSION = "";
         }
+                
+    }
+
+    public class MemberProgressNotes
+    {
+        public string AUTHOR = "";
+        public DateTime CONTACTDATE = DateTime.MinValue;
+        public string strCONTACTDATE = "";
+        public int CONTACTMINUTES = 0;
+        public DateTime CREATEDATE = DateTime.MinValue;
+        public string MEMBERNAME = "";
+        public long mpnID = -1;
+        public string NOTATION = "";
+        public string NOTATIONSHORT = "";
+        public string NOTECONTACTDESC = "";
+        public string NOTETYPEDESC = "";
+        public DateTime SAFETYASSESSMENT = DateTime.MinValue;
+        public string SAFETYASSESSMENTLVL = "";
+        public string SAFETYASSESSMENTLVLDESC = "";
+        public string SIGNED = "";
+        public DateTime SIGNEDDATE = DateTime.MinValue;
+        public string SSN = "";
+        public string SUPERAPPROV = "";
+        public DateTime SUPERAPPROVEDATE = DateTime.MinValue;
+        public string SUPERVISORACK1 = "";
+        public string SUPERVISORACK2 = "";
+        public string SUPERVISORNOTATION = "";
+        public DateTime SUPERVISORNOTATIONDATE = DateTime.MinValue;
+        public int TRAVELMINUTES = 0;
+        public string SERVICECODE = "";
+        public string SERVICEDESCRIPTION = "";
+        public string NEWSSN = "";
+        public int ENCOUNTERID = 0;
+        public string CONTACTTYPEDESCRIPTION = "";
+        public string strCREATEDATE = "";
+    }
+
+    public class ServiceDescription
+    {
+        public string ACTIVE = "";
+        public string AUTHREQ = "";
+        public string COSTCENTER = "";
+        public double COSTPERUNIT = 0.0;
+        public string FUNDER = "";
+        public string FUNDERDESCRIPTION = "";
+        public long ID = -1;
+        public string SVCCODE = "";
+        public string SVCDESCRIPTION = "";
+        public string UNITTYPE = "";
+        public string UNITTYPEDESCRIPTION = "";
+        public int AUTOUNIT = -1;
+        public int ROUNDRULE = -1;
+        public string MOD1 = "";
+        public string MOD2 = "";
+        public string MOD3 = "";
+        public string MOD4 = "";
+        public string COPAY = "";
+        public string RELATEDSPLITCODE = "";
+        public bool BCBANOTE = false;
     }
 
 
