@@ -1594,7 +1594,7 @@ namespace CFCSMobileWebServices.Controllers
 
         [Route("api/Login/EncounterProgressNotes/{IDNUM}")]
         [HttpGet]
-        public JsonResult<List<MemberProgressNotes>> GetListOfProgressNotesForType(string IDNUM)
+        public JsonResult<List<MemberProgressNotes>> GetListOfEncounterNotesForType(string IDNUM)
 
         {
             List<MemberProgressNotes> result = new List<MemberProgressNotes>();
@@ -1615,6 +1615,166 @@ namespace CFCSMobileWebServices.Controllers
                              "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPSAFETYASSESSMENTLVL] WHERE CODE = SAFETYASSESSMENTLVL) as 'SALDESC', SERVICECODE " +
                     //"FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
                     "FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' AND NOTETYPE = '13' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
+
+                //we only want type 13 returned in this query 'Encounter'
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    MemberProgressNotes pn = new MemberProgressNotes();
+                    List<ServiceDescription> SVCS = GetListOfServiceDescriptions();
+
+                    pn.mpnID = r.GetInt64(0);
+                    pn.NOTETYPEDESC = r[1] + "";
+                    pn.AUTHOR = r[2] + "";
+                    pn.CREATEDATE = r.GetDateTime(3);
+                    pn.NOTATION = r[4] + "";
+
+                    pn.NOTATIONSHORT = Elipsis(pn.NOTATION, 200);
+
+                    pn.SIGNED = r[5] + "";
+
+                    if (!r.IsDBNull(6))
+                    {
+                        pn.SIGNEDDATE = r.GetDateTime(6);
+                    }
+
+                    pn.SUPERAPPROV = r[7] + "";
+
+                    if (!r.IsDBNull(8))
+                    {
+                        pn.SUPERAPPROVEDATE = r.GetDateTime(8);
+                    }
+
+                    pn.SSN = IDNUM;
+
+                    pn.NOTECONTACTDESC = r[10] + "";
+
+                    pn.SUPERVISORNOTATION = r[11] + "";
+
+                    pn.SUPERVISORACK1 = r[12] + "";
+
+                    pn.SUPERVISORACK2 = r[13] + "";
+
+                    if (!r.IsDBNull(14))
+                    {
+                        pn.SUPERVISORNOTATIONDATE = r.GetDateTime(14);
+                    }
+
+                    if (!r.IsDBNull(15))
+                    {
+                        pn.CONTACTDATE = r.GetDateTime(15);
+                        pn.strCONTACTDATE = r.GetDateTime(15).ToShortDateString();
+                    }
+                    else
+                    {
+                        pn.CONTACTDATE = Convert.ToDateTime(null);
+                        pn.strCONTACTDATE = "";
+                    }
+
+                    if (!r.IsDBNull(16))
+                    {
+                        pn.TRAVELMINUTES = r.GetInt32(16);
+                    }
+                    else
+                    {
+                        pn.TRAVELMINUTES = 0;
+                    }
+
+                    if (!r.IsDBNull(17))
+                    {
+                        pn.CONTACTMINUTES = r.GetInt32(17);
+                    }
+                    else
+                    {
+                        pn.CONTACTMINUTES = 0;
+                    }
+
+                    if (!r.IsDBNull(18))
+                    {
+                        pn.SAFETYASSESSMENT = r.GetDateTime(18);
+                    }
+                    else
+                    {
+                        pn.SAFETYASSESSMENT = Convert.ToDateTime(null);
+                    }
+
+                    pn.SAFETYASSESSMENTLVL = r[19] + "";
+                    pn.SAFETYASSESSMENTLVLDESC = r[20] + "";
+
+                    if (pn.SUPERAPPROV.Trim() == "")
+                    {
+                        pn.SUPERAPPROV = pn.AUTHOR;
+                        pn.SUPERAPPROVEDATE = pn.CREATEDATE;
+                    }
+
+                    pn.SERVICECODE = r[21] + "";
+
+                    foreach (ServiceDescription o in SVCS)
+                    {
+                        string tmp = o.COSTCENTER;
+                        //if (tmp.Length == 1)
+                        //    tmp = "0" + tmp;
+
+                        if (pn.SERVICECODE == tmp)
+                        {
+                            pn.SERVICEDESCRIPTION = o.SVCDESCRIPTION;
+                            break;
+                        }
+                    }
+
+                    result.Add(pn);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfProgressNotesForType", ex.Message);
+
+                MemberProgressNotes pn = new MemberProgressNotes();
+
+                pn.NOTATION = ex.Message;
+
+                result.Add(pn);
+            }
+
+            return Json(result);
+        }
+
+        [Route("api/Login/AllProgressNotes/{IDNUM}")]
+        [HttpGet]
+        public JsonResult<List<MemberProgressNotes>> GetListOfAllNotesForType(string IDNUM)
+
+        {
+            List<MemberProgressNotes> result = new List<MemberProgressNotes>();
+
+            try
+            {
+
+                //03172016 - per client, do not show encounter notes here
+                // added some coalesces to simulate supervision approval business requirements change
+                string sql = "SELECT MPNID," +
+                    "COALESCE((SELECT TOP 1 DESCRIPTION FROM TBLLOOKUPPROGRESSNOTETYPES WHERE CODE = NOTETYPE)," +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPREMNOTETYPE] WHERE CODE = NOTETYPE)) as 'NTYPE'," +
+                    "CREATEDBY,CREATEDATE,NOTATION,SIGNED,SIGNDATE,COALESCE(SUPERAPPROV,CREATEDBY),COALESCE(SUPERAPPROVEDATE,CREATEDATE),SSN," +
+                    "COALESCE((SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPNOTECONTACTTYPE] WHERE CODE = NOTECONTACTTYPE)," +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPREMCONTACTWITH] WHERE CODE = NOTECONTACTTYPE)) as 'NCONTACTTYPE', " +
+                    "SUPERVISORNOTATION, SUPERVISORACK1, SUPERVISORACK2, SUPERVISORNOTATIONDATE,CONTACTDATE, TRAVELTIME, CONTACTTIME, " +
+                    "SAFETYASSESSMENT,SAFETYASSESSMENTLVL, " +
+                             "(SELECT TOP 1 DESCRIPTION FROM [tblLOOKUPSAFETYASSESSMENTLVL] WHERE CODE = SAFETYASSESSMENTLVL) as 'SALDESC', SERVICECODE " +
+                    "FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
+                    //"FROM TBLMEMBERPROGRESSNOTES WHERE SSN = @SSN AND HIDDEN <> 'Y' AND NOTETYPE = '13' ORDER BY COALESCE(CONTACTDATE,CREATEDATE) DESC,MPNID ASC";
 
                 //we only want type 13 returned in this query 'Encounter'
 

@@ -57,16 +57,16 @@
             
                 <StackLayout>
                 
-                    <Button x:Name="btnEncounter" Text="Enter an Encounter" 
+                    <Button x:Name="btnEncounter" Text="Encounters" 
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="Handle_Encounter_Clicked" HeightRequest="100"></Button>
-                    <Button x:Name="btnCollateral" Text="Enter a Colleratal Note"
+                    <Button x:Name="btnCollateral" Text="Colleratal Notes"
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="Handle_Collateral_Clicked" HeightRequest="100"></Button>
-                    <Button x:Name="btnAuths" Text="View Service Authorizations"
+                    <Button x:Name="btnAuths" Text="Service Authorizations"
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="Handle_Auth_Clicked" HeightRequest="100"></Button>
-                    <Button x:Name="btnTeam" Text="View Members Team"
+                    <Button x:Name="btnTeam" Text="Members Team"
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
               

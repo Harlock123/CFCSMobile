@@ -35,7 +35,7 @@ namespace CFCSMobile
 
         void Handle_Encounter_Clicked(object sender, System.EventArgs e)
         {
-            DisplayAlert("Tapped", "Handle Encounter", "OK");
+            Application.Current.MainPage = new MemberEncounterNotes(SelectedMember);
         }
 
 
