@@ -26,13 +26,13 @@ namespace CFCSMobile.Controls
             LastName = ln;
 
             MemberFN.Text = fn + " " + ln;
-            MemberLN.Text = "DOB: " + s.DOB;
+            MemberDOB.ValueText = s.DOB;
 
-            MemberPHONE.Text = s.Phone1;
+            MemberPHONE.ValueText = s.Phone1;
 
             MemberAddress m = s.memberAddress;
 
-            MemberAddress.Text = m.Address1 + " " + m.Address2.Trim() + " " + m.City.Trim() + " " + m.State + "  " + m.ZipCode; 
+            MemberAddress.ValueText = m.Address1 + " " + m.Address2.Trim() + " " + m.City.Trim() + " " + m.State + "  " + m.ZipCode; 
 
             if (s.Gender == "M")
             {

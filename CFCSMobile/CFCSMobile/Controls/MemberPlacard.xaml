@@ -9,7 +9,7 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="24"/>
         <RowDefinition Height="20"/>
-        <RowDefinition Height="16"/>
+        <RowDefinition Height="20"/>
         
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
@@ -28,7 +28,15 @@
            FontSize="18"
            Grid.Row="0" Grid.Column="1"
            Text="Fullname goes here"/>
-    <Label x:Name="MemberLN" TextColor="DarkGray"
+
+    <local:LabledDateControl x:Name="MemberDOB" TitleText="DOB:" TitleFontSize="10" ValueFontSize="12"
+                             Grid.Row="1" Grid.Column="1" ></local:LabledDateControl>
+
+    <local:LabledDateControl x:Name="MemberPHONE" TitleText="Phone:" TitleFontSize="10" ValueFontSize="12"
+                             Grid.Row="1" Grid.Column="2" ></local:LabledDateControl>
+
+
+    <!--<Label x:Name="MemberDOB" TextColor="DarkGray"
            FontAttributes="Bold"
            FontSize="14"
            Grid.Row="1" Grid.Column="1"
@@ -38,12 +46,15 @@
            FontAttributes="Bold"
            FontSize="14"
            Grid.Row="1" Grid.Column="2"
-           Text=""/>
+           Text=""/>-->
+
+    <local:LabledDateControl x:Name="MemberAddress" TitleText="Address:" TitleFontSize="10" ValueFontSize="12"
+                             Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"></local:LabledDateControl>
     
-    <Label x:Name="MemberAddress" TextColor="DarkGray"
+    <!--<Label x:Name="MemberAddress" TextColor="DarkGray"
            FontAttributes="Bold"
            FontSize="12"
            Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-           Text=""/>
+           Text=""/>-->
 
 </Grid>
