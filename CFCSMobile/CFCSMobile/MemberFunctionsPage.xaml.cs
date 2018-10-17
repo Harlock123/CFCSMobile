@@ -37,11 +37,10 @@ namespace CFCSMobile
         {
             Application.Current.MainPage = new MemberEncounterNotes(SelectedMember);
         }
-
-
+        
         void Handle_Collateral_Clicked(object sender, System.EventArgs e)
         {
-            DisplayAlert("Tapped", "Handle Collateral", "OK");
+            Application.Current.MainPage = new MemberCollateralNotes(SelectedMember);
         }
 
         void Handle_Auth_Clicked(object sender, System.EventArgs e)

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:local="clr-namespace:CFCSMobile.Controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    HorizontalOptions="FillAndExpand"
+    x:Class="CFCSMobile.Controls.MemberProgressNote" 
+    x:Name="theGrid">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="12"/>
+        <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <local:LabledDateControl x:Name="ContactType" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                             TitleText="Contact Type:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="NoteType" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" TitleText="Note Type:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="Author" Grid.Row="0" Grid.Column="2" TitleText="Author:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <local:LabledDateControl x:Name="CreateDate" Grid.Row="1" Grid.Column="0" TitleText="Created:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="ContactDate" Grid.Row="1" Grid.Column="2" TitleText="Contact:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <local:LabledDateControl x:Name="LBL" Grid.Row="2" Grid.Column="0" TitleText="Note Detail:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <Editor x:Name="NarrativeShort" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
+            InputTransparent="True" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
+
+    <!--<Button x:Name="PicButton" Text="img" Grid.Row="0" Grid.Column="0" 
+            WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"
+            FontSize="Micro" BackgroundColor="Green" TextColor="White"
+            BorderRadius="10"/>-->
+
+    <!--<Label x:Name="MemberService" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="0"
+           Text=""/>
+
+    <Label x:Name="MemberProvider" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="1"
+           Text=""/>
+
+    <Label x:Name="MemberFunder" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="14"
+           Grid.Row="0" Grid.Column="2"
+           Text=""/>
+
+    <Label x:Name="MemberDateRange" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="10"
+           Grid.Row="1" Grid.Column="0"
+           Text=""/>
+
+    <local:LabledDateControl x:Name="MemberUnits" Grid.Row="1" Grid.Column="1" TitleText="Units:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="MemberRemainingUnits" Grid.Row="1" Grid.Column="2" TitleText="Remaining:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    -->
+    <!--<Label x:Name="MemberUnits" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="12"
+           Grid.Row="1" Grid.Column="1"
+           Text=""/>
+
+    <Label x:Name="MemberRemainingUnits" TextColor="Black"
+           FontAttributes="Bold" 
+           FontSize="12"
+           Grid.Row="1" Grid.Column="2"
+           Text=""/>
+-->
+</Grid>
