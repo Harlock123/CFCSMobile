@@ -32,7 +32,7 @@
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
     <Editor x:Name="NarrativeShort" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
-            InputTransparent="True" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
+            InputTransparent="True" BackgroundColor="White" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
 
     <!--<Button x:Name="PicButton" Text="img" Grid.Row="0" Grid.Column="0" 
             WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"

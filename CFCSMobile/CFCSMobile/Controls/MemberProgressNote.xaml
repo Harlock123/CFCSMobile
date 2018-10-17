@@ -8,6 +8,7 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="20"/>
         <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
         <RowDefinition Height="12"/>
         <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
@@ -19,21 +20,21 @@
 
     <local:LabledDateControl x:Name="ContactType" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
                              TitleText="Contact Type:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl x:Name="NoteType" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" TitleText="Note Type:" 
+    <local:LabledDateControl x:Name="NoteType" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TitleText="Note Type:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl x:Name="Author" Grid.Row="0" Grid.Column="2" TitleText="Author:" 
-                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-
-    <local:LabledDateControl x:Name="CreateDate" Grid.Row="1" Grid.Column="0" TitleText="Created:" 
-                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl x:Name="ContactDate" Grid.Row="1" Grid.Column="2" TitleText="Contact:" 
+    <local:LabledDateControl x:Name="Author" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalOptions="Center" TitleText="Author:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
-    <local:LabledDateControl x:Name="LBL" Grid.Row="2" Grid.Column="0" TitleText="Note Detail:" 
+    <local:LabledDateControl x:Name="CreateDate" Grid.Row="2" Grid.Column="0" TitleText="Created:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl x:Name="ContactDate" Grid.Row="2" Grid.Column="2" TitleText="Contact:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
-    <Editor x:Name="NarrativeShort" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
-            InputTransparent="True" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
+    <local:LabledDateControl x:Name="LBL" Grid.Row="3" Grid.Column="0" TitleText="Note Detail:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <Editor x:Name="NarrativeShort" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" 
+            InputTransparent="True" BackgroundColor="White" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
 
     <!--<Button x:Name="PicButton" Text="img" Grid.Row="0" Grid.Column="0" 
             WidthRequest="50" HeightRequest="48" Grid.RowSpan="2"
