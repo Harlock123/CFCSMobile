@@ -2236,6 +2236,2325 @@ namespace CFCSMobileWebServices.Controllers
             return result;
         }
 
+        [Route("api/Login/GetAllLookups")]
+        [HttpGet]
+        public JsonResult<TheLookups> GetAllLookups()
+        {
+            TheLookups result = new TheLookups();
+            try
+            {
+                result.LOOKUPADDRESSTYPE = GetSpecificLookupList("tblLOOKUPADDRESSTYPE");
+                result.LOOKUPADMISSIONTYPE = GetSpecificLookupList("tblLOOKUPADMISSIONTYPE");
+                result.LOOKUPALERTTYPE = GetSpecificLookupList("tblLOOKUPALERTTYPE");
+                result.LOOKUPASSMTTYPE = GetSpecificLookupList("tblLOOKUPASSMTTYPE");
+                result.LOOKUPCOMMERCIALINSURANCE = GetSpecificLookupList("tblLOOKUPCOMMERCIALINSURANCE");
+                result.LOOKUPCOMMUNITYSUPPORTSTYPE = GetSpecificLookupList("tblLOOKUPCOMMUNITYSUPPORTSTYPE");
+                result.LOOKUPCONCURRENT211REFERRALTARGETS = GetSpecificLookupList("tblLOOKUPCONCURRENT211REFERRALTARGETS");
+                result.LOOKUPCONTACTTYPE = GetSpecificLookupList("tblLOOKUPCONTACTTYPE");
+                result.LOOKUPCOSTCENTER = GetSpecificLookupListExt("tblLOOKUPCOSTCENTER");
+                result.LOOKUPUNITTYPE = GetSpecificLookupListExt("tblLOOKUPUNITS");
+                result.LOOKUPCOUNTYNAME = GetSpecificLookupList("tblLOOKUPCOUNTYNAME");
+                result.LOOKUPDISCHARGETYPE = GetSpecificLookupList("tblLOOKUPDISCHARGETYPE");
+                result.LOOKUPDISPOSITIONS = GetSpecificLookupList("tblLOOKUPDISPOSITIONS");
+                result.LOOKUPDISCHARGEREASON = GetSpecificLookupList("tblLOOKUPDISCHARGEREASON");
+                result.LOOKUPDRUGOFCHOICE = GetSpecificLookupList("tblLOOKUPDRUGOFCHOICE");
+                result.LOOKUPEDUCATION = GetSpecificLookupList("tblLOOKUPEDUCATION");
+
+                result.LOOKUPENCOUNTERRELATION = GetSpecificLookupList("tblLOOKUPENCOUNTERRELATION");
+                result.LOOKUPENCOUNTERSDS = GetSpecificLookupList("tblLOOKUPENCOUNTERSDS");
+                result.LOOKUPENCOUNTERSTATUS = GetSpecificLookupList("tblLOOKUPENCOUNTERSTATUS");
+                result.LOOKUPENCOUNTERSTATUSNOBILLED = GetEncounterStatusWithoutBilled();
+                result.LOOKUPENCOUNTERSTATUSALL = GetEncounterStatusAll();
+
+                result.LOOKUPEMPLOYMENT = GetSpecificLookupList("tblLOOKUPEMPLOYMENT");
+                result.LOOKUPETHNICITY = GetSpecificLookupList("tblLOOKUPETHNICITY");
+                result.LOOKUPFACILITY = GetSpecificLookupListWithProgram("tblLOOKUPFACILITY");
+                result.LOOKUPFACILITYTYPE = GetSpecificLookupList("tblLOOKUPFACILITYTYPE");
+                result.LOOKUPFOLLOWUPREASONS = GetSpecificLookupList("tblLOOKUPFOLLOWUPREASONS");
+                result.LOOKUPFOLLOWUPPROVTYPE = GetSpecificLookupList("tblLOOKUPFOLLOWUPPROVTYPE");
+                result.LOOKUPFREQ = GetSpecificLookupList("tblLOOKUPFREQ");
+                result.LOOKUPFUNDING = GetSpecificLookupList("tblLOOKUPFUNDING");
+                result.LOOKUPFUNDERS = GetSpecificLookupList("tblLOOKUPFUNDERS");
+                result.LOOKUPFUNDERSFLEXFUND = GetFundersNoMedicaid();
+                result.LOOKUPFUNDERSGROUPHEALTH = GetFundersMedicaidandCommercial();
+                result.LOOKUPGENDER = GetSpecificLookupList("tblLOOKUPGENDER");
+                result.LOOKUPGROUPINFORMATION = GetSpecificLookupList("tblLOOKUPGROUPINFORMATION");
+                result.LOOKUPHEALTHSTATUS = GetSpecificLookupList("tblLOOKUPHEALTHSTATUS");
+                result.LOOKUPINCIDENTALEXPENSECATEGORIES = GetSpecificLookupList("tblLOOKUPINCIDENTALEXPENSECATEGORIES");
+                result.LOOKUPINCOMESOURCE = GetSpecificLookupList("tblLOOKUPINCOMESOURCE");
+                result.LOOKUPLANGUAGES = GetSpecificLookupList("tblLOOKUPLANGUAGES");
+                result.LOOKUPLEGALSTATUS = GetSpecificLookupList("tblLOOKUPLEGALSTATUS");
+                result.LOOKUPLIVINGSIT = GetSpecificLookupList("tblLOOKUPLIVINGSIT");
+                result.LOOKUPMARCHMANACT = GetSpecificLookupList("tblLOOKUPMARCHMANACT");
+                result.LOOKUPMEDCARECOVERAGEGROUPS = GetSpecificLookupList("tblLOOKUPMEDCARECOVERAGEGROUPS");
+                result.LOOKUPMEDICAIDTYPE = GetSpecificLookupList("tblLOOKUPMEDICAIDTYPE");
+                result.LOOKUPMESSAGETYPE = GetSpecificLookupList("tblLOOKUPMESSAGETYPE");
+                result.LOOKUPMARITALSTATUS = GetSpecificLookupList("tblLOOKUPMARITALSTATUS");
+                result.LOOKUPMHPROBLEM = GetSpecificLookupList("tblLOOKUPMHPROBLEM");
+                result.LOOKUPMEMBERWATCHLIST = GetSpecificLookupList("tblLOOKUPMEMBERWATCHLIST");
+                result.LOOKUPNOTECONTACTTYPE = GetSpecificLookupList("tblLOOKUPNOTECONTACTTYPE");
+                result.LOOKUPOTHERSYSTEMS = GetSpecificLookupList("tblLOOKUPOTHERSYSTEMS");
+                result.LOOKUPOPFUTYPE = GetSpecificLookupList("tblLOOKUPOPFUTYPES");
+                result.LOOKUPPARTICIPANTTYPE = GetSpecificLookupList("tblLOOKUPPARTICIPANTTYPE");
+                result.LOOKUPPHONETYPES = GetSpecificLookupList("tblLOOKUPPHONETYPES");
+                result.LOOKUPPREGTRIMESTER = GetSpecificLookupList("tblLOOKUPPREGTRIMESTER");
+                result.LOOKUPPROGRAM = GetSpecificLookupList("tblLOOKUPPROGRAM");
+                result.LOOKUPPROGRAMMEMBERSHIP = GetSpecificLookupList("tblLOOKUPPROGRAMMEMBERSHIP");
+                result.LOOKUPPROGRAMDISCHARGEREASONS = GetSpecificLookupList("tblLOOKUPPROGRAMDISCHARGEREASONS");
+                result.LOOKUPPROGRAMEVALPURPOSE = GetSpecificLookupList("tblLOOKUPPROGRAMEVALPURPOSE");
+                result.LOOKUPPROGRAMTYPE = GetSpecificLookupList("tblLOOKUPPROGRAMTYPE");
+                result.LOOKUPPROGRESSNOTETYPES = GetSpecificLookupList("tblLOOKUPPROGRESSNOTETYPES");
+
+                //LogError("PART1", "MADE IT HERE");
+
+                result.LOOKUPPROVIDERSPECIALTY = GetSpecificLookupList("tblLOOKUPPROVIDERSPECIALTY");
+                result.LOOKUPPROVIDERTYPE = GetSpecificLookupList("tblLOOKUPPROVIDERTYPE");
+
+                result.LOOKUPPURPOSEASAM = GetSpecificLookupList("tblLOOKUPPURPOSEASAM");
+                result.LOOKUPPURPOSEOFEVAL = GetSpecificLookupList("tblLOOKUPPURPOSEOFEVAL");
+                result.LOOKUPPURPOSEOFEVALDCF = GetSpecificLookupList("tblLOOKUPPURPOSEOFEVALDCF");
+                result.LOOKUPRACE = GetSpecificLookupList("tblLOOKUPRACE");
+                result.LOOKUPRECLEVELOFCARE = GetSpecificLookupList("tblLOOKUPRECLEVELOFCARE");
+
+                result.LOOKUPREFERRALSOURCE = GetSpecificLookupList("tblLOOKUPREFERRALSOURCE");
+
+                result.LOOKUPREFERRALREASON = GetSpecificLookupList("tblLOOKUPREFERRALREASON");
+                result.LOOKUPREFSOURCEBLUEBOOK = GetReferralSourceBlueBook();
+
+                result.LOOKUPREMCONTACTWITH = GetSpecificLookupList("tblLOOKUPREMCONTACTWITH");
+                result.LOOKUPREMNOTETYPE = GetSpecificLookupList("tblLOOKUPREMNOTETYPE");
+
+                result.LOOKUPRESIDENTSTATUS = GetSpecificLookupList("tblLOOKUPRESIDENTSTATUS");
+                result.LOOKUPSCALE = GetSpecificLookupList("tblLOOKUPSCALE");
+                result.LOOKUPSCREENINGPROGRAM = GetSpecificLookupList("tblLOOKUPSCREENINGPROGRAM");
+                result.LOOKUPSERVICEGAPS = GetEntireListOfServiceGapDescriptors();
+                result.LOOKUPSERVICEGAPVERIFICATIONMETHODS = GetSpecificLookupList("tblLOOKUPSERVICEGAPVERIFICATIONMETHODS");
+                result.LOOKUPTANFSTATUS = GetSpecificLookupList("tblLOOKUPTANFSTATUS");
+                result.LOOKUPTREATMENTPLAN_NEEDPROGRESS = GetSpecificLookupList("tblLOOKUPTMTPLAN_NEEDPROGRESS");
+                result.LOOKUPROLES = GetSpecificLookupList("tblLOOKUPROLES");
+                result.LOOKUPHIERARCHY = GetSpecificLookupList("tblLOOKUPHIERARCHY");
+                result.LOOKUPPROVIDERS = GetAllProviderDesignations();
+                result.LOOKUP211REFERRALPROVIDERS = GetListOf211ReferralProviders();
+
+                //result.LOOKUPROI = GetSpecificLookupList("tblLOOKUPROITYPE");
+                result.LOOKUPROI = GetSpecificLookupListWACtive("tblLOOKUPROITYPE");
+
+                result.LOOKUPSETARGETTYPE = GetSpecificLookupList("tblLOOKUPSETARGETTYPE");
+                result.LOOKUPSETYPE = GetSpecificLookupList("tblLOOKUPSETYPE");
+                result.LOOKUPDOCUMENTTYPES = GetSpecificLookupList("tblLOOKUPDOCUMENTTYPES");
+
+                result.LOOKUPTHERAPIES = GetSpecificLookupList("tblLOOKUPTHERAPIES");
+
+                result.LOOKUP_V_DETOX = GetSpecificLookupList("tblLOOKUP_V_DETOX");
+                result.LOOKUP_V_EMERSTAB = GetSpecificLookupList("tblLOOKUP_V_EMERSTAB");
+                result.LOOKUP_V_INCIDENTAL = GetSpecificLookupList("tblLOOKUP_V_INCIDENTAL");
+                result.LOOKUP_V_PREVENTION = GetSpecificLookupList("tblLOOKUP_V_PREVENTION");
+                result.LOOKUP_V_RECOVERY = GetSpecificLookupList("tblLOOKUP_V_RECOVERY");
+                result.LOOKUP_V_RECOVERYCCST = GetSpecificLookupList("tblLOOKUP_V_RECOVERYCCST");
+                result.LOOKUP_V_RECOVERYFACT = GetSpecificLookupList("tblLOOKUP_V_RECOVERYFACT");
+                result.LOOKUP_V_RECOVERYINCIDENTAL = GetSpecificLookupList("tblLOOKUP_V_RECOVERYINCIDENTAL");
+                result.LOOKUP_V_TREATMENTANDAFTERCARE = GetSpecificLookupList("tblLOOKUP_V_TREATMENTANDAFTERCARE");
+
+                result.LOOKUPSUPPORTSRELATIONSHIP = GetSpecificLookupList("tblLOOKUPSUPPORTSRELATIONSHIP");
+                result.LOOKUPSUPPORTSRELATIONSHIPTEAM = GetSpecificLookupListTeam("tblLOOKUPSUPPORTSRELATIONSHIP");
+                result.LOOKUPSUPPORTSRELATIONSHIPFAMILY = GetSpecificLookupListFAMILY("tblLOOKUPSUPPORTSRELATIONSHIP");
+
+
+                result.LOOKUPPROVIDERSFORTRACKINGELEMENTS = GetListOfProvidersForTrackingElements();
+                result.LOOKUPASSEMENTKINDS = GetSpecificLookupList("tblLOOKUPASSOCIATEDASSESSMENTTYPES");
+
+                result.LOOKUPSERVICES = GetListOfServiceDescriptions();
+                result.LOOKUPSERVICESNOID = GetListOfServiceDescriptionsNoID();
+                result.LOOKUPSERVICESNOIDNOSPLIT = GetListOfServiceDescriptionsNoIDNoSplit();
+                result.LOOKUPSUPERVISORS = GetListOfSupervisors();
+                result.LOOKUPUSERSWITHID = GetSpecificLookupWithID();
+                result.LOOKUPCOUNTIES = GetListOfCounties();
+                result.LOOKUPPAYER = GetSpecificLookupList("tblLOOKUPPAYER");
+                result.LOOKUPDSP = GetListOfDSP();
+                result.LOOKUPCASESTATUS = GetSpecificLookupList("tblLOOKUPCASESTATUS");
+                result.LOOKUPCASESETTING = GetSpecificLookupList("tblLOOKUPCASESETTING");
+
+                result.LOOKUPTASKS = GetSpecificLookupList("tblLOOKUPTASKS");
+                result.LOOKUPTASKSTEPS = GetListOfTaskSteps();
+                result.LOOKUPTASKSTATUS = GetSpecificLookupList("tblLOOKUPTASKSTATUS");
+
+                result.LOOKUPFUNDERSFORENCOUNTERS = GetFundersForEncounters();
+
+                result.LOOKUPLOOKUPTABLES = GetAllLookupsTables();
+
+                // we will fill this in later...
+                //result.LOOKUPZIPS = GetZipCodeList();
+
+                result.LOOKUPGMRegions = GetListOfGMRRegions();
+                               
+                result.LOOKUPSAFETYASSESSMENTLVL = GetSpecificLookupListAlternatOrder("tblLOOKUPSAFETYASSESSMENTLVL");
+
+                result.LOOKUPDISTINCTSERVICES = GetDistinctServices();
+                result.LOOKUPDISTINCTSERVICESWITHID = GetDistinctServicesWithID();
+
+                result.LOOKUPRELIGION = GetSpecificLookupList("tblLOOKUPRELIGION");
+                result.LOOKUPCOMPETENCIES = GetSpecificLookupList("tblLOOKUPUSERCOMPETENCY");
+                result.LOOKUPCREDENTIALS = GetSpecificLookupList("tblLOOKUPUSERCREDENTIALS");
+
+                result.LOOKUPACTIVEMEMBERS = GetActiveMembers();
+                result.LOOKUPWAITLISTREASON = GetSpecificLookupList("tblLOOKUPWAITLISTREASON");
+                result.LOOKUPMEDS = GetSpecificLookupListWithOther("tblLOOKUPMEDS");
+
+
+                // These are OHIO Specific additions to Health Intech and are omitted from the CFCS API Layer
+                // new stuff for HealthIntech
+
+                //result.LOOKUPCONTACTPREFERENCES = GetSpecificLookupList("tblLOOKUPCONTACTPREFERENCES");
+                //result.LOOKUPMARITIALSTATUS = GetSpecificLookupList("tblLOOKUPMARITALSTATUS");
+                //result.LOOKUPASSESSMENTREASON = GetSpecificLookupList("tblLOOKUPASSESSMENTREASON");
+                //result.LOOKUPPATIENTSTATUSLIST = GetSpecificLookupList("tblLOOKUPPATIENTSTATUS");
+
+                //result.LOOKUPADLSELFPERFORMANCELIST = GetSpecificLookupList("tblLOOKUPADLSELFPERFORMANCELIST");
+                //result.LOOKUPADLSTATUS90 = GetSpecificLookupList("tblLOOKUPADLSTATUS90");
+
+                //result.LOOKUPUNDERSTANDOTHERS = GetSpecificLookupList("tblLOOKUPUNDERSTANDOTHERS");
+                //result.LOOKUPSELFUNDERSTOOD = GetSpecificLookupList("tblLOOKUPSELFUNDERSTOOD");
+
+                //result.LOOKUPBEHAVIORSYMPTOMS = GetSpecificLookupList("tblLOOKUPBEHAVIORSYMPTOMS");
+
+                //result.LOOKUPPSYCHIATRICCONTACT = GetSpecificLookupList("tblLOOKUPPSYCHIATRICCONTACT");
+                //result.LOOKUPDISCHARGEFROMPSYCHIATRIC = GetSpecificLookupList("tblLOOKUPDISCHARGEFROMPSYCHIATRIC");
+                //result.LOOKUPPSYCHIATRICDURATION = GetSpecificLookupList("tblLOOKUPPSYCHIATRICDURATION");
+                //result.LOOKUPPSYCHIATRICADMISSION2YEAR = GetSpecificLookupList("tblLOOKUPPSYCHIATRICADMISSION2YEAR");
+                //result.LOOKUPPSYCHIATRICADMISSIONLIFETIME = GetSpecificLookupList("tblLOOKUPPSYCHIATRICADMISSIONLIFETIME");
+                //result.LOOKUPFIRSTPSYCHIATRICSTAYAGE = GetSpecificLookupList("tblLOOKUPFIRSTPSYCHIATRICSTAYAGE");
+
+                //result.LOOKUPPRIMARYLANGUAGELIST = GetSpecificLookupList("tblLOOKUPPRIMARYLANGUAGELIST");
+                //result.LOOKUPRESIDENCENEEDSTOCHANGELIST = GetSpecificLookupList("tblLOOKUPRESIDENCENEEDSTOCHANGELIST");
+                //result.LOOKUPFARTHESTWALKEDDISTANCELIST = GetSpecificLookupList("tblLOOKUPFARTHESTWALKEDDISTANCELIST");
+                //result.LOOKUPLIVINGSTATUS = GetSpecificLookupList("tblLOOKUPLIVINGSTATUS");
+                //result.LOOKUPLIVINGARRANGEMENT = GetSpecificLookupList("tblLOOKUPLIVINGARRANGEMENT");
+                //result.LOOKUPHOSPITALSTAY = GetSpecificLookupList("tblLOOKUPHOSPITALSTAY");
+                //result.LOOKUPCOGNITIVESKILLSLIST = GetSpecificLookupList("tblLOOKUPCOGNITIVESKILLSLIST");
+                //result.LOOKUPBEHAVIOURPRESENT = GetSpecificLookupList("tblLOOKUPBEHAVIOURPRESENT");
+                //result.LOOKUPUNDERSTOODLIST = GetSpecificLookupList("tblLOOKUPUNDERSTOODLIST");
+                //result.LOOKUPVISIONDIFFICULTYLIST = GetSpecificLookupList("tblLOOKUPVISIONDIFFICULTYLIST");
+                //result.LOOKUPHEARINGDIFFICULTYLIST = GetSpecificLookupList("tblLOOKUPHEARINGDIFFICULTYLIST");
+                //result.LOOKUPCHANGEIN90LIST = GetSpecificLookupList("tblLOOKUPCHANGEIN90LIST");
+                //result.LOOKUPBEHAVIOURLIST = GetSpecificLookupList("tblLOOKUPBEHAVIOURLIST");
+                //result.LOOKUPINDICATORLIST = GetSpecificLookupList("tblLOOKUPINDICATORLIST");
+                //result.LOOKUPSOCIALLIST = GetSpecificLookupList("tblLOOKUPSOCIALLIST");
+
+                //result.DECLINELIST = GetSpecificLookupList("tblDECLINELIST");
+                //result.LOOKUPALONELIST = GetSpecificLookupList("tblLOOKUPALONELIST");
+                //result.LOOKUPSELFPERFORMANCELIST = GetSpecificLookupList("tblLOOKUPSELFPERFORMANCELIST");
+                //result.LOOKUPLOCOMOTIONWALKINGLIST = GetSpecificLookupList("tblLOOKUPLOCOMOTIONWALKINGLIST");
+                //result.LOOKUPLOCOMOTIONWALKINGDISTANCELIST = GetSpecificLookupList("tblLOOKUPLOCOMOTIONWALKINGDISTANCELIST");
+                //result.LOOKUPFARTHESTWALKINGDISTANCELIST = GetSpecificLookupList("tblLOOKUPFARTHESTWALKINGDISTANCELIST");
+                //result.LOOKUPFARTHESTWHEELEDDISTANCELIST = GetSpecificLookupList("tblLOOKUPFARTHESTWHEELEDDISTANCELIST");
+
+                //result.LOOKUPACTIVITYTLEVELLIST = GetSpecificLookupList("tblLOOKUPACTIVITYTLEVELLIST");
+                //result.LOOKUPGOINGOUTLIST = GetSpecificLookupList("tblLOOKUPGOINGOUTLIST");
+                //result.LOOKUPCHANGEINADLLIST = GetSpecificLookupList("tblLOOKUPCHANGEINADLLIST");
+                //result.LOOKUPBLADDERLIST = GetSpecificLookupList("tblLOOKUPBLADDERLIST");
+                //result.LOOKUPURINARYLIST = GetSpecificLookupList("tblLOOKUPURINARYLIST");
+                //result.LOOKUPBOWELLIST = GetSpecificLookupList("tblLOOKUPBOWELLIST");
+
+
+                //result.LOOKUPSLEEPPROBLEM = GetSpecificLookupList("tblLOOKUPSLEEPPROBLEM");
+                //result.LOOKUPINSIGHTDEGREE = GetSpecificLookupList("tblLOOKUPINSIGHTDEGREE");
+                //result.LOOKUPALCOHOLCONSUMED30LIST = GetSpecificLookupList("tblLOOKUPALCOHOLCONSUMED30LIST");
+                //result.LOOKUPINTOXICSUBSTANCETIME = GetSpecificLookupList("tblLOOKUPINTOXICSUBSTANCETIME");
+                //result.LOOKUPINJECTIONDRUGUSE = GetSpecificLookupList("tblLOOKUPINJECTIONDRUGUSE");
+                //result.LOOKUPWITHDRAWALSYMPTOMS = GetSpecificLookupList("tblLOOKUPWITHDRAWALSYMPTOMS");
+                //result.LOOKUPINJURIOUSATTEMPT = GetSpecificLookupList("tblLOOKUPINJURIOUSATTEMPT");
+                //result.LOOKUPSELFINJURIOUSTOKILL = GetSpecificLookupList("tblLOOKUPSELFINJURIOUSTOKILL");
+                //result.LOOKUPVIOLENCE = GetSpecificLookupList("tblLOOKUPVIOLENCE");
+                //result.LOOKUPBEHAVIOURDISTURBANCE = GetSpecificLookupList("tblLOOKUPBEHAVIOURDISTURBANCE");
+                //result.LOOKUPPOLICEINTERVENTION = GetSpecificLookupList("tblLOOKUPPOLICEINTERVENTION");
+                //result.LOOKUPDISORDEREDTHINKING = GetSpecificLookupList("tblLOOKUPDISORDEREDTHINKING");
+                //result.LOOKUPDECISIONMAKING90 = GetSpecificLookupList("tblLOOKUPDECISIONMAKING90");
+                //result.LOOKUPIADLCAPACITY = GetSpecificLookupList("tblLOOKUPIADLCAPACITY");
+                //result.LOOKUPLIFEEVENTS = GetSpecificLookupList("tblLOOKUPLIFEEVENTS");
+                //result.LOOKUPINTENSEFEAREVENTS = GetSpecificLookupList("tblLOOKUPINTENSEFEAREVENTS");
+
+                //result.LOOKUPTREATMENTMODALITIES = GetSpecificLookupList("tblLOOKUPTREATMENTMODALITIES");
+                //result.LOOKUPINTERVENTIONFOCUS = GetSpecificLookupList("tblLOOKUPINTERVENTIONFOCUS");
+                //result.LOOKUPELECTROCONVULSIVETHERAPY = GetSpecificLookupList("tblLOOKUPELECTROCONVULSIVETHERAPY");
+                //result.LOOKUPCONTROLINTERVENTION = GetSpecificLookupList("tblLOOKUPCONTROLINTERVENTION");
+                //result.LOOKUPAUTHORIZEDACTIVITIES = GetSpecificLookupList("tblLOOKUPAUTHORIZEDACTIVITIES");
+                //result.LOOKUPDISTURBEDRELATIONSHIP = GetSpecificLookupList("tblLOOKUPDISTURBEDRELATIONSHIP");
+                //result.LOOKUPSOCIALLIST = GetSpecificLookupList("tblLOOKUPSOCIALLIST");
+                //result.LOOKUPTYPEOFADMISSION = GetSpecificLookupList("tblLOOKUPTYPEOFADMISSION");
+
+                //result.LOOKUPEMPLOYMENTSTATUS = GetSpecificLookupList("tblLOOKUPEMPLOYMENTSTATUS");
+                //result.LOOKUPEMPLOYMENTARRANGEMENT = GetSpecificLookupList("tblLOOKUPEMPLOYMENTARRANGEMENT");
+                //result.LOOKUPFORMALEDUCATION = GetSpecificLookupList("tblLOOKUPFORMALEDUCATION");
+                //result.LOOKUPUNEMPLOYMENTRISK = GetSpecificLookupList("tblLOOKUPUNEMPLOYMENTRISK");
+                //result.LOOKUPSOCIALSUPPORT = GetSpecificLookupList("tblLOOKUPSOCIALSUPPORT");
+                //result.LOOKUPEXPECTATIONOFSTAY = GetSpecificLookupList("tblLOOKUPEXPECTATIONOFSTAY");
+                //result.LOOKUPPSYCHIATRICSYMPTOMS = GetSpecificLookupList("tblLOOKUPPSYCHIATRICSYMPTOMS");
+                //result.LOOKUPPROVISIONALDSMCATEGORY = GetSpecificLookupList("tblLOOKUPPROVISIONALDSMCATEGORY");
+                //result.LOOKUPMEDICALDIAGNOSES = GetSpecificLookupList("tblLOOKUPMEDICALDIAGNOSES");
+                //result.LOOKUPDISCHARGEASSESSMENT = GetSpecificLookupList("tblLOOKUPDISCHARGEASSESSMENT");
+
+                //result.LOOKUPDIAGPRESENTLIST = GetSpecificLookupList("tblLOOKUPDIAGPRESENTLIST");
+                //result.LOOKUPFALLSLIST = GetSpecificLookupList("tblLOOKUPFALLSLIST");
+                //result.LOOKUPPROBLEMFREQUENCYLIST = GetSpecificLookupList("tblLOOKUPPROBLEMFREQUENCYLIST");
+                //result.LOOKUPDYSPNEALIST = GetSpecificLookupList("tblLOOKUPDYSPNEALIST");
+                //result.LOOKUPFATIGUELIST = GetSpecificLookupList("tblLOOKUPFATIGUELIST");
+                //result.LOOKUPPAIN1LIST = GetSpecificLookupList("tblLOOKUPPAIN1LIST");
+                //result.LOOKUPPAIN2LIST = GetSpecificLookupList("tblLOOKUPPAIN2LIST");
+
+                //result.LOOKUPPAIN3LIST = GetSpecificLookupList("tblLOOKUPPAIN3LIST");
+                //result.LOOKUPPAIN4LIST = GetSpecificLookupList("tblLOOKUPPAIN4LIST");
+                //result.LOOKUPSELFREPORTEDHEALTHLIST = GetSpecificLookupList("tblLOOKUPSELFREPORTEDHEALTHLIST");
+                //result.LOOKUPTOBACCOLIST = GetSpecificLookupList("tblLOOKUPTOBACCOLIST");
+                //result.LOOKUPALCOHOLLIST = GetSpecificLookupList("tblLOOKUPALCOHOLLIST");
+                //result.LOOKUPNUTRITIONLIST = GetSpecificLookupList("tblLOOKUPNUTRITIONLIST");
+                //result.LOOKUPPRESSUREULCERLIST = GetSpecificLookupList("tblLOOKUPPRESSUREULCERLIST");
+                //result.LOOKUPFOOTPROBLEMLIST = GetSpecificLookupList("tblLOOKUPFOOTPROBLEMLIST");
+                //result.RELASHIPSHIPTOPERSONLIST = GetSpecificLookupList("tblLOOKUPRELATIONSHIPTOPERSON");
+                //result.LIVEWITHPERSONLIST = GetSpecificLookupList("tblLOOKUPLIVESWITHPERSON");
+                //result.INFORMALHELPLIST = GetSpecificLookupList("tblLOOKUPINFORMALHELP");
+                //result.TREATMENTLIST = GetSpecificLookupList("tblLOOKUPTREATMENTLIST");
+                //result.SELFSUFFICIENCYLIST = GetSpecificLookupList("tblLOOKUPSELFSUFFICIENCY90LIST");
+                //result.PROBLEMRELATEDTODETERIORATIONLIST = GetSpecificLookupList("tblLOOKUPPRECIPITATINGEVENT");
+                //result.LOOKUPMEDICATIONADHERENCE = GetSpecificLookupList("tblLOOKUPMEDICATIONADHERENCE");
+
+                //result.LOOKUP_CA_ADAPTABILITY = GetSpecificLookupList("tblLOOKUP_CA_ADAPTABILITY");
+                //result.LOOKUP_CA_ADHERENT_WITH_MEDICATIONS = GetSpecificLookupList("tblLOOKUP_CA_ADHERENT_WITH_MEDICATIONS");
+                //result.LOOKUP_CA_ADL_SELF_PERFORMANCE = GetSpecificLookupList("tblLOOKUP_CA_ADL_SELF_PERFORMANCE");
+                //result.LOOKUP_CA_ALCOHOL = GetSpecificLookupList("tblLOOKUP_CA_ALCOHOL");
+                //result.LOOKUP_CA_ASSESSMENT_REASONS = GetSpecificLookupList("tblLOOKUP_CA_ASSESSMENT_REASONS");
+                //result.LOOKUP_CA_BEHAVIOR = GetSpecificLookupList("tblLOOKUP_CA_BEHAVIOR");
+                //result.LOOKUP_CA_BEHAVIOR_PRESENT = GetSpecificLookupList("tblLOOKUP_CA_BEHAVIOR_PRESENT");
+                //result.LOOKUP_CA_BLADDER_CONTINENCE = GetSpecificLookupList("tblLOOKUP_CA_BLADDER_CONTINENCE");
+                //result.LOOKUP_CA_BOWEL_COLLECTION_DEVICE = GetSpecificLookupList("tblLOOKUP_CA_BOWEL_COLLECTION_DEVICE");
+                //result.LOOKUP_CA_BOWEL_CONTINENCE = GetSpecificLookupList("tblLOOKUP_CA_BOWEL_CONTINENCE");
+                //result.LOOKUP_CA_CARE_GOALS = GetSpecificLookupList("tblLOOKUP_CA_CARE_GOALS");
+                //result.LOOKUP_CA_CAREGIVER_HELP = GetSpecificLookupList("tblLOOKUP_CA_CAREGIVER_HELP");
+                //result.LOOKUP_CA_CHANGE_IN_ADL = GetSpecificLookupList("tblLOOKUP_CA_CHANGE_IN_ADL");
+                //result.LOOKUP_CA_CHANGE_IN_DECISION = GetSpecificLookupList("tblLOOKUP_CA_CHANGE_IN_DECISION");
+                //result.LOOKUP_CA_COGNITIVIE_SKILLS = GetSpecificLookupList("tblLOOKUP_CA_COGNITIVIE_SKILLS");
+                //result.LOOKUP_CA_DAYS_WENT_OUT = GetSpecificLookupList("tblLOOKUP_CA_DAYS_WENT_OUT");
+                //result.LOOKUP_CA_DEGREE_COMPLETED = GetSpecificLookupList("tblLOOKUP_CA_DEGREE_COMPLETED");
+                //result.LOOKUP_CA_DISEASE_CODE = GetSpecificLookupList("tblLOOKUP_CA_DISEASE_CODE");
+                //result.LOOKUP_CA_DYSPNEA = GetSpecificLookupList("tblLOOKUP_CA_DYSPNEA");
+                //result.LOOKUP_CA_EDUCATION_STATUS = GetSpecificLookupList("tblLOOKUP_CA_EDUCATION_STATUS");
+                //result.LOOKUP_CA_EFFECT = GetSpecificLookupList("tblLOOKUP_CA_EFFECT");
+                //result.LOOKUP_CA_EXPECTED_SERVICES = GetSpecificLookupList("tblLOOKUP_CA_EXPECTED_SERVICES");
+                //result.LOOKUP_CA_FATIGUE = GetSpecificLookupList("tblLOOKUP_CA_FATIGUE");
+                //result.LOOKUP_CA_FOOT_PROBLEMS = GetSpecificLookupList("tblLOOKUP_CA_FOOT_PROBLEMS");
+                //result.LOOKUP_CA_FORMAL_CARE = GetSpecificLookupList("tblLOOKUP_CA_FORMAL_CARE");
+                //result.LOOKUP_CA_FORMAL_TREATMENTS = GetSpecificLookupList("tblLOOKUP_CA_FORMAL_TREATMENTS");
+                //result.LOOKUP_CA_FUTURE_NEEDS = GetSpecificLookupList("tblLOOKUP_CA_FUTURE_NEEDS");
+                //result.LOOKUP_CA_GENDER = GetSpecificLookupList("tblLOOKUP_CA_GENDER");
+                //result.LOOKUP_CA_HEARING_DIFFICULTY = GetSpecificLookupList("tblLOOKUP_CA_HEARING_DIFFICULTY");
+                //result.LOOKUP_CA_HOME_ENVIRONMENT = GetSpecificLookupList("tblLOOKUP_CA_HOME_ENVIRONMENT");
+                //result.LOOKUP_CA_IADL_SELF_PERFORMANCE = GetSpecificLookupList("tblLOOKUP_CA_IADL_SELF_PERFORMANCE");
+                //result.LOOKUP_CA_INTELLECTUAL_DISABILITY = GetSpecificLookupList("tblLOOKUP_CA_INTELLECTUAL_DISABILITY");
+                //result.LOOKUP_CA_INTENT = GetSpecificLookupList("tblLOOKUP_CA_INTENT");
+                //result.LOOKUP_CA_LAST_HOSPITAL_STAY = GetSpecificLookupList("tblLOOKUP_CA_LAST_HOSPITAL_STAY");
+                //result.LOOKUP_CA_LEGAL_GUARDIANSHIP = GetSpecificLookupList("tblLOOKUP_CA_LEGAL_GUARDIANSHIP");
+                //result.LOOKUP_CA_LIVES_WITH_CHILD_YOUTH = GetSpecificLookupList("tblLOOKUP_CA_LIVES_WITH_CHILD_YOUTH");
+                //result.LOOKUP_CA_LIVING_ARRANGEMENT = GetSpecificLookupList("tblLOOKUP_CA_LIVING_ARRANGEMENT");
+                //result.LOOKUP_CA_LIVING_STATUS = GetSpecificLookupList("tblLOOKUP_CA_LIVING_STATUS");
+                //result.LOOKUP_CA_LOCOMOTION = GetSpecificLookupList("tblLOOKUP_CA_LOCOMOTION");
+                //result.LOOKUP_CA_MOOD = GetSpecificLookupList("tblLOOKUP_CA_MOOD");
+                //result.LOOKUP_CA_NUTRITION_INTAKE = GetSpecificLookupList("tblLOOKUP_CA_NUTRITION_INTAKE");
+                //result.LOOKUP_CA_PAIN1 = GetSpecificLookupList("tblLOOKUP_CA_PAIN1");
+                //result.LOOKUP_CA_PAIN2 = GetSpecificLookupList("tblLOOKUP_CA_PAIN2");
+                //result.LOOKUP_CA_PAIN3 = GetSpecificLookupList("tblLOOKUP_CA_PAIN3");
+                //result.LOOKUP_CA_PAIN4 = GetSpecificLookupList("tblLOOKUP_CA_PAIN4");
+                //result.LOOKUP_CA_PARENTS_MARITAL_STATUS = GetSpecificLookupList("tblLOOKUP_CA_PARENTS_MARITAL_STATUS");
+                //result.LOOKUP_CA_PHYSICAL_ACTIVITY_HOURS = GetSpecificLookupList("tblLOOKUP_CA_PHYSICAL_ACTIVITY_HOURS");
+                //result.LOOKUP_CA_PRENATAL_HISTORY = GetSpecificLookupList("tblLOOKUP_CA_PRENATAL_HISTORY");
+                //result.LOOKUP_CA_PRESSURE_ULCER = GetSpecificLookupList("tblLOOKUP_CA_PRESSURE_ULCER");
+                //result.LOOKUP_CA_PRIMARY_LANGUAGE = GetSpecificLookupList("tblLOOKUP_CA_PRIMARY_LANGUAGE");
+                //result.LOOKUP_CA_PROBLEM_FREQUENCY = GetSpecificLookupList("tblLOOKUP_CA_PROBLEM_FREQUENCY");
+                //result.LOOKUP_CA_RELATIONSHIP = GetSpecificLookupList("tblLOOKUP_CA_RELATIONSHIP");
+                //result.LOOKUP_CA_SELF_INJURIOUS = GetSpecificLookupList("tblLOOKUP_CA_SELF_INJURIOUS");
+                //result.LOOKUP_CA_SELF_REPORTED_MOOD = GetSpecificLookupList("tblLOOKUP_CA_SELF_REPORTED_MOOD");
+                //result.LOOKUP_CA_SELF_SUFFICIENCY = GetSpecificLookupList("tblLOOKUP_CA_SELF_SUFFICIENCY");
+                //result.LOOKUP_CA_SERVICES_PROVIDED_AT_SCHOOL = GetSpecificLookupList("tblLOOKUP_CA_SERVICES_PROVIDED_AT_SCHOOL");
+                //result.LOOKUP_CA_SOCIAL = GetSpecificLookupList("tblLOOKUP_CA_SOCIAL");
+                //result.LOOKUP_CA_UNDERSTANDS = GetSpecificLookupList("tblLOOKUP_CA_UNDERSTANDS");
+                //result.LOOKUP_CA_UNDERSTOOD = GetSpecificLookupList("tblLOOKUP_CA_UNDERSTOOD");
+                //result.LOOKUP_CA_URINARY = GetSpecificLookupList("tblLOOKUP_CA_URINARY");
+                //result.LOOKUP_CA_VISION_DIFFICULTY = GetSpecificLookupList("tblLOOKUP_CA_VISION_DIFFICULTY");
+
+                //result.LOOKUP_HCA_ADHERENT_WITH_MEDICATIONS = GetSpecificLookupList("tblLOOKUP_HCA_ADHERENT_WITH_MEDICATIONS");
+                //result.LOOKUP_HCA_ADL_SELF_PERFORMANCE = GetSpecificLookupList("tblLOOKUP_HCA_ADL_SELF_PERFORMANCE");
+                //result.LOOKUP_HCA_ALCOHOL = GetSpecificLookupList("tblLOOKUP_HCA_ALCOHOL");
+                //result.LOOKUP_HCA_ASSESSMENT_REASONS = GetSpecificLookupList("tblLOOKUP_HCA_ASSESSMENT_REASONS");
+                //result.LOOKUP_HCA_BEHAVIOR = GetSpecificLookupList("tblLOOKUP_HCA_BEHAVIOR");
+                //result.LOOKUP_HCA_BEHAVIOR_PRESENT = GetSpecificLookupList("tblLOOKUP_HCA_BEHAVIOR_PRESENT");
+                //result.LOOKUP_HCA_BLADDER_CONTINENCE = GetSpecificLookupList("tblLOOKUP_HCA_BLADDER_CONTINENCE");
+                //result.LOOKUP_HCA_BOWEL_CONTINENCE = GetSpecificLookupList("tblLOOKUP_HCA_BOWEL_CONTINENCE");
+                //result.LOOKUP_HCA_CHANGE_IN_ADL = GetSpecificLookupList("tblLOOKUP_HCA_CHANGE_IN_ADL");
+                //result.LOOKUP_HCA_CHANGE_IN_DECISION = GetSpecificLookupList("tblLOOKUP_HCA_CHANGE_IN_DECISION");
+                //result.LOOKUP_HCA_COGNITIVIE_SKILLS = GetSpecificLookupList("tblLOOKUP_HCA_COGNITIVIE_SKILLS");
+                //result.LOOKUP_HCA_DAYS_WENT_OUT = GetSpecificLookupList("tblLOOKUP_HCA_DAYS_WENT_OUT");
+                //result.LOOKUP_HCA_DISEASE_CODE = GetSpecificLookupList("tblLOOKUP_HCA_DISEASE_CODE");
+                //result.LOOKUP_HCA_DISTANCE_WALKED = GetSpecificLookupList("tblLOOKUP_HCA_DISTANCE_WALKED");
+                //result.LOOKUP_HCA_DISTANCE_WHEELED = GetSpecificLookupList("tblLOOKUP_HCA_DISTANCE_WHEELED");
+                //result.LOOKUP_HCA_DYSPNEA = GetSpecificLookupList("tblLOOKUP_HCA_DYSPNEA");
+                //result.LOOKUP_HCA_FALLS = GetSpecificLookupList("tblLOOKUP_HCA_FALLS");
+                //result.LOOKUP_HCA_FATIGUE = GetSpecificLookupList("tblLOOKUP_HCA_FATIGUE");
+                //result.LOOKUP_HCA_FOOT_PROBLEMS = GetSpecificLookupList("tblLOOKUP_HCA_FOOT_PROBLEMS");
+                //result.LOOKUP_HCA_FORMAL_TREATMENTS = GetSpecificLookupList("tblLOOKUP_HCA_FORMAL_TREATMENTS");
+                //result.LOOKUP_HCA_HEARING_DIFFICULTY = GetSpecificLookupList("tblLOOKUP_HCA_HEARING_DIFFICULTY");
+                //result.LOOKUP_HCA_IADL_SELF_PERFORMANCE = GetSpecificLookupList("tblLOOKUP_HCA_IADL_SELF_PERFORMANCE");
+                //result.LOOKUP_HCA_INFORMAL_HELP = GetSpecificLookupList("tblLOOKUP_HCA_INFORMAL_HELP");
+                //result.LOOKUP_HCA_LAST_HOSPITAL_STAY = GetSpecificLookupList("tblLOOKUP_HCA_LAST_HOSPITAL_STAY");
+                //result.LOOKUP_HCA_LIVES_WITH_PERSON = GetSpecificLookupList("tblLOOKUP_HCA_LIVES_WITH_PERSON");
+                //result.LOOKUP_HCA_LIVING_ARRANGEMENT = GetSpecificLookupList("tblLOOKUP_HCA_LIVING_ARRANGEMENT");
+                //result.LOOKUP_HCA_LIVING_BETTER_OFF = GetSpecificLookupList("tblLOOKUP_HCA_LIVING_BETTER_OFF");
+                //result.LOOKUP_HCA_LIVING_STATUS = GetSpecificLookupList("tblLOOKUP_HCA_LIVING_STATUS");
+                //result.LOOKUP_HCA_LOCOMOTION = GetSpecificLookupList("tblLOOKUP_HCA_LOCOMOTION");
+                //result.LOOKUP_HCA_LOCOMOTION_TIMED = GetSpecificLookupList("tblLOOKUP_HCA_LOCOMOTION_TIMED");
+                //result.LOOKUP_HCA_MARITAL_STATUS = GetSpecificLookupList("tblLOOKUP_HCA_MARITAL_STATUS");
+                //result.LOOKUP_HCA_MOOD = GetSpecificLookupList("tblLOOKUP_HCA_MOOD");
+                //result.LOOKUP_HCA_NUTRITION_INTAKE = GetSpecificLookupList("tblLOOKUP_HCA_NUTRITION_INTAKE");
+                //result.LOOKUP_HCA_PAIN1 = GetSpecificLookupList("tblLOOKUP_HCA_PAIN1");
+                //result.LOOKUP_HCA_PAIN2 = GetSpecificLookupList("tblLOOKUP_HCA_PAIN2");
+                //result.LOOKUP_HCA_PAIN3 = GetSpecificLookupList("tblLOOKUP_HCA_PAIN3");
+                //result.LOOKUP_HCA_PAIN4 = GetSpecificLookupList("tblLOOKUP_HCA_PAIN4");
+                //result.LOOKUP_HCA_PHYSICAL_ACTIVITY_HOURS = GetSpecificLookupList("tblLOOKUP_HCA_PHYSICAL_ACTIVITY_HOURS");
+                //result.LOOKUP_HCA_PRECIPITATING_EVENT = GetSpecificLookupList("tblLOOKUP_HCA_PRECIPITATING_EVENT");
+                //result.LOOKUP_HCA_PRESSURE_ULCER = GetSpecificLookupList("tblLOOKUP_HCA_PRESSURE_ULCER");
+                //result.LOOKUP_HCA_PRIMARY_LANGUAGE = GetSpecificLookupList("tblLOOKUP_HCA_PRIMARY_LANGUAGE");
+                //result.LOOKUP_HCA_PROBLEM_FREQUENCY = GetSpecificLookupList("tblLOOKUP_HCA_PROBLEM_FREQUENCY");
+                //result.LOOKUP_HCA_RELATIONSHIP = GetSpecificLookupList("tblLOOKUP_HCA_RELATIONSHIP");
+                //result.LOOKUP_HCA_SELF_REPORTED_HEALTH = GetSpecificLookupList("tblLOOKUP_HCA_SELF_REPORTED_HEALTH");
+                //result.LOOKUP_HCA_SELF_REPORTED_MOOD = GetSpecificLookupList("tblLOOKUP_HCA_SELF_REPORTED_MOOD");
+                //result.LOOKUP_HCA_SELF_SUFFICIENCY = GetSpecificLookupList("tblLOOKUP_HCA_SELF_SUFFICIENCY");
+                //result.LOOKUP_HCA_SOCIAL = GetSpecificLookupList("tblLOOKUP_HCA_SOCIAL");
+                //result.LOOKUP_HCA_SOCIAL_ACTIVITES_CHANGE = GetSpecificLookupList("tblLOOKUP_HCA_SOCIAL_ACTIVITES_CHANGE");
+                //result.LOOKUP_HCA_TIME_ALONE = GetSpecificLookupList("tblLOOKUP_HCA_TIME_ALONE");
+                //result.LOOKUP_HCA_TOBACCO = GetSpecificLookupList("tblLOOKUP_HCA_TOBACCO");
+                //result.LOOKUP_HCA_TREATMENTS = GetSpecificLookupList("tblLOOKUP_HCA_TREATMENTS");
+                //result.LOOKUP_HCA_UNDERSTANDS = GetSpecificLookupList("tblLOOKUP_HCA_UNDERSTANDS");
+                //result.LOOKUP_HCA_UNDERSTOOD = GetSpecificLookupList("tblLOOKUP_HCA_UNDERSTOOD");
+                //result.LOOKUP_HCA_URINARY = GetSpecificLookupList("tblLOOKUP_HCA_URINARY");
+                //result.LOOKUP_HCA_VISION_DIFFICULTY = GetSpecificLookupList("tblLOOKUP_HCA_VISION_DIFFICULTY");
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetAllLookups", ex.Message);
+            }
+
+            return Json(result);
+        }
+
+        private List<CodedDescriptor> GetSpecificLookupList(string TNAME)
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorExt> GetSpecificLookupListExt(string TNAME)
+        {
+            List<CodedDescriptorExt> result = new List<CodedDescriptorExt>();
+            string sql = "";
+
+            try
+            {
+                if (TNAME == "tblLOOKUPUNITS")
+                { sql = "SELECT * FROM " + TNAME + " ORDER BY DESCRIPTON "; }
+                else
+                { sql = "SELECT * FROM " + TNAME + " ORDER BY DESCRIPTION "; }
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorExt res = new CodedDescriptorExt();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+                    res.authreq = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupListExt", ex.Message);
+
+                CodedDescriptorExt err = new CodedDescriptorExt();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+                err.authreq = "";
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetEncounterStatusWithoutBilled()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                //string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
+                //sql += "WHERE ACTIVE = 'Y' AND DESCRIPTION <> 'BILLED' ORDER BY [DESCRIPTION]";
+
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
+                sql += "WHERE ACTIVE = 'Y' ";
+                sql += "AND CODE NOT IN ('03','04','07','08','09','10') ";
+                sql += "ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetEncounterStatusWithoutBilled", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetEncounterStatusAll()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
+                sql += "ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetEncounterStatusAll", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWPrograms> GetSpecificLookupListWithProgram(string TNAME)
+        {
+            List<CodedDescriptorWPrograms> result = new List<CodedDescriptorWPrograms>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION],[ACTIVE],[PROGRAM] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWPrograms res = new CodedDescriptorWPrograms();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+                    res.active = r[2] + "";
+                    res.program = r[3] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupListWithProgram", ex.Message + System.Environment.NewLine + TNAME);
+
+                CodedDescriptorWPrograms err = new CodedDescriptorWPrograms();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWID> GetSpecificLookupWithID()
+        {
+            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT TBLUSERLOGINID, UL.Username, FIRSTNAME + ' ' + LASTNAME ";
+                sql += "FROM TBLUSERLOGINS UL ";
+                sql += "LEFT OUTER JOIN tblUserHierarchy UH ON UH.UserName = UL.Username ";
+                sql += "WHERE UH.HierCode <> 'SUPER' AND UH.HierCode <> 'CFBH' ";
+                sql += "ORDER BY USERNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWID res = new CodedDescriptorWID();
+
+                    if (r[0] != null)
+                        res.id = Convert.ToInt64(r[0]);
+                    res.code = r[1] + "";
+                    res.description = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupWithID", ex.Message);
+
+                result = new List<CodedDescriptorWID>();
+            }
+
+            return result;
+        }
+
+        private List<ZipCodeDescriptor> GetZipCodeList()
+        {
+            List<ZipCodeDescriptor> result = new List<ZipCodeDescriptor>();
+
+            try
+            {
+                string sql = "SELECT * , (SELECT TOP 1 county from [tblLOOKUPZIPCOUNTYCITY] B where a.zipcode = b.zip) as 'COUNTY' FROM tblLOOKUPZIPCODES A " +
+                    "WHERE A.ZIPCODESTATE in ('PA','NJ','TN','FL','MD','NY','DC','RI','MA','CN') ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    ZipCodeDescriptor zip = new ZipCodeDescriptor();
+
+                    zip.zipcode = r[0] + "";
+                    zip.zipcodecity = r[1] + "";
+                    zip.zipcodestate = r[2] + "";
+
+                    if (!r.IsDBNull(3))
+                        zip.ziplong = r.GetDouble(3);
+
+                    if (!r.IsDBNull(4))
+                        zip.ziplat = r.GetDouble(4);
+
+                    zip.zipcounty = r[6] + "";
+
+                    result.Add(zip);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetZipCodeList", ex.Message);
+
+                result.Clear();
+
+                ZipCodeDescriptor res = new ZipCodeDescriptor();
+                res.zipcode = ex.Message;
+                res.zipcodecity = ex.Message;
+
+                result.Add(res);
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetFundersNoMedicaid()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
+                sql += "WHERE ACTIVE = 'Y' ";
+                sql += " AND REFERENCENUM IS NOT NULL ";
+                //sql += " AND DESCRIPTION NOT LIKE '%MEDICAID%' ";
+                sql += " AND GROUPHEALTH = 1 ";
+                sql += "ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetFundersNoMedicaid", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetFundersMedicaidandCommercial()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
+                sql += "WHERE ACTIVE = 'Y' ";
+                sql += " AND REFERENCENUM IS NOT NULL ";
+                //sql += " AND DESCRIPTION NOT LIKE '%MEDICAID%' ";
+                sql += " AND GROUPHEALTH = 1 OR MEDICAID = 1 ";
+                sql += "ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetFundersMedicaidandCommercial", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWithOther> GetReferralSourceBlueBook()
+        {
+            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
+                sql += "FROM tblREFERRALSOURCE ";
+                sql += " WHERE RSISAGENCY = 0 ";
+                sql += " AND RSACTIVE = 1 ";
+                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
+
+                    if (r[0].ToString() != "")
+                    { res.id = Convert.ToInt64(r[0]); }
+                    res.code = r[1] + "";
+                    res.other = r[2] + "";
+                    res.description = r[1] + "" + " " + r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetReferralSourceBlueBook", ex.Message);
+
+                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
+
+                err.id = 0;
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetTeamReferralSource()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT CODE, DESCRIPTION FROM tblLOOKUPREFERRALSOURCE ";
+                sql += "ORDER BY DESCRIPTION ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetTeamReferralSource", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+
+        }
+
+        private List<CodedDescriptorWID> GetStaffBlueBook(long rsid)
+        {
+            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
+
+            try
+            {
+                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
+                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
+                sql += "FROM tblREFERRALSOURCE ";
+                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
+                sql += " AND RSISAGENCY = 0 ";
+                sql += " AND RSACTIVE = 1 ";
+                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWID res = new CodedDescriptorWID();
+
+                    if (r[0].ToString() != "")
+                    { res.id = Convert.ToInt64(r[0]); }
+                    res.code = r[1] + "";
+                    res.description = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetStaffBlueBook", ex.Message);
+
+                CodedDescriptorWID err = new CodedDescriptorWID();
+
+                err.id = 0;
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWithOther> GetStaffBlueBookWithOther(long rsid)
+        {
+            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
+
+            try
+            {
+                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
+                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
+                sql += "FROM tblREFERRALSOURCE ";
+                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
+                sql += " AND RSISAGENCY = 0 ";
+                sql += " AND RSACTIVE = 1 ";
+                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
+
+                    if (r[0].ToString() != "")
+                    { res.id = Convert.ToInt64(r[0]); }
+                    res.code = r[1] + "";
+                    res.other = r[2] + "";
+                    res.description = r[1] + "" + " " + r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetStaffBlueBookWithOther", ex.Message);
+
+                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
+
+                err.id = 0;
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWithOther> GetStaffBlueBookWithInactive(long rsid)
+        {
+            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
+
+            try
+            {
+                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
+                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
+                sql += "FROM tblREFERRALSOURCE ";
+                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
+                sql += " AND RSISAGENCY = 0 ";
+                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
+
+                    if (r[0].ToString() != "")
+                    { res.id = Convert.ToInt64(r[0]); }
+                    res.code = r[1] + "";
+                    res.other = r[2] + "";
+                    res.description = r[1] + "" + " " + r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetStaffBlueBookWithInactive", ex.Message);
+
+                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
+
+                err.id = 0;
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<ServiceGapDescriptor> GetEntireListOfServiceGapDescriptors()
+        {
+            List<ServiceGapDescriptor> result = new List<ServiceGapDescriptor>();
+            try
+            {
+                string sql = "SELECT [CMSID],[GAPDESCRIPTION],[GAPDOMAIN],[MEASURE],[TYPE],[CPT],[HCPCS],[UB],[DIAG],[LOINC] " +
+                                "FROM [tblLOOKUPSERVICEGAPDESCRIPTORS] ORDER BY [GAPDESCRIPTION] ";
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    ServiceGapDescriptor a = new ServiceGapDescriptor();
+
+                    a.CMSID = r[0] + "";
+                    a.GAPDESCRIPTION = r[1] + "";
+                    a.GAPDOMAIN = r[2] + "";
+                    a.MEASURE = r[3] + "";
+                    a.TYPE = r[4] + "";
+                    a.CPT = r[5] + "";
+                    a.HCPCS = r[6] + "";
+                    a.UB = r[7] + "";
+                    a.DIAG = r[8] + "";
+                    a.LOINC = r[9] + "";
+
+                    result.Add(a);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("GetEntireListOfServiceGapDescriptors" + ex.ToString()));
+            }
+            return result;
+        }
+
+        private List<CodedDescriptor> GetSpecificLookupListTeam(string TNAME)
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' AND TEAMTAB = 'Y' ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetSpecificLookupListFAMILY(string TNAME)
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' AND FAMILYTAB = 'Y' ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }        //
+
+        private List<ProviderDesignation> GetListOf211ReferralProviders()
+        {
+            List<ProviderDesignation> result = new List<ProviderDesignation>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT PROVIDERID,PROVIDERNAME " +
+                    "from tblLOOKUPREFERRALPROVIDERS WHERE REFERRAL211 = 'Y' ORDER BY PROVIDERNAME";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ProviderDesignation p = new ProviderDesignation();
+
+                    p.ProviderID = r[0] + "";
+                    p.ProviderName = r[1] + "";
+
+                    result.Add(p);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOf211ReferralProviders", ex.Message);
+                result.Clear();
+
+                ProviderDesignation p = new ProviderDesignation();
+
+                p.ProviderName = ex.Message;
+
+                result.Add(p);
+            }
+
+            return result;
+        }
+
+        private List<ProviderDesignation> GetListOfProvidersForTrackingElements()
+        {
+            List<ProviderDesignation> result = new List<ProviderDesignation>();
+
+            try
+            {
+                string sql = "SELECT MIN(PMID) as 'PMID',SUBPROVIDERID,SUBPROVIDERNAME " +
+                            "FROM tblProviderSubProvider WHERE SUBPROVIDERID IN (" +
+                            "select DISTINCT SUBPROVIDERID " +
+                            "FROM tblProviderSubProvider " +
+                            "WHERE RIGHT(LEFT(SUBPROVIDERID,3),1) = '-') " +
+                            "GROUP BY SUBPROVIDERID,SUBPROVIDERNAME " +
+                            "ORDER BY SUBPROVIDERNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ProviderDesignation p = new ProviderDesignation();
+                    p.mpcID = r.GetInt64(0);
+                    p.ProviderID = r[1] + "";
+                    p.ProviderName = r[2] + "";
+
+                    result.Add(p);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfProvidersForTrackingElements", ex.Message);
+            }
+
+            return result;
+        }
+
+        private List<ServiceDescription> GetListOfServiceDescriptionsNoID()
+        {
+            List<ServiceDescription> result = new List<ServiceDescription>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT [CostCenter],[SvcCode]" +
+                    ",[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE]" +
+                    ",[AUTHREQ],[RELATEDSPLITCODE] " +
+                    //[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT] " +
+                    "FROM [dbo].[tblLOOKUPSERVICES] A " +
+                    "WHERE a.active = 'Y' " +
+                    " AND FUNDER = 'xxxxx' " +
+                    "ORDER BY [SVCDESCRIPTION] ";
+
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ServiceDescription i = new ServiceDescription();
+
+                    i.COSTCENTER = r["COSTCENTER"] + "";
+                    i.SVCCODE = r["SVCCODE"] + "";
+                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
+                    i.UNITTYPE = r["UNITTYPE"] + "";
+                    if (r["COSTPERUNIT"].ToString() != "")
+                    {
+                        string v = r["COSTPERUNIT"] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.COSTPERUNIT = d;
+                        }
+                        else
+                        {
+                            i.COSTPERUNIT = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    //i.COPAY = r["COPAY"] + "";
+                    //i.MOD1 = r["MODIFIER1"] + "";
+                    //i.MOD2 = r["MODIFIER2"] + "";
+                    //i.MOD3 = r["MODIFIER3"] + "";
+                    //i.MOD4 = r["MODIFIER4"] + "";
+
+                    //if (r["AUTOUNIT"].ToString() != "")
+                    //{
+                    //    string v = r["AUTOUNIT"] + "";
+
+                    //    int d = -1;
+
+                    //    if (int.TryParse(v, out d))
+                    //    {
+                    //        i.AUTOUNIT = d;
+                    //    }
+                    //    else
+                    //    {
+                    //        i.AUTOUNIT = -1;
+                    //    }
+                    //}
+
+                    i.RELATEDSPLITCODE = r["RELATEDSPLITCODE"] + "";
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsNoID", ex.Message);
+            }
+
+            return result;
+        }
+
+        private List<ServiceDescription> GetListOfServiceDescriptionsNoIDNoSplit()
+        {
+            List<ServiceDescription> result = new List<ServiceDescription>();
+
+            try
+            {
+                //string sql = "SELECT DISTINCT [CostCenter],[SvcCode]" +
+                //    ",[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE]" +
+                //    ",[AUTHREQ],[RELATEDSPLITCODE] " +
+                //    //[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT] " +
+                //    "FROM [dbo].[tblLOOKUPSERVICES] A " +
+                //    "WHERE a.active = 'Y' " +
+                //    " AND FUNDER = 'xxxxx' " +
+                //    "ORDER BY [SVCDESCRIPTION] ";
+
+                //string sql = "SELECT DISTINCT SVCID,[CostCenter],[SvcCode], ";
+                //sql += "[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE], ";
+                //sql += "[AUTHREQ],MODIFIER1,MODIFIER2,MODIFIER3,MODIFIER4,[RELATEDSPLITCODE] ";
+                //sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                //sql += "WHERE  (a.active = 'Y' AND FUNDER = 'xxxxx' ";
+                //sql += " AND NOT EXISTS (SELECT * FROM tbllookupservices c WHERE cast(a.svcid as varchar) = c.RelatedSplitCode)) ";
+                //sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                string sql = "SELECT * FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "WHERE  (a.active = 'Y' AND FUNDER = 'xxxxx' ";
+                sql += " AND NOT EXISTS (SELECT * FROM tbllookupservices c WHERE cast(a.svcid as varchar) = c.RelatedSplitCode)) ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ServiceDescription i = new ServiceDescription();
+
+                    i.ID = Convert.ToInt64(r["SVCID"]);
+                    i.COSTCENTER = r["COSTCENTER"] + "";
+                    i.SVCCODE = r["SVCCODE"] + "";
+                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
+                    i.UNITTYPE = r["UNITTYPE"] + "";
+                    if (r["COSTPERUNIT"].ToString() != "")
+                    {
+                        string v = r["COSTPERUNIT"] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.COSTPERUNIT = d;
+                        }
+                        else
+                        {
+                            i.COSTPERUNIT = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.COPAY = r["COPAY"] + "";
+                    i.MOD1 = r["MODIFIER1"] + "";
+                    i.MOD2 = r["MODIFIER2"] + "";
+                    i.MOD3 = r["MODIFIER3"] + "";
+                    i.MOD4 = r["MODIFIER4"] + "";
+                    i.RELATEDSPLITCODE = r["RELATEDSPLITCODE"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != DBNull.Value)
+                    { i.BCBANOTE = Convert.ToBoolean(r["BCBANOTEREQUIRED"]); }
+                    else
+                    { i.BCBANOTE = false; }
+
+                    if (r["AUTOUNIT"] != DBNull.Value)
+                    { i.AUTOUNIT = Convert.ToInt32(r["AUTOUNIT"]); }
+                    else
+                    { i.AUTOUNIT = 0; }
+
+                    if (r["ROUNDRULE"] != DBNull.Value)
+                    { i.ROUNDRULE = Convert.ToInt32(r["ROUNDRULE"]); }
+                    else
+                    { i.ROUNDRULE = 0; }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsNoIDNoSplit", ex.Message);
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWID> GetListOfSupervisors()
+        {
+            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
+
+            try
+            {
+                //string sql = "SELECT DISTINCT UL.TBLUSERLOGINID AS ID, US.SUPERVISORNAME AS CODE, UL.FIRSTNAME + UL.LASTNAME AS DESCRIPTION ";
+                //sql += "FROM TBLUSERSSUPERVISOR US ";
+                //sql += "LEFT OUTER JOIN TBLUSERLOGINS UL ON UL.USERNAME = US.SUPERVISORNAME ";
+                //sql += "WHERE UL.TBLUSERLOGINID IS NOT NULL ";
+                //sql += "ORDER BY SUPERVISORNAME ";
+
+                string sql = "SELECT DISTINCT UL.TBLUSERLOGINID AS ID, UL.Username AS CODE, UL.FIRSTNAME + ' ' + UL.LASTNAME AS DESCRIPTION ";
+                sql += "FROM tblUserLogins UL ";
+                sql += "LEFT OUTER JOIN tblUserHierarchy UH ON UL.USERNAME = UH.UserName ";
+                sql += "WHERE UL.TBLUSERLOGINID IS NOT NULL ";
+                sql += "AND UH.HierCode = 'SUPER' ";
+                sql += "ORDER BY ul.Username ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWID res = new CodedDescriptorWID();
+
+                    if (r[0] != null)
+                    { res.id = Convert.ToInt64(r[0]); }
+                    res.code = r[1] + "";
+                    res.description = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfSupervisors", ex.Message);
+
+                result = null;
+
+                CodedDescriptorWID cd = new CodedDescriptorWID();
+                cd.code = "----";
+                cd.description = ex.Message;
+
+                result.Add(cd);
+            }
+            return result;
+        }
+
+        private List<CodedDescriptor> GetListOfDSP()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT UL.USERNAME, FIRSTNAME + ' ' + LASTNAME ";
+                sql += "FROM TBLUSERROLES UR ";
+                sql += "LEFT OUTER JOIN TBLUSERLOGINS UL ON UL.USERNAME = UR.USERNAME ";
+                sql += "WHERE UR.RoleCode = 'DSP' AND COALESCE(UL.DEACTIVE,'N') <> 'Y' ";
+                sql += "ORDER BY UL.USERNAME ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfDSP", ex.Message);
+
+                result = null;
+
+                CodedDescriptor cd = new CodedDescriptor();
+                cd.code = "----";
+                cd.description = ex.Message;
+
+                result.Add(cd);
+            }
+            return result;
+        }
+
+        private List<CodedDescriptor> GetListOfCounties()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT COUNTY AS CODE, COUNTY AS DESCRIPTION ";
+                sql += "FROM tblMemberAddress ";
+                sql += "ORDER BY COUNTY ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfCounties", ex.Message);
+
+                result = null;
+
+                CodedDescriptor cd = new CodedDescriptor();
+                cd.code = "----";
+                cd.description = ex.Message;
+
+                result.Add(cd);
+            }
+            return result;
+        }
+
+        private List<ProviderDesignation> GetAllProviderDesignations()
+        {
+            List<ProviderDesignation> result = new List<ProviderDesignation>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT PID,PNAME,CNPI,SNPI FROM (" +
+                                "select PROVIDERID as 'PID', PROVIDERNAME as 'PNAME',CONTRACTNPI AS 'CNPI',SUBPROVNPI as 'SNPI' from dbo.tblProviderSubProvider " +
+                                "union " +
+                                "select SUBPROVIDERID , SUBPROVIDERNAME,CONTRACTNPI,SUBPROVNPI from dbo.tblProviderSubProvider " +
+                                ") A " +
+                                "ORDER BY PNAME";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    ProviderDesignation p = new ProviderDesignation();
+
+                    p.ProviderID = r["PID"] + "";
+                    p.ProviderName = r["PNAME"] + "";
+                    p.ContractNPI = r["CNPI"] + "";
+                    p.ProviderNPI = r["SNPI"] + "";
+
+                    // we might have some cruft in the system so lets weed out all provider id's without a - as the third character
+                    //if (p.ProviderID.Substring(0, 3).EndsWith("-"))
+                    result.Add(p);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+                
+            }
+            catch (Exception ex)
+            {
+                LogError("GetAllProviderDesignations", ex.Message);
+                result.Clear();
+
+                ProviderDesignation p = new ProviderDesignation();
+
+                p.ProviderName = ex.Message;
+
+                result.Add(p);
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptorWithActive> GetSpecificLookupListWACtive(string TNAME)
+        {
+            List<CodedDescriptorWithActive> result = new List<CodedDescriptorWithActive>();
+
+            try
+            {
+                string sql = "SELECT CODE,[DESCRIPTION],ACTIVE FROM " + TNAME + " ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWithActive res = new CodedDescriptorWithActive();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+                    res.active = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupListWACtive", ex.Message);
+
+                CodedDescriptorWithActive err = new CodedDescriptorWithActive();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+                err.active = "";
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<NumericDescriptor> GetSpecificLookupListWithOther(string TNAME)
+        {
+            List<NumericDescriptor> result = new List<NumericDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [MEDID],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    NumericDescriptor res = new NumericDescriptor();
+
+                    if (r[0] != null)
+                        res.number = Convert.ToInt64(r[0]);
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupListWithOther", ex.Message + System.Environment.NewLine + TNAME);
+
+                NumericDescriptor err = new NumericDescriptor();
+
+                err.number = 0;
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetSpecificLookupListAlternatOrder(string TNAME)
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [CODE]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetListOfTaskSteps()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT TASKCODE AS CODE, TASKSTEPDESCRIPTION AS DESCRIPTION ";
+                sql += "FROM tblLOOKUPTASKSTEPS ";
+                sql += "ORDER BY TASKCODE ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfTaskSteps", ex.Message);
+
+                //result = null;
+
+                CodedDescriptor cd = new CodedDescriptor();
+                cd.code = "----";
+                cd.description = ex.Message;
+
+                result.Add(cd);
+            }
+            return result;
+        }
+
+        private List<CodedDescriptor> GetFundersForEncounters()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
+                sql += "WHERE ACTIVE = 'Y' ";
+                sql += " AND REFERENCENUM IS NOT NULL ";
+                sql += "ORDER BY [DESCRIPTION]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetFundersForEncounters", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+        }
+
+        private List<CodedDescriptor> GetAllLookupsTables()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "select OBJECT_ID,NAME " +
+                            "from sys.tables st " +
+                            "where name like 'tblLOOKUP%' and type_desc = 'USER_TABLE' " +
+                            "and (select COUNT(*) from syscolumns where id = object_id(st.NAME)) = 3 " +
+                            "order by name";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    CodedDescriptor cd = new CodedDescriptor();
+                    cd.code = r[0] + "";
+                    cd.description = r[1] + "";
+
+                    result.Add(cd);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetAllLookupsTables", ex.Message);
+            }
+
+            return result;
+        }
+
+        public List<CodedDescriptor> GetActiveMembers()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "select distinct firstname + ' ' + lastname as membername, MM.SSN ";
+                sql += "from tblmembermain mm ";
+                sql += "inner join tblMemberAuthorizedServices aus on aus.SSN = mm.SSN ";
+                sql += "where (aus.ENDDATE is null or aus.ENDDATE = '' or CAST(aus.ENDDATE as Date) >= CAST(DATEADD(Year,-1,GETDATE()) AS Date)) ";
+                sql += "and mm.ssn in (select MCDSSN from tblMemberCopayDeductible) ";
+                sql += "order by membername ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[1] + "";
+                    res.description = r[0] + "";
+
+                    result.Add(res);
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetActiveMembers", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+
+        }
+
+        private List<CodedDescriptor> GetDistinctServices()
+        {
+            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT COSTCENTER,SVCDESCRIPTION FROM tblLookupServices WHERE ACTIVE = 'Y' " +
+                                "ORDER BY SvcDescription";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptor res = new CodedDescriptor();
+
+                    res.code = r[0] + "";
+                    res.description = r[1] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetDistinctServices", ex.Message);
+
+                CodedDescriptor err = new CodedDescriptor();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+
+
+        }
+
+        private List<CodedDescriptorWID> GetDistinctServicesWithID()
+        {
+            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
+
+            try
+            {
+                string sql = "SELECT DISTINCT SVCID,COSTCENTER,SVCDESCRIPTION, ";
+                sql += "(SELECT DESCRIPTION FROM TBLLOOKUPFUNDERS WHERE CODE = FUNDER) AS FUNDER ";
+                sql += "FROM tblLookupServices WHERE ACTIVE = 'Y' ";
+                sql += " AND FUNDER = 'xxxxx' ";
+                sql += "ORDER BY SvcDescription ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                result.Clear();
+
+                while (r.Read())
+                {
+                    CodedDescriptorWID res = new CodedDescriptorWID();
+
+                    res.id = Convert.ToInt32(r[0]);
+                    res.code = r[1] + "";
+                    //res.description = r[2] + " - " + r[3] + "";
+                    res.description = r[2] + "";
+
+                    result.Add(res);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetDistinctServicesWithID", ex.Message);
+
+                CodedDescriptorWID err = new CodedDescriptorWID();
+
+                err.code = "";
+                err.description = ex.Message; // build a aresult that shows the message
+
+                result.Clear(); // clear any results we maay have at the moment
+
+                result.Add(err); // add it to the results list
+            }
+
+            return result;
+
+
+        }
+
+        private List<GMRRegions> GetListOfGMRRegions()
+        {
+            List<GMRRegions> result = new List<GMRRegions>();
+
+            try
+            {
+                string sql = "SELECT [gmrID],[gmrNAME],[gmrDESC],[gmrLAT],[gmrLON],[gmrZOOM] FROM [tblPOIGeoMapRegions] ORDER BY [gmrNAME]";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    GMRRegions gmr = new GMRRegions();
+
+                    gmr.ID = r[0].ToString();
+                    gmr.NAME = r[1] + "";
+                    gmr.DESC = r[2] + "";
+
+                    double d = 0.0;
+
+                    if (double.TryParse(r[3] + "", out d))
+                    {
+                        gmr.LAT = d;
+                    }
+
+                    if (double.TryParse(r[4] + "", out d))
+                    {
+                        gmr.LON = d;
+                    }
+
+                    int i = 0;
+
+                    if (int.TryParse(r[5] + "", out i))
+                    {
+                        gmr.ZOOM = i;
+                    }
+
+                    result.Add(gmr);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("", ex.Message);
+            }
+
+            return result;
+        }
+        
     }
 
     #region Extra Classes
@@ -2694,6 +5013,421 @@ namespace CFCSMobileWebServices.Controllers
         public string COPAY = "";
         public string RELATEDSPLITCODE = "";
         public bool BCBANOTE = false;
+    }
+        
+    public class TheLookups
+    {
+        public List<CodedDescriptor> LOOKUP_V_DETOX;
+        public List<CodedDescriptor> LOOKUP_V_EMERSTAB;
+        public List<CodedDescriptor> LOOKUP_V_INCIDENTAL;
+        public List<CodedDescriptor> LOOKUP_V_PREVENTION;
+        public List<CodedDescriptor> LOOKUP_V_RECOVERY;
+        public List<CodedDescriptor> LOOKUP_V_RECOVERYCCST;
+        public List<CodedDescriptor> LOOKUP_V_RECOVERYFACT;
+        public List<CodedDescriptor> LOOKUP_V_RECOVERYINCIDENTAL;
+        public List<CodedDescriptor> LOOKUP_V_TREATMENTANDAFTERCARE;
+        public List<ProviderDesignation> LOOKUP211REFERRALPROVIDERS;
+        public List<CodedDescriptor> LOOKUPADDRESSTYPE;
+        public List<CodedDescriptor> LOOKUPADMISSIONTYPE;
+        public List<CodedDescriptor> LOOKUPALERTTYPE;
+        public List<CodedDescriptor> LOOKUPASSEMENTKINDS;
+        public List<CodedDescriptor> LOOKUPASSMTTYPE;
+        public List<CodedDescriptor> LOOKUPCOMMERCIALINSURANCE;
+        public List<CodedDescriptor> LOOKUPCOMMUNITYSUPPORTSTYPE;
+        public List<CodedDescriptor> LOOKUPCONCURRENT211REFERRALTARGETS;
+        public List<CodedDescriptor> LOOKUPCONTACTTYPE;
+        public List<CodedDescriptorExt> LOOKUPUNITTYPE;
+        public List<CodedDescriptorExt> LOOKUPCOSTCENTER;
+        public List<CodedDescriptor> LOOKUPCOUNTYNAME;
+        public List<CodedDescriptor> LOOKUPDISCHARGEREASON;
+        public List<CodedDescriptor> LOOKUPDISCHARGETYPE;
+        public List<CodedDescriptor> LOOKUPDISPOSITIONS;
+        public List<CodedDescriptor> LOOKUPDOCUMENTTYPES;
+        public List<CodedDescriptor> LOOKUPDRUGOFCHOICE;
+        public List<CodedDescriptor> LOOKUPEDUCATION;
+        public List<CodedDescriptor> LOOKUPEMPLOYMENT;
+        public List<CodedDescriptor> LOOKUPENCOUNTERRELATION;
+        public List<CodedDescriptor> LOOKUPENCOUNTERSDS;
+        public List<CodedDescriptor> LOOKUPENCOUNTERSTATUS;
+        public List<CodedDescriptor> LOOKUPENCOUNTERSTATUSNOBILLED;
+        public List<CodedDescriptor> LOOKUPENCOUNTERSTATUSALL;
+        public List<CodedDescriptor> LOOKUPETHNICITY;
+        public List<CodedDescriptorWPrograms> LOOKUPFACILITY;
+        public List<CodedDescriptor> LOOKUPFACILITYTYPE;
+        public List<CodedDescriptor> LOOKUPFOLLOWUPPROVTYPE;
+        public List<CodedDescriptor> LOOKUPFOLLOWUPREASONS;
+        public List<CodedDescriptor> LOOKUPFREQ;
+        public List<CodedDescriptor> LOOKUPFUNDERS;
+        public List<CodedDescriptor> LOOKUPFUNDERSFLEXFUND;
+        public List<CodedDescriptor> LOOKUPFUNDERSGROUPHEALTH;
+        public List<CodedDescriptor> LOOKUPFUNDING;
+        public List<CodedDescriptor> LOOKUPGENDER;
+        public List<GMRRegions> LOOKUPGMRegions;
+        public List<CodedDescriptor> LOOKUPGROUPINFORMATION;
+        public List<CodedDescriptor> LOOKUPHEALTHSTATUS;
+        public List<CodedDescriptor> LOOKUPHIERARCHY;
+        public List<CodedDescriptor> LOOKUPINCIDENTALEXPENSECATEGORIES;
+        public List<CodedDescriptor> LOOKUPINCOMESOURCE;
+        public List<CodedDescriptor> LOOKUPLANGUAGES;
+        public List<CodedDescriptor> LOOKUPLEGALSTATUS;
+        public List<CodedDescriptor> LOOKUPLIVINGSIT;
+        public List<CodedDescriptor> LOOKUPLOOKUPTABLES;
+        public List<CodedDescriptor> LOOKUPMARCHMANACT;
+        public List<CodedDescriptor> LOOKUPMARITALSTATUS;
+        public List<CodedDescriptor> LOOKUPMEDCARECOVERAGEGROUPS;
+        public List<CodedDescriptor> LOOKUPMEDICAIDTYPE;
+        public List<NumericDescriptor> LOOKUPMEDS;
+        public List<CodedDescriptor> LOOKUPMEMBERWATCHLIST;
+        public List<CodedDescriptor> LOOKUPMESSAGETYPE;
+        public List<CodedDescriptor> LOOKUPMHPROBLEM;
+        public List<CodedDescriptor> LOOKUPNOTECONTACTTYPE;
+        public List<CodedDescriptor> LOOKUPOPFUTYPE;
+        public List<CodedDescriptor> LOOKUPOTHERSYSTEMS;
+        public List<CodedDescriptor> LOOKUPPARTICIPANTTYPE;
+        public List<CodedDescriptor> LOOKUPPHONETYPES;
+        public List<CodedDescriptor> LOOKUPPREGTRIMESTER;
+        public List<CodedDescriptor> LOOKUPPROGRAM;
+        public List<CodedDescriptor> LOOKUPPROGRAMDISCHARGEREASONS;
+        public List<CodedDescriptor> LOOKUPPROGRAMEVALPURPOSE;
+        public List<CodedDescriptor> LOOKUPPROGRAMMEMBERSHIP;
+        public List<CodedDescriptor> LOOKUPPROGRAMTYPE;
+        public List<CodedDescriptor> LOOKUPPROGRESSNOTETYPES;
+
+        public List<ProviderDesignation> LOOKUPPROVIDERS;
+        public List<ProviderDesignation> LOOKUPPROVIDERSFORTRACKINGELEMENTS;
+        public List<CodedDescriptor> LOOKUPPROVIDERSPECIALTY;
+        public List<CodedDescriptor> LOOKUPPROVIDERTYPE;
+
+        public List<CodedDescriptor> LOOKUPPURPOSEASAM;
+        public List<CodedDescriptor> LOOKUPPURPOSEOFEVAL;
+        public List<CodedDescriptor> LOOKUPPURPOSEOFEVALDCF;
+        public List<CodedDescriptor> LOOKUPRACE;
+        public List<CodedDescriptor> LOOKUPRECLEVELOFCARE;
+        public List<CodedDescriptor> LOOKUPREFERRALREASON;
+        public List<CodedDescriptor> LOOKUPREFERRALSOURCE;
+        public List<CodedDescriptorWithOther> LOOKUPREFSOURCEBLUEBOOK;
+        public List<CodedDescriptor> LOOKUPREMCONTACTWITH;
+        public List<CodedDescriptor> LOOKUPREMNOTETYPE;
+        public List<CodedDescriptor> LOOKUPRESIDENTSTATUS;
+
+        //public List<CodedDescriptor> LOOKUPROI;
+        public List<CodedDescriptorWithActive> LOOKUPROI;
+
+        public List<CodedDescriptor> LOOKUPROLES;
+        public List<CodedDescriptor> LOOKUPSAFETYASSESSMENTLVL;
+        public List<CodedDescriptor> LOOKUPSCALE;
+        public List<CodedDescriptor> LOOKUPSCREENINGPROGRAM;
+        public List<ServiceGapDescriptor> LOOKUPSERVICEGAPS;
+        public List<CodedDescriptor> LOOKUPSERVICEGAPVERIFICATIONMETHODS;
+        public List<ServiceDescription> LOOKUPSERVICES;
+        public List<ServiceDescription> LOOKUPSERVICESNOID;
+        public List<ServiceDescription> LOOKUPSERVICESNOIDNOSPLIT;
+        public List<CodedDescriptor> LOOKUPSETARGETTYPE;
+        public List<CodedDescriptor> LOOKUPSETYPE;
+        public List<CodedDescriptor> LOOKUPSUPPORTSRELATIONSHIP;
+        public List<CodedDescriptor> LOOKUPSUPPORTSRELATIONSHIPTEAM;
+        public List<CodedDescriptor> LOOKUPSUPPORTSRELATIONSHIPFAMILY;
+        public List<CodedDescriptor> LOOKUPTANFSTATUS;
+        public List<CodedDescriptor> LOOKUPTHERAPIES;
+        public List<CodedDescriptor> LOOKUPTREATMENTPLAN_NEEDPROGRESS;
+        public List<ZipCodeDescriptor> LOOKUPZIPS;
+
+        public List<CodedDescriptorWID> LOOKUPSUPERVISORS;
+        public List<CodedDescriptorWID> LOOKUPUSERSWITHID;
+        public List<CodedDescriptor> LOOKUPMEMBERAUTHS;
+        public List<CodedDescriptor> LOOKUPCOUNTIES;
+        public List<CodedDescriptor> LOOKUPPAYER;
+        public List<CodedDescriptor> LOOKUPDSP;
+        public List<CodedDescriptor> LOOKUPCASESTATUS;
+        public List<CodedDescriptor> LOOKUPCASESETTING;
+        public List<CodedDescriptor> LOOKUPTASKS;
+        public List<CodedDescriptor> LOOKUPTASKSTEPS;
+        public List<CodedDescriptor> LOOKUPTASKSTATUS;
+        public List<CodedDescriptor> LOOKUPFUNDERSFORENCOUNTERS;
+        public List<CodedDescriptor> LOOKUPDISTINCTSERVICES;
+        public List<CodedDescriptorWID> LOOKUPDISTINCTSERVICESWITHID;
+        public List<CodedDescriptor> LOOKUPRELIGION;
+        public List<CodedDescriptor> LOOKUPCOMPETENCIES;
+        public List<CodedDescriptor> LOOKUPCREDENTIALS;
+        public List<CodedDescriptor> LOOKUPACTIVEMEMBERS;
+        public List<CodedDescriptor> LOOKUPWAITLISTREASON;
+        // Added for HealthIntech
+
+        public List<CodedDescriptor> LOOKUPSLEEPPROBLEM;
+        public List<CodedDescriptor> LOOKUPINSIGHTDEGREE;
+        public List<CodedDescriptor> LOOKUPALCOHOLCONSUMED30LIST;
+        public List<CodedDescriptor> LOOKUPINTOXICSUBSTANCETIME;
+        public List<CodedDescriptor> LOOKUPINJECTIONDRUGUSE;
+        public List<CodedDescriptor> LOOKUPWITHDRAWALSYMPTOMS;
+        public List<CodedDescriptor> LOOKUPINJURIOUSATTEMPT;
+        public List<CodedDescriptor> LOOKUPSELFINJURIOUSTOKILL;
+        public List<CodedDescriptor> LOOKUPVIOLENCE;
+        public List<CodedDescriptor> LOOKUPBEHAVIOURDISTURBANCE;
+        public List<CodedDescriptor> LOOKUPPOLICEINTERVENTION;
+        public List<CodedDescriptor> LOOKUPDISORDEREDTHINKING;
+        public List<CodedDescriptor> LOOKUPDECISIONMAKING90;
+        public List<CodedDescriptor> LOOKUPIADLCAPACITY;
+        public List<CodedDescriptor> LOOKUPADLSTATUS90;
+        public List<CodedDescriptor> LOOKUPLIFEEVENTS;
+        public List<CodedDescriptor> LOOKUPINTENSEFEAREVENTS;
+        public List<CodedDescriptor> LOOKUPSELFUNDERSTOOD;
+        public List<CodedDescriptor> LOOKUPUNDERSTANDOTHERS;
+        public List<CodedDescriptor> LOOKUPPSYCHIATRICCONTACT;
+        public List<CodedDescriptor> LOOKUPDISCHARGEFROMPSYCHIATRIC;
+        public List<CodedDescriptor> LOOKUPPSYCHIATRICDURATION;
+        public List<CodedDescriptor> LOOKUPPSYCHIATRICADMISSION2YEAR;
+        public List<CodedDescriptor> LOOKUPPSYCHIATRICADMISSIONLIFETIME;
+        public List<CodedDescriptor> LOOKUPFIRSTPSYCHIATRICSTAYAGE;
+        public List<CodedDescriptor> LOOKUPBEHAVIORSYMPTOMS;
+        public List<CodedDescriptor> LOOKUPTREATMENTMODALITIES;
+        public List<CodedDescriptor> LOOKUPINTERVENTIONFOCUS;
+        public List<CodedDescriptor> LOOKUPELECTROCONVULSIVETHERAPY;
+        public List<CodedDescriptor> LOOKUPCONTROLINTERVENTION;
+        public List<CodedDescriptor> LOOKUPAUTHORIZEDACTIVITIES;
+        public List<CodedDescriptor> LOOKUPDISTURBEDRELATIONSHIP;
+        public List<CodedDescriptor> LOOKUPSOCIALLIST;
+        public List<CodedDescriptor> LOOKUPEMPLOYMENTSTATUS;
+        public List<CodedDescriptor> LOOKUPEMPLOYMENTARRANGEMENT;
+        public List<CodedDescriptor> LOOKUPFORMALEDUCATION;
+        public List<CodedDescriptor> LOOKUPUNEMPLOYMENTRISK;
+        public List<CodedDescriptor> LOOKUPSOCIALSUPPORT;
+        public List<CodedDescriptor> LOOKUPEXPECTATIONOFSTAY;
+        public List<CodedDescriptor> LOOKUPPSYCHIATRICSYMPTOMS;
+        public List<CodedDescriptor> LOOKUPPROVISIONALDSMCATEGORY;
+        public List<CodedDescriptor> LOOKUPMEDICALDIAGNOSES;
+        public List<CodedDescriptor> LOOKUPDISCHARGEASSESSMENT;
+        public List<CodedDescriptor> LOOKUPTYPEOFADMISSION;
+        public List<CodedDescriptor> LOOKUPCONTACTPREFERENCES;
+        public List<CodedDescriptor> LOOKUPMARITIALSTATUS;
+        public List<CodedDescriptor> LOOKUPLIVINGSTATUS;
+        public List<CodedDescriptor> LOOKUPLIVINGARRANGEMENT;
+        public List<CodedDescriptor> LOOKUPHOSPITALSTAY;
+        public List<CodedDescriptor> LOOKUPCOGNITIVESKILLSLIST;
+        public List<CodedDescriptor> LOOKUPBEHAVIOURPRESENT;
+        public List<CodedDescriptor> LOOKUPASSESSMENTREASON;
+        public List<CodedDescriptor> LOOKUPPATIENTSTATUSLIST;
+        public List<CodedDescriptor> LOOKUPUNDERSTOODLIST;
+        public List<CodedDescriptor> LOOKUPPRIMARYLANGUAGELIST;
+        public List<CodedDescriptor> LOOKUPRESIDENCENEEDSTOCHANGELIST;
+        public List<CodedDescriptor> LOOKUPVISIONDIFFICULTYLIST;
+        public List<CodedDescriptor> LOOKUPHEARINGDIFFICULTYLIST;
+        public List<CodedDescriptor> LOOKUPFARTHESTWALKEDDISTANCELIST;
+        public List<CodedDescriptor> LOOKUPADLSELFPERFORMANCELIST;
+        public List<CodedDescriptor> LOOKUPCHANGEIN90LIST;
+        public List<CodedDescriptor> LOOKUPBEHAVIOURLIST;
+        public List<CodedDescriptor> LOOKUPINDICATORLIST;
+
+        public List<CodedDescriptor> DECLINELIST;
+        public List<CodedDescriptor> LOOKUPALONELIST;
+        public List<CodedDescriptor> LOOKUPSELFPERFORMANCELIST;
+        public List<CodedDescriptor> LOOKUPLOCOMOTIONWALKINGLIST;
+        public List<CodedDescriptor> LOOKUPLOCOMOTIONWALKINGDISTANCELIST;
+        public List<CodedDescriptor> LOOKUPFARTHESTWALKINGDISTANCELIST;
+        public List<CodedDescriptor> LOOKUPFARTHESTWHEELEDDISTANCELIST;
+
+        public List<CodedDescriptor> LOOKUPACTIVITYTLEVELLIST;
+        public List<CodedDescriptor> LOOKUPGOINGOUTLIST;
+        public List<CodedDescriptor> LOOKUPCHANGEINADLLIST;
+        public List<CodedDescriptor> LOOKUPBLADDERLIST;
+        public List<CodedDescriptor> LOOKUPURINARYLIST;
+        public List<CodedDescriptor> LOOKUPBOWELLIST;
+
+        public List<CodedDescriptor> LOOKUPDIAGPRESENTLIST;
+        public List<CodedDescriptor> LOOKUPFALLSLIST;
+        public List<CodedDescriptor> LOOKUPPROBLEMFREQUENCYLIST;
+        public List<CodedDescriptor> LOOKUPDYSPNEALIST;
+        public List<CodedDescriptor> LOOKUPFATIGUELIST;
+        public List<CodedDescriptor> LOOKUPPAIN1LIST;
+        public List<CodedDescriptor> LOOKUPPAIN2LIST;
+
+        public List<CodedDescriptor> LOOKUPPAIN3LIST;
+        public List<CodedDescriptor> LOOKUPPAIN4LIST;
+        public List<CodedDescriptor> LOOKUPSELFREPORTEDHEALTHLIST;
+        public List<CodedDescriptor> LOOKUPTOBACCOLIST;
+        public List<CodedDescriptor> LOOKUPALCOHOLLIST;
+        public List<CodedDescriptor> LOOKUPNUTRITIONLIST;
+        public List<CodedDescriptor> LOOKUPPRESSUREULCERLIST;
+        public List<CodedDescriptor> LOOKUPFOOTPROBLEMLIST;
+
+        public List<CodedDescriptor> RELASHIPSHIPTOPERSONLIST;
+        public List<CodedDescriptor> LIVEWITHPERSONLIST;
+        public List<CodedDescriptor> INFORMALHELPLIST;
+        public List<CodedDescriptor> TREATMENTLIST;
+        public List<CodedDescriptor> SELFSUFFICIENCYLIST;
+        public List<CodedDescriptor> PROBLEMRELATEDTODETERIORATIONLIST;
+        public List<CodedDescriptor> LOOKUPMEDICATIONADHERENCE;
+
+        public List<CodedDescriptor> LOOKUP_CA_PARENTS_MARITAL_STATUS;
+        public List<CodedDescriptor> LOOKUP_CA_ASSESSMENT_REASONS;
+        public List<CodedDescriptor> LOOKUP_CA_LIVING_STATUS;
+        public List<CodedDescriptor> LOOKUP_CA_LIVING_ARRANGEMENT;
+        public List<CodedDescriptor> LOOKUP_CA_LAST_HOSPITAL_STAY;
+        public List<CodedDescriptor> LOOKUP_CA_PRIMARY_LANGUAGE;
+        public List<CodedDescriptor> LOOKUP_CA_EDUCATION_STATUS;
+        public List<CodedDescriptor> LOOKUP_CA_SERVICES_PROVIDED_AT_SCHOOL;
+        public List<CodedDescriptor> LOOKUP_CA_PRENATAL_HISTORY;
+        public List<CodedDescriptor> LOOKUP_CA_COGNITIVIE_SKILLS;
+        public List<CodedDescriptor> LOOKUP_CA_BEHAVIOR_PRESENT;
+        public List<CodedDescriptor> LOOKUP_CA_UNDERSTOOD;
+        public List<CodedDescriptor> LOOKUP_CA_HEARING_DIFFICULTY;
+        public List<CodedDescriptor> LOOKUP_CA_VISION_DIFFICULTY;
+        public List<CodedDescriptor> LOOKUP_CA_CHANGE_IN_DECISION;
+        public List<CodedDescriptor> LOOKUP_CA_INDICATOR_BEHAVIOR;
+        public List<CodedDescriptor> LOOKUP_CA_MOOD;
+        public List<CodedDescriptor> LOOKUP_CA_SELF_INJURIOUS;
+        public List<CodedDescriptor> LOOKUP_CA_INTENT;
+        public List<CodedDescriptor> LOOKUP_CA_SOCIAL;
+
+        public List<CodedDescriptor> LOOKUP_CA_ADAPTABILITY;
+        public List<CodedDescriptor> LOOKUP_CA_ADHERENT_WITH_MEDICATIONS;
+        public List<CodedDescriptor> LOOKUP_CA_ADL_SELF_PERFORMANCE;
+        public List<CodedDescriptor> LOOKUP_CA_ALCOHOL;
+        public List<CodedDescriptor> LOOKUP_CA_BEHAVIOR;
+        public List<CodedDescriptor> LOOKUP_CA_BLADDER_CONTINENCE;
+        public List<CodedDescriptor> LOOKUP_CA_BOWEL_COLLECTION_DEVICE;
+        public List<CodedDescriptor> LOOKUP_CA_BOWEL_CONTINENCE;
+        public List<CodedDescriptor> LOOKUP_CA_CARE_GOALS;
+        public List<CodedDescriptor> LOOKUP_CA_CAREGIVER_HELP;
+        public List<CodedDescriptor> LOOKUP_CA_CHANGE_IN_ADL;
+        public List<CodedDescriptor> LOOKUP_CA_DAYS_WENT_OUT;
+        public List<CodedDescriptor> LOOKUP_CA_DEGREE_COMPLETED;
+        public List<CodedDescriptor> LOOKUP_CA_DISEASE_CODE;
+        public List<CodedDescriptor> LOOKUP_CA_DYSPNEA;
+        public List<CodedDescriptor> LOOKUP_CA_EFFECT;
+        public List<CodedDescriptor> LOOKUP_CA_EXPECTED_SERVICES;
+        public List<CodedDescriptor> LOOKUP_CA_FATIGUE;
+        public List<CodedDescriptor> LOOKUP_CA_FOOT_PROBLEMS;
+        public List<CodedDescriptor> LOOKUP_CA_FORMAL_CARE;
+        public List<CodedDescriptor> LOOKUP_CA_FORMAL_TREATMENTS;
+        public List<CodedDescriptor> LOOKUP_CA_FUTURE_NEEDS;
+        public List<CodedDescriptor> LOOKUP_CA_GENDER;
+        public List<CodedDescriptor> LOOKUP_CA_HOME_ENVIRONMENT;
+        public List<CodedDescriptor> LOOKUP_CA_IADL_SELF_PERFORMANCE;
+        public List<CodedDescriptor> LOOKUP_CA_INTELLECTUAL_DISABILITY;
+        public List<CodedDescriptor> LOOKUP_CA_LEGAL_GUARDIANSHIP;
+        public List<CodedDescriptor> LOOKUP_CA_LIVES_WITH_CHILD_YOUTH;
+        public List<CodedDescriptor> LOOKUP_CA_LOCOMOTION;
+        public List<CodedDescriptor> LOOKUP_CA_NUTRITION_INTAKE;
+        public List<CodedDescriptor> LOOKUP_CA_PAIN1;
+        public List<CodedDescriptor> LOOKUP_CA_PAIN2;
+        public List<CodedDescriptor> LOOKUP_CA_PAIN3;
+        public List<CodedDescriptor> LOOKUP_CA_PAIN4;
+        public List<CodedDescriptor> LOOKUP_CA_PHYSICAL_ACTIVITY_HOURS;
+        public List<CodedDescriptor> LOOKUP_CA_PRESSURE_ULCER;
+        public List<CodedDescriptor> LOOKUP_CA_PROBLEM_FREQUENCY;
+        public List<CodedDescriptor> LOOKUP_CA_RELATIONSHIP;
+        public List<CodedDescriptor> LOOKUP_CA_SELF_REPORTED_MOOD;
+        public List<CodedDescriptor> LOOKUP_CA_SELF_SUFFICIENCY;
+        public List<CodedDescriptor> LOOKUP_CA_UNDERSTANDS;
+        public List<CodedDescriptor> LOOKUP_CA_URINARY;
+
+        public List<CodedDescriptor> LOOKUP_HCA_ADHERENT_WITH_MEDICATIONS;
+        public List<CodedDescriptor> LOOKUP_HCA_ADL_SELF_PERFORMANCE;
+        public List<CodedDescriptor> LOOKUP_HCA_ALCOHOL;
+        public List<CodedDescriptor> LOOKUP_HCA_ASSESSMENT_REASONS;
+        public List<CodedDescriptor> LOOKUP_HCA_BEHAVIOR;
+        public List<CodedDescriptor> LOOKUP_HCA_BEHAVIOR_PRESENT;
+        public List<CodedDescriptor> LOOKUP_HCA_BLADDER_CONTINENCE;
+        public List<CodedDescriptor> LOOKUP_HCA_BOWEL_CONTINENCE;
+        public List<CodedDescriptor> LOOKUP_HCA_CHANGE_IN_ADL;
+        public List<CodedDescriptor> LOOKUP_HCA_CHANGE_IN_DECISION;
+        public List<CodedDescriptor> LOOKUP_HCA_COGNITIVIE_SKILLS;
+        public List<CodedDescriptor> LOOKUP_HCA_DAYS_WENT_OUT;
+        public List<CodedDescriptor> LOOKUP_HCA_DISEASE_CODE;
+        public List<CodedDescriptor> LOOKUP_HCA_DISTANCE_WALKED;
+        public List<CodedDescriptor> LOOKUP_HCA_DISTANCE_WHEELED;
+        public List<CodedDescriptor> LOOKUP_HCA_DYSPNEA;
+        public List<CodedDescriptor> LOOKUP_HCA_FALLS;
+        public List<CodedDescriptor> LOOKUP_HCA_FATIGUE;
+        public List<CodedDescriptor> LOOKUP_HCA_FOOT_PROBLEMS;
+        public List<CodedDescriptor> LOOKUP_HCA_FORMAL_TREATMENTS;
+        public List<CodedDescriptor> LOOKUP_HCA_HEARING_DIFFICULTY;
+        public List<CodedDescriptor> LOOKUP_HCA_IADL_SELF_PERFORMANCE;
+        public List<CodedDescriptor> LOOKUP_HCA_INFORMAL_HELP;
+        public List<CodedDescriptor> LOOKUP_HCA_LAST_HOSPITAL_STAY;
+        public List<CodedDescriptor> LOOKUP_HCA_LIVES_WITH_PERSON;
+        public List<CodedDescriptor> LOOKUP_HCA_LIVING_ARRANGEMENT;
+        public List<CodedDescriptor> LOOKUP_HCA_LIVING_BETTER_OFF;
+        public List<CodedDescriptor> LOOKUP_HCA_LIVING_STATUS;
+        public List<CodedDescriptor> LOOKUP_HCA_LOCOMOTION;
+        public List<CodedDescriptor> LOOKUP_HCA_LOCOMOTION_TIMED;
+        public List<CodedDescriptor> LOOKUP_HCA_MARITAL_STATUS;
+        public List<CodedDescriptor> LOOKUP_HCA_MOOD;
+        public List<CodedDescriptor> LOOKUP_HCA_NUTRITION_INTAKE;
+        public List<CodedDescriptor> LOOKUP_HCA_PAIN1;
+        public List<CodedDescriptor> LOOKUP_HCA_PAIN2;
+        public List<CodedDescriptor> LOOKUP_HCA_PAIN3;
+        public List<CodedDescriptor> LOOKUP_HCA_PAIN4;
+        public List<CodedDescriptor> LOOKUP_HCA_PHYSICAL_ACTIVITY_HOURS;
+        public List<CodedDescriptor> LOOKUP_HCA_PRECIPITATING_EVENT;
+        public List<CodedDescriptor> LOOKUP_HCA_PRESSURE_ULCER;
+        public List<CodedDescriptor> LOOKUP_HCA_PRIMARY_LANGUAGE;
+        public List<CodedDescriptor> LOOKUP_HCA_PROBLEM_FREQUENCY;
+        public List<CodedDescriptor> LOOKUP_HCA_RELATIONSHIP;
+        public List<CodedDescriptor> LOOKUP_HCA_SELF_REPORTED_HEALTH;
+        public List<CodedDescriptor> LOOKUP_HCA_SELF_REPORTED_MOOD;
+        public List<CodedDescriptor> LOOKUP_HCA_SELF_SUFFICIENCY;
+        public List<CodedDescriptor> LOOKUP_HCA_SOCIAL;
+        public List<CodedDescriptor> LOOKUP_HCA_SOCIAL_ACTIVITES_CHANGE;
+        public List<CodedDescriptor> LOOKUP_HCA_TIME_ALONE;
+        public List<CodedDescriptor> LOOKUP_HCA_TOBACCO;
+        public List<CodedDescriptor> LOOKUP_HCA_TREATMENTS;
+        public List<CodedDescriptor> LOOKUP_HCA_UNDERSTANDS;
+        public List<CodedDescriptor> LOOKUP_HCA_UNDERSTOOD;
+        public List<CodedDescriptor> LOOKUP_HCA_URINARY;
+        public List<CodedDescriptor> LOOKUP_HCA_VISION_DIFFICULTY;
+    }
+
+    public class ProviderDesignation
+    {
+        public DateTime Edate = Convert.ToDateTime(null);
+        public long mpcID = -1;
+        public string ProviderID = "";
+        public string ProviderName = "";
+        public DateTime Sdate = Convert.ToDateTime(null);
+        public string ProviderNPI = "";
+        public string ContractNPI = "";
+    }
+
+    public class GMRRegions
+    {
+        public string DESC = "";
+        public string ID = "";
+        public double LAT = 0.0;
+        public double LON = 0.0;
+        public string NAME = "";
+        public int ZOOM = 0;
+    }
+
+    public class NumericDescriptor
+    {
+        public string description = "";
+        public long number = -1;
+    }
+
+    public class ServiceGapDescriptor
+    {
+        public string CMSID = "";
+        public string GAPDESCRIPTION = "";
+        public string GAPDOMAIN = "";
+        public string MEASURE = "";
+        public string TYPE = "";
+        public string CPT = "";
+        public string HCPCS = "";
+        public string UB = "";
+        public string DIAG = "";
+        public string LOINC = "";
+
+    }
+
+    public class ZipCodeDescriptor
+    {
+        public string zipcode = "";
+        public string zipcodecity = "";
+        public string zipcodestate = "";
+        public string zipcounty = "";
+        public double ziplat = 0.0;
+        public double ziplong = 0.0;
     }
 
 
