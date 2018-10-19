@@ -60,7 +60,7 @@
                     <Button x:Name="btnEncounter" Text="Encounters" 
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="Handle_Encounter_Clicked" HeightRequest="100"></Button>
-                    <Button x:Name="btnCollateral" Text="Colleratal Notes"
+                    <Button x:Name="btnCollateral" Text="Collateral Notes"
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="Handle_Collateral_Clicked" HeightRequest="100"></Button>
                     <Button x:Name="btnAuths" Text="Service Authorizations"
