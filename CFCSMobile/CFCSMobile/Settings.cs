@@ -30,6 +30,6 @@ namespace CFCSMobile
 
         static public Color LabelColorForValueFields = Color.FromHex("#9090AO");
 
-        static public TheLookups Lookups = null;
+        static public TheLookups Lookups = null; // Will get Populated at Startup after login
     }
 }

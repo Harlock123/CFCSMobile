@@ -21,6 +21,7 @@ namespace CFCSMobile
                 lblWelcome.Text = "Welcome " + Settings.FIRSTNAME + " " + Settings.LASTNAME;
 
                 GetMOTD();
+                GetLookups();
                 GetMyCaseLoad();
             }
             else
@@ -74,6 +75,37 @@ namespace CFCSMobile
 
             //DisplayAlert("Tapped", ((Controls.MemberPlacard)sender).FirstName + " " + ((Controls.MemberPlacard)sender).LastName + " Tapped On" +
             //    ((Controls.MemberPlacard)sender).TheData.MMID, "OK");
+        }
+
+        async void GetLookups()
+        {
+            
+            try
+            {
+
+                if (Settings.Lookups == null)
+                {
+                    string URL = Settings.BASEURL; // "";
+
+                    URL += "/Login/GetAllLookups";
+
+                    HttpClient c = new HttpClient();
+
+                    var response = await c.GetStringAsync(URL);
+
+                    var theresult = JsonConvert.DeserializeObject<TheLookups>(response);
+
+                    Settings.Lookups = theresult;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Big trouble in little china...", 
+                    "Having a problem fetching all of the lookup information. This application will likely not function correctly...", 
+                    "Understood.");
+
+            }
+
         }
 
         async void GetMOTD()

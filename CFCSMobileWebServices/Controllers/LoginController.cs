@@ -2304,26 +2304,18 @@ namespace CFCSMobileWebServices.Controllers
                 result.LOOKUPPROGRAMEVALPURPOSE = GetSpecificLookupList("tblLOOKUPPROGRAMEVALPURPOSE");
                 result.LOOKUPPROGRAMTYPE = GetSpecificLookupList("tblLOOKUPPROGRAMTYPE");
                 result.LOOKUPPROGRESSNOTETYPES = GetSpecificLookupList("tblLOOKUPPROGRESSNOTETYPES");
-
-                //LogError("PART1", "MADE IT HERE");
-
                 result.LOOKUPPROVIDERSPECIALTY = GetSpecificLookupList("tblLOOKUPPROVIDERSPECIALTY");
                 result.LOOKUPPROVIDERTYPE = GetSpecificLookupList("tblLOOKUPPROVIDERTYPE");
-
                 result.LOOKUPPURPOSEASAM = GetSpecificLookupList("tblLOOKUPPURPOSEASAM");
                 result.LOOKUPPURPOSEOFEVAL = GetSpecificLookupList("tblLOOKUPPURPOSEOFEVAL");
                 result.LOOKUPPURPOSEOFEVALDCF = GetSpecificLookupList("tblLOOKUPPURPOSEOFEVALDCF");
                 result.LOOKUPRACE = GetSpecificLookupList("tblLOOKUPRACE");
                 result.LOOKUPRECLEVELOFCARE = GetSpecificLookupList("tblLOOKUPRECLEVELOFCARE");
-
                 result.LOOKUPREFERRALSOURCE = GetSpecificLookupList("tblLOOKUPREFERRALSOURCE");
-
                 result.LOOKUPREFERRALREASON = GetSpecificLookupList("tblLOOKUPREFERRALREASON");
                 result.LOOKUPREFSOURCEBLUEBOOK = GetReferralSourceBlueBook();
-
                 result.LOOKUPREMCONTACTWITH = GetSpecificLookupList("tblLOOKUPREMCONTACTWITH");
                 result.LOOKUPREMNOTETYPE = GetSpecificLookupList("tblLOOKUPREMNOTETYPE");
-
                 result.LOOKUPRESIDENTSTATUS = GetSpecificLookupList("tblLOOKUPRESIDENTSTATUS");
                 result.LOOKUPSCALE = GetSpecificLookupList("tblLOOKUPSCALE");
                 result.LOOKUPSCREENINGPROGRAM = GetSpecificLookupList("tblLOOKUPSCREENINGPROGRAM");
@@ -2335,16 +2327,11 @@ namespace CFCSMobileWebServices.Controllers
                 result.LOOKUPHIERARCHY = GetSpecificLookupList("tblLOOKUPHIERARCHY");
                 result.LOOKUPPROVIDERS = GetAllProviderDesignations();
                 result.LOOKUP211REFERRALPROVIDERS = GetListOf211ReferralProviders();
-
-                //result.LOOKUPROI = GetSpecificLookupList("tblLOOKUPROITYPE");
                 result.LOOKUPROI = GetSpecificLookupListWACtive("tblLOOKUPROITYPE");
-
                 result.LOOKUPSETARGETTYPE = GetSpecificLookupList("tblLOOKUPSETARGETTYPE");
                 result.LOOKUPSETYPE = GetSpecificLookupList("tblLOOKUPSETYPE");
                 result.LOOKUPDOCUMENTTYPES = GetSpecificLookupList("tblLOOKUPDOCUMENTTYPES");
-
                 result.LOOKUPTHERAPIES = GetSpecificLookupList("tblLOOKUPTHERAPIES");
-
                 result.LOOKUP_V_DETOX = GetSpecificLookupList("tblLOOKUP_V_DETOX");
                 result.LOOKUP_V_EMERSTAB = GetSpecificLookupList("tblLOOKUP_V_EMERSTAB");
                 result.LOOKUP_V_INCIDENTAL = GetSpecificLookupList("tblLOOKUP_V_INCIDENTAL");
@@ -2354,15 +2341,11 @@ namespace CFCSMobileWebServices.Controllers
                 result.LOOKUP_V_RECOVERYFACT = GetSpecificLookupList("tblLOOKUP_V_RECOVERYFACT");
                 result.LOOKUP_V_RECOVERYINCIDENTAL = GetSpecificLookupList("tblLOOKUP_V_RECOVERYINCIDENTAL");
                 result.LOOKUP_V_TREATMENTANDAFTERCARE = GetSpecificLookupList("tblLOOKUP_V_TREATMENTANDAFTERCARE");
-
                 result.LOOKUPSUPPORTSRELATIONSHIP = GetSpecificLookupList("tblLOOKUPSUPPORTSRELATIONSHIP");
                 result.LOOKUPSUPPORTSRELATIONSHIPTEAM = GetSpecificLookupListTeam("tblLOOKUPSUPPORTSRELATIONSHIP");
                 result.LOOKUPSUPPORTSRELATIONSHIPFAMILY = GetSpecificLookupListFAMILY("tblLOOKUPSUPPORTSRELATIONSHIP");
-
-
                 result.LOOKUPPROVIDERSFORTRACKINGELEMENTS = GetListOfProvidersForTrackingElements();
                 result.LOOKUPASSEMENTKINDS = GetSpecificLookupList("tblLOOKUPASSOCIATEDASSESSMENTTYPES");
-
                 result.LOOKUPSERVICES = GetListOfServiceDescriptions();
                 result.LOOKUPSERVICESNOID = GetListOfServiceDescriptionsNoID();
                 result.LOOKUPSERVICESNOIDNOSPLIT = GetListOfServiceDescriptionsNoIDNoSplit();
@@ -2373,29 +2356,20 @@ namespace CFCSMobileWebServices.Controllers
                 result.LOOKUPDSP = GetListOfDSP();
                 result.LOOKUPCASESTATUS = GetSpecificLookupList("tblLOOKUPCASESTATUS");
                 result.LOOKUPCASESETTING = GetSpecificLookupList("tblLOOKUPCASESETTING");
-
                 result.LOOKUPTASKS = GetSpecificLookupList("tblLOOKUPTASKS");
                 result.LOOKUPTASKSTEPS = GetListOfTaskSteps();
                 result.LOOKUPTASKSTATUS = GetSpecificLookupList("tblLOOKUPTASKSTATUS");
-
                 result.LOOKUPFUNDERSFORENCOUNTERS = GetFundersForEncounters();
-
                 result.LOOKUPLOOKUPTABLES = GetAllLookupsTables();
-
                 // we will fill this in later...
                 //result.LOOKUPZIPS = GetZipCodeList();
-
                 result.LOOKUPGMRegions = GetListOfGMRRegions();
-                               
                 result.LOOKUPSAFETYASSESSMENTLVL = GetSpecificLookupListAlternatOrder("tblLOOKUPSAFETYASSESSMENTLVL");
-
                 result.LOOKUPDISTINCTSERVICES = GetDistinctServices();
                 result.LOOKUPDISTINCTSERVICESWITHID = GetDistinctServicesWithID();
-
                 result.LOOKUPRELIGION = GetSpecificLookupList("tblLOOKUPRELIGION");
                 result.LOOKUPCOMPETENCIES = GetSpecificLookupList("tblLOOKUPUSERCOMPETENCY");
                 result.LOOKUPCREDENTIALS = GetSpecificLookupList("tblLOOKUPUSERCREDENTIALS");
-
                 result.LOOKUPACTIVEMEMBERS = GetActiveMembers();
                 result.LOOKUPWAITLISTREASON = GetSpecificLookupList("tblLOOKUPWAITLISTREASON");
                 result.LOOKUPMEDS = GetSpecificLookupListWithOther("tblLOOKUPMEDS");
