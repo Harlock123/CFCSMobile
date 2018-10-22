@@ -122,7 +122,9 @@ namespace CFCSMobileWebServices.Controllers
                 cn.Dispose();
                                
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 result = false;
             }
@@ -571,7 +573,9 @@ namespace CFCSMobileWebServices.Controllers
 
 
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception Ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 // fail silently
                 locked = false;

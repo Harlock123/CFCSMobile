@@ -98,7 +98,9 @@ namespace CFCSMobile
                     Settings.Lookups = theresult;
                 }
             }
+#pragma warning disable CS0168 // Variable is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
             {
                 await DisplayAlert("Big trouble in little china...", 
                     "Having a problem fetching all of the lookup information. This application will likely not function correctly...", 
