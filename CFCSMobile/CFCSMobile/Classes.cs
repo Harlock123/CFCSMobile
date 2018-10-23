@@ -423,6 +423,11 @@ namespace CFCSMobile
     {
         public string code = "";
         public string description = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWList
@@ -430,6 +435,11 @@ namespace CFCSMobile
         public string code = "";
         public string description = "";
         public List<string> theList = new List<string>();
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorExt
@@ -437,6 +447,11 @@ namespace CFCSMobile
         public string authreq = "";
         public string code = "";
         public string description = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWithActive
@@ -444,6 +459,11 @@ namespace CFCSMobile
         public string active = "";
         public string code = "";
         public string description = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWField
@@ -451,6 +471,11 @@ namespace CFCSMobile
         public string code = "";
         public string description = "";
         public string field = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWPrograms
@@ -459,6 +484,11 @@ namespace CFCSMobile
         public string code = "";
         public string description = "";
         public string program = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWID
@@ -466,6 +496,11 @@ namespace CFCSMobile
         public long id = 0;
         public string code = "";
         public string description = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
     public class CodedDescriptorWithOther
@@ -474,6 +509,11 @@ namespace CFCSMobile
         public string code = "";
         public string description = "";
         public string other = "";
+
+        public override String ToString()
+        {
+            return description;
+        }
     }
 
 }

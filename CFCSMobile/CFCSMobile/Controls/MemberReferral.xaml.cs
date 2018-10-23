@@ -23,7 +23,8 @@ namespace CFCSMobile.Controls
         {
             InitializeComponent();
 
-            theGrid.BackgroundColor = Settings.ReferralBackgroundColor;
+            //Should be done in the XAML now
+            //theGrid.BackgroundColor = Settings.ReferralBackgroundColor;
 
             lblAddress.ValueText = src.RSADDRESS1.Trim() + " " + src.RSADDRESS2.Trim() + " " + 
                               src.RSADDRESS3.Trim() + " " + src.RSCITY.Trim() + " " + 

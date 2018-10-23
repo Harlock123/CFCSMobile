@@ -49,7 +49,7 @@
 
                 <Button x:Name="btnLogin" BackgroundColor="LightBlue" 
                         Text="Login" HorizontalOptions="Center" 
-                        WidthRequest="150" BorderRadius="20"
+                        WidthRequest="150" BorderRadius="10" HeightRequest="50"
                         TextColor="Black"
                         Clicked="Button_Clicked"
                         Grid.Row="3"></Button>

@@ -23,7 +23,8 @@ namespace CFCSMobile.Controls
         {
             InitializeComponent();
 
-            theGrid.BackgroundColor = Settings.StaffBackgroundColor;
+            //SHould be done in the xaml now
+            //theGrid.BackgroundColor = Settings.StaffBackgroundColor;
 
             TheObserver = ob;
             lblStaff.Text = ob.OBSERVER + " " + ob.CREDENTIALONE.Trim() + " " + ob.CREDENTIALTWO.Trim();

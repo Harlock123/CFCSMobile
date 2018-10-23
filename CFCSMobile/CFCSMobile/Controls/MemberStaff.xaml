@@ -2,10 +2,11 @@
 <Grid   xmlns="http://xamarin.com/schemas/2014/forms"
         xmlns:local="clr-namespace:CFCSMobile.Controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:base="clr-namespace:CFCSMobile"
         HorizontalOptions="FillAndExpand"
         x:Class="CFCSMobile.Controls.MemberStaff" 
         x:Name="theGrid"
-        BackgroundColor="#C8FCDF" Margin="4,0,4,0" 
+        BackgroundColor="{x:Static base:Settings.StaffBackgroundColor}" Margin="4,0,4,0" 
     >
     <Grid.RowDefinitions>
         <RowDefinition Height="20"/>

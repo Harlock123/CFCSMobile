@@ -89,5 +89,9 @@ namespace CFCSMobile
 
         }
 
+        private void btnAddNewContact_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new MemberCreateCollateralNote(SelectedMember);
+        }
     }
 }
