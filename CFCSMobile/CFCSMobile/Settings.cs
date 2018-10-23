@@ -30,6 +30,10 @@ namespace CFCSMobile
 
         static public Color LabelColorForValueFields = Color.FromHex("#9090AO");
 
+        static public Color EditFieldBackgroundColor = Color.White;
+
+        static public Color ButtonBackgroundColor = Color.FromHex("#C0C000");
+
         static public TheLookups Lookups = null; // Will get Populated at Startup after login
     }
 }

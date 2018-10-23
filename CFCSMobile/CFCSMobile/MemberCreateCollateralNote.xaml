@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:CFCSMobile"
              x:Class="CFCSMobile.MemberCreateCollateralNote"
              BackgroundColor="Beige">
     <ContentPage.Content>
@@ -46,17 +47,27 @@
 
             <ScrollView Grid.Row="2" x:Name="svNotes" Orientation="Vertical">
                 <StackLayout x:Name="lstCreateNote" Orientation="Vertical" Padding="10,5,10,5">
-                    <Picker Title="Note Type:" x:Name="NoteTypePicker"  />
-                    <Picker Title="Contact Type:" x:Name="ContactTypePicker"  />
+                    <Label Text="Note Type:"></Label>
+                    <Picker BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}" 
+                            x:Name="NoteTypePicker"  />
+                    
+                    <Label Text="Contact Type:"></Label>
+                    <Picker BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}" 
+                            x:Name="ContactTypePicker"  />
+                    
                     <Label Text="Date of Contact:"></Label>
-                    <DatePicker x:Name="ContactDate" WidthRequest="240" />
+                    <DatePicker BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"
+                            x:Name="ContactDate" WidthRequest="240" />
+                    
                     <Label Text="Commentary about the Contact:"></Label>
-                    <Editor Placeholder="The narrative about this contact goes here..." x:Name="ContactNarrative"
-                           HeightRequest="80"/>
+                    <Editor Placeholder="The narrative about this contact goes here..." 
+                            BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}" 
+                            x:Name="ContactNarrative" HeightRequest="100"/>
 
-                    <Button HorizontalOptions="Center" WidthRequest="200"  BackgroundColor="#C0C000" 
-                        TextColor="Black" BorderRadius="10" Margin="2" HeightRequest="50"
-                        x:Name="TheSaveButton" Clicked="TheSaveButton_Clicked" Text="Save" />
+                    <Button HorizontalOptions="Center" WidthRequest="200"  
+                            BackgroundColor="{x:Static base:Settings.ButtonBackgroundColor}" 
+                            TextColor="Black" BorderRadius="10" Margin="2" HeightRequest="50"
+                            x:Name="TheSaveButton" Clicked="TheSaveButton_Clicked" Text="Save" />
                 </StackLayout>
             </ScrollView>
 

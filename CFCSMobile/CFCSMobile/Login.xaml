@@ -53,8 +53,14 @@
                         TextColor="Black"
                         Clicked="Button_Clicked"
                         Grid.Row="3"></Button>
-                
-                <ActivityIndicator x:Name="ActWorking" HorizontalOptions="Center" Grid.Row="4" IsVisible="False" IsRunning="False" />
+
+                <ActivityIndicator x:Name="ActWorking" 
+                                   HorizontalOptions="Center" Grid.Row="4" 
+                                   IsVisible="False" IsRunning="False">
+                    <ActivityIndicator.WidthRequest>
+                        <OnPlatform  iOS="100" Android="100" UWP="400" />
+                    </ActivityIndicator.WidthRequest>
+                </ActivityIndicator>
 
             </Grid>
         </ScrollView>
