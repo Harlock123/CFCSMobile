@@ -51,7 +51,7 @@
             <Button HorizontalOptions="Center" WidthRequest="200"  BackgroundColor="#C0C000" 
                     TextColor="Black" BorderRadius="10" Margin="2" HeightRequest="50"
                     Grid.Row="3" x:Name="btnAddNewContact" Clicked="btnAddNewContact_Clicked" 
-                    Text="Add new contact" />
+                    Text="Add new contact" IsVisible="False" />
 
 
         </Grid>

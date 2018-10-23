@@ -80,6 +80,8 @@ namespace CFCSMobile
 
             }
 
+            btnAddNewContact.IsVisible = true;
+
         }
 
         private void Trec_Tapped(object sender, EventArgs e)

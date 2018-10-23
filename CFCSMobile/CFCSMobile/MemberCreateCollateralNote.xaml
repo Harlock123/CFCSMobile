@@ -51,7 +51,7 @@
                     <Label Text="Date of Contact:"></Label>
                     <DatePicker x:Name="ContactDate" WidthRequest="240" />
                     <Label Text="Commentary about the Contact:"></Label>
-                    <Entry Placeholder="The narrative about this contact goes here..." x:Name="ContactNarrative"
+                    <Editor Placeholder="The narrative about this contact goes here..." x:Name="ContactNarrative"
                            HeightRequest="80"/>
 
                     <Button HorizontalOptions="Center" WidthRequest="200"  BackgroundColor="#C0C000" 
