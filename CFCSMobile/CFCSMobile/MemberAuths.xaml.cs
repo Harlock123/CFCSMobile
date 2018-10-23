@@ -50,6 +50,8 @@ namespace CFCSMobile
             string URL = Settings.BASEURL;//"";
             string u = SelectedMember.TheData.SSN;
 
+            ActWorking.IsVisible = true;
+            ActWorking.IsRunning = true;
 
             URL += "/Login/GetAuths/" + u;
 
@@ -78,6 +80,9 @@ namespace CFCSMobile
                 lstAuths.Children.Add(m);
 
             }
+
+            ActWorking.IsVisible = false;
+            ActWorking.IsRunning = false;
 
             //lvMYCASELOAD.ItemsSource = theresult;
 

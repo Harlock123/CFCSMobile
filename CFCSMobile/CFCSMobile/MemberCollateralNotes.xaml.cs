@@ -51,6 +51,10 @@ namespace CFCSMobile
             string URL = Settings.BASEURL;//"";
             string u = SelectedMember.TheData.SSN;
 
+            ActWorking.IsVisible = true;
+            ActWorking.IsRunning = true;
+
+            btnAddNewContact.IsVisible = false;
 
             URL += "/Login/AllExceptEncounterProgressNotes/" + u;
 
@@ -79,6 +83,9 @@ namespace CFCSMobile
                 lstNotes.Children.Add(m);
 
             }
+
+            ActWorking.IsVisible = false;
+            ActWorking.IsRunning = false;
 
             btnAddNewContact.IsVisible = true;
 

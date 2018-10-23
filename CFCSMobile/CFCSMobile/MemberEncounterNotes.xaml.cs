@@ -50,6 +50,8 @@ namespace CFCSMobile
             string URL = Settings.BASEURL;//"";
             string u = SelectedMember.TheData.SSN;
 
+            ActWorking.IsVisible = true;
+            ActWorking.IsRunning = true;
 
             URL += "/Login/EncounterProgressNotes/" + u;
 
@@ -84,7 +86,10 @@ namespace CFCSMobile
                 lstNotes.Children.Add(m);
 
             }
-            
+
+            ActWorking.IsVisible = false;
+            ActWorking.IsRunning = false;
+
         }
 
         private void Trec_Tapped(object sender, EventArgs e)

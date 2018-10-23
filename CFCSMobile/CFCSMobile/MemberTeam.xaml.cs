@@ -53,6 +53,8 @@ namespace CFCSMobile
             string URL = Settings.BASEURL;//"";
             string u = SelectedMember.TheData.SSN;
 
+            ActWorking.IsVisible = true;
+            ActWorking.IsRunning = true;
 
             URL += "/Login/MemberReferrals/" + u;
 
@@ -101,6 +103,8 @@ namespace CFCSMobile
 
             }
 
+            ActWorking.IsVisible = false;
+            ActWorking.IsRunning = false;
 
         }
     }
