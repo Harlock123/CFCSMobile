@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Newtonsoft.Json;
 using System.Data;
+using Newtonsoft.Json.Linq;
 
 namespace CFCSMobileWebServices.Controllers
 {
@@ -2622,6 +2623,41 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
+        [Route("api/Login/SaveNote")]
+        [HttpPost]
+        public JsonResult<Boolean> SaveNote([FromBody] MemberProgressNotes payload)
+        {
+
+            // Console.WriteLine(Request.ToString());
+
+            //    int l = note.Length;
+
+            //    MemberProgressNotes mp = JsonConvert.DeserializeObject<MemberProgressNotes>(note);
+
+            try
+            {
+                tblMemberProgressNotes pn = new tblMemberProgressNotes(DBCON());
+
+                pn.NOTATION = payload.NOTATION;
+                pn.NOTECONTACTTYPE = payload.NOTECONTACTDESC;
+                pn.NOTETYPE = payload.NOTETYPEDESC;
+                pn.CREATEDATE = ServerDateTime();
+                pn.CONTACTDATE = payload.CONTACTDATE;
+                pn.CREATEDBY = payload.AUTHOR;
+                pn.SSN = payload.SSN;
+
+                pn.Add();
+                
+                return Json( true);
+            }
+            catch 
+            {
+                return Json(false);
+            }
+
+
+        }
+
         private List<CodedDescriptor> GetSpecificLookupList(string TNAME)
         {
             List<CodedDescriptor> result = new List<CodedDescriptor>();
@@ -4532,7 +4568,539 @@ namespace CFCSMobileWebServices.Controllers
 
             return result;
         }
+
         
+
+        public bool WriteProgressNote(MemberProgressNotes pn)
+        {
+            bool result = true;
+
+            try
+            {
+                if (pn.mpnID <= 0)
+                {
+                    // adding a new note
+
+                    tblMemberProgressNotes tmp = new tblMemberProgressNotes(DBCON());
+                    tmp.Initialize();
+
+                    tmp.SSN = pn.SSN;
+                    tmp.NOTETYPE = pn.NOTETYPEDESC;
+                    tmp.NOTECONTACTTYPE = pn.NOTECONTACTDESC;
+
+                    //DB 05-16-2012 use session
+                    tmp.CREATEDBY = pn.AUTHOR;
+                    //tmp.CREATEDBY = GetCurrentUserName();
+
+                    tmp.CREATEDATE = ServerDateTime();
+                    tmp.NOTATION = pn.NOTATION;
+                    tmp.SIGNED = pn.SIGNED;
+                    tmp.SIGNDATE = ServerDateTime();
+                    tmp.SUPERVISORNOTATION = pn.SUPERVISORNOTATION;
+                    tmp.SUPERVISORACK1 = pn.SUPERVISORACK1;
+                    tmp.SUPERVISORACK2 = pn.SUPERVISORACK2;
+                    tmp.SUPERVISORNOTATIONDATE = pn.SUPERVISORNOTATIONDATE;
+                    tmp.CONTACTDATE = pn.CONTACTDATE;
+                    tmp.TRAVELTIME = pn.TRAVELMINUTES;
+                    tmp.CONTACTTIME = pn.CONTACTMINUTES;
+                    tmp.SAFETYASSESSMENT = pn.SAFETYASSESSMENT;
+                    tmp.SAFETYASSESSMENTLVL = pn.SAFETYASSESSMENTLVL;
+                    tmp.SERVICECODE = pn.SERVICECODE;
+
+                    tmp.Add();
+
+                    tmp = null;
+                }
+                else
+                {
+                    // editing an old note
+
+                    tblMemberProgressNotes tmp = new tblMemberProgressNotes(DBCON());
+                    tmp.Initialize();
+
+                    tmp.Read(pn.mpnID);
+
+                    tmp.NOTETYPE = pn.NOTETYPEDESC;
+                    tmp.NOTECONTACTTYPE = pn.NOTECONTACTDESC;
+                    tmp.OLDNOTATION = tmp.NOTATION; // lets save one prior notation
+                    tmp.NOTATION = pn.NOTATION;
+
+                    tmp.SUPERVISORNOTATION = pn.SUPERVISORNOTATION;
+                    tmp.SUPERVISORACK1 = pn.SUPERVISORACK1;
+                    tmp.SUPERVISORACK2 = pn.SUPERVISORACK2;
+                    tmp.SUPERVISORNOTATIONDATE = pn.SUPERVISORNOTATIONDATE;
+                    tmp.CONTACTDATE = pn.CONTACTDATE;
+
+                    tmp.TRAVELTIME = pn.TRAVELMINUTES;
+                    tmp.CONTACTTIME = pn.CONTACTMINUTES;
+                    tmp.SAFETYASSESSMENT = pn.SAFETYASSESSMENT;
+                    tmp.SAFETYASSESSMENTLVL = pn.SAFETYASSESSMENTLVL;
+                    tmp.SERVICECODE = pn.SERVICECODE;
+
+                    tmp.Update();
+
+                    tmp = null;
+                }
+
+                // new stuff for supervision messaging just in case the note requires it
+                if (pn.NOTETYPEDESC == "04") // a crisis
+                    SendMessageToThisMembersProgramsSupervisors(pn.SSN, pn.AUTHOR);
+            }
+            catch (Exception ex)
+            {
+                LogError("WriteProgressNote", ex.Message);
+
+                result = false;
+            }
+
+            return result;
+        }
+
+        public DateTime ServerDateTime()
+        {
+            DateTime result = DateTime.Now;
+
+            try
+            {
+                string sql = "SELECT GETDATE()";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    result = r.GetDateTime(0);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("ServerDateTime", ex.Message);
+                result = DateTime.Now;
+            }
+
+            return result;
+        }
+
+        public MemberDetailsShort GetCompleteMemberDetails(string SSN, string UNAME, string IPADDR)
+        {
+
+            if (UNAME != "" && IPADDR != "")
+                LogThisAccess(SSN, UNAME, IPADDR, "FULLMEMBER"); // for Hipaa logging
+
+            MemberDetailsShort mem = new MemberDetailsShort();
+
+            try
+            {
+                string sql = "SELECT MMID,FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,SSN, Phone1, Phone1Type, Phone1Ext, " +
+                    "Phone2, Phone2Type, Phone2Ext, Email, ParentGuardian, ParentGuardPhone, LOCATIONDATE " +
+                    "FROM tblMemberMain A " +
+                    "WHERE A.SSN=@SSN ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    if (r["MMID"] != DBNull.Value)
+                    {
+                        mem.MMID = Convert.ToInt64(r["MMID"]);
+                    }
+                    mem.FirstName = r["FIRSTNAME"].ToString() + "";
+                    mem.LastName = r["LASTNAME"].ToString() + "";
+                    mem.MiddleName = r["MIDDLENAME"].ToString() + "";
+
+                    if (r["DOB"] != DBNull.Value)
+                    {
+                        mem.DOB = r.GetDateTime(r.GetOrdinal("DOB")).ToShortDateString();
+                    }
+
+                    if (r["LOCATIONDATE"] != DBNull.Value)
+                    {
+                        mem.LocationDate = r.GetDateTime(r.GetOrdinal("LOCATIONDATE"));
+                    }
+
+
+                    mem.Gender = r["GENDER"].ToString() + "";
+                    mem.Ethnicity = r["ETHNICITY"].ToString() + "";
+                    mem.Race = r["RACE"].ToString() + "";
+                    mem.SSN = r["SSN"].ToString() + "";
+                    mem.Phone1 = r["Phone1"].ToString() + "";
+                    mem.Phone1Type = r["Phone1Type"].ToString() + "";
+                    mem.Phone1Ext = r["Phone1Ext"].ToString() + "";
+                    mem.Phone2 = r["Phone2"].ToString() + "";
+                    mem.Phone2Type = r["Phone2Type"].ToString() + "";
+                    mem.Phone2Ext = r["Phone2Ext"].ToString() + "";
+                    mem.Email = r["Email"].ToString() + "";
+                    mem.ParentGuardian = r["ParentGuardian"].ToString() + "";
+                    mem.ParentGuardPhone = r["ParentGuardPhone"].ToString() + "";
+                    //mem.CurrentCaseManager = GetCurrentMemberCaseManager(SSN);
+                    //mem.CaseManager = GetFirstAndLastName(mem.CurrentCaseManager);
+                }
+
+                mem.memberAddress = GetMemberAddress(SSN);
+                //mem.memberAddressHistory = GetMemberAddressHistory(SSN);
+                //mem.memberAuths = GetAuthsAvailableForMember(SSN);
+
+                //mem.memberProviders = GetListOfMemberProviders(mem.MMID);
+                //mem.MemberSupports = GetListOfMemberRelationships(mem.MMID);
+                //mem.MemberServices = GetListOfMemberServices(SSN);
+                //mem.MemberLanguages = GetListOfMemberLanguages(SSN);
+                //mem.MemberContacts = GetListOfMemberContacts(SSN);
+                //mem.MemberAdmissions = GetListOfMemberAdmissions(SSN);
+                //mem.MemberPrograms = GetListOfMemberProgramMemberships(SSN);
+                //mem.MemberGroups = GetListOfMemberGroupMemberships(SSN);
+                //mem.MemberOtherSystems = GetListOfMemberOtherSystemIDs(SSN);
+                //mem.MemberMeds = GetListOfMemberMedications(SSN);
+                //mem.MemberServiceProviders = GetListOfMemberServiceProviders(SSN);
+                //mem.MemberScores = GetAllScoresFor(SSN);
+                //mem.MemberROIs = GetListOfMemberROIs(SSN);
+                //mem.MemberWatchList = GetListOfMemberWatchListEntries(SSN);
+                //mem.MemberEligibilityList = GetListOfEligibilityEntriesFor(SSN);
+                //mem.MemberContactList = GetListOfMemberContactInfo(SSN);
+                //mem.MemberDMEProviders = GetListOfMemberDMEServiceProviders(SSN);
+                //mem.MemberLabs = GetListOfLabsOnFile(SSN);
+                //mem.MemberAlerts = GetListofMemberAlertsOnFile(SSN);
+                //mem.MemberTherapies = GetListOfMemberTherapies(SSN);
+                //mem.MemberImmunizations = GetListOfMemberImmunizations(SSN);
+                //mem.MemberCommunitySupports = GetListOftblMemberCommunitySupports(SSN);
+                //mem.MemberOtherSystemIDs = GetOtherSystemIDsForThisMember(SSN);
+
+                //mem.ConsumerLoginAndContactPreferences = GetConsumerUserInfo(SSN);
+
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetCompleteMemberDetails", ex.Message);
+            }
+            return mem;
+        }
+
+        private void LogThisAccess(string ssn, string uname, string ipaddr, string context)
+        {
+            try
+            {
+                string sql = "INSERT INTO TBLACCESSLOG (USERNAME,USERIP,SSNACCESSED,DATEACCESSED,CONTEXT) VALUES (@UN,@UIP,@SSN,@DT,@CONTXT)";
+
+                //ignore passed in username. Use session value instead DB 05-23-2012
+                // MCompton 7/10/2017 This does not appear to be used, and causing exception in new Family Link 
+                //string _userName = HttpContext.Current.Session["UserName"].ToString();
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                //ignore passed in username. Use session value instead DB 05-23-2012
+                //cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = uname;
+                //FB 18190 - dmcgrady
+                cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = uname;
+                //cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = _userName;
+
+                cmd.Parameters.Add("@UIP", SqlDbType.VarChar).Value = ipaddr;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = ssn;
+                cmd.Parameters.Add("@DT", SqlDbType.DateTime).Value = ServerDateTime();
+                cmd.Parameters.Add("@CONTXT", SqlDbType.VarChar).Value = context;
+
+                cmd.ExecuteNonQuery();
+
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                LogError("LogThisAccess", ex.Message);
+
+                // Fail Silently?
+
+            }
+
+        }
+        
+        private bool SendMessageToThisMembersProgramsSupervisors(string SSN, string Login)
+        {
+            bool res = true;
+
+            try
+            {
+                // Get a list of programs that the member is part of currently
+                string sql = "SELECT [mpmPROGRAM] AS PROGRAM FROM [tblMemberProgramMembership] WHERE [mpmSSN] = @SSN " +
+                             "AND ((GETDATE() between [mpmSDATE] AND [mpmEDATE]) OR (GETDATE() >= [mpmSDATE] AND  [mpmEDATE] IS NULL))";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN.Trim();
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    List<string> Logins = GetLoginsInASpecificGroup(r[0] + "");
+                    List<string> RLogins = RestrictLoginsListToHierarchyType(Logins, "SUPER");
+
+                    MemberDetailsShort mem = GetCompleteMemberDetails(SSN, "Internal Messaging", "");
+
+                    string Message = "An Encounter Note was added by " + Login + "\nFor Consumer " + mem.FirstName + " " + mem.LastName + "\n" +
+                        "And needs supervision review.";
+
+                    SendMessageTo(Logins, Message, Login);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: SendMessageToThisMembersProgramsSupervisors", ex.Message);
+            }
+
+            return res;
+        }
+
+        private List<string> GetLoginsInASpecificGroup(string groupcode)
+        {
+            List<string> res = new List<string>();
+
+            try
+            {
+                string sql = "SELECT UserName AS UGUserName FROM tblUserGroups WHERE GROUPCODE = @GRP";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@GRP", SqlDbType.VarChar).Value = groupcode.Trim();
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    res.Add(r[0] + "");
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: GetLoginsInASpecificGroup", ex.Message);
+            }
+
+            return res;
+        }
+
+        private List<string> GetLoginsOfUserSupers(string login)
+        {
+            List<string> res = new List<string>();
+
+            try
+            {
+                string sql = " SELECT SupervisorName AS Supervisor FROM tblUsersSupervisor WHERE UserName = @Login";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@Login", SqlDbType.VarChar).Value = login.Trim();
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    res.Add(r[0] + "");
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: GetLoginsOfUserSupers", ex.Message);
+            }
+
+            return res;
+        }
+
+        private bool isuserinhierarchy(string login, string htype)
+        {
+            bool res = false;
+
+            try
+            {
+                string sql = "SELECT [UserName] from [tblUserHierarchy] WHERE [HierCode] = @HTYPE AND [UserName] = @LOGIN";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@HTYPE", SqlDbType.VarChar).Value = htype.Trim();
+                cmd.Parameters.Add("@LOGIN", SqlDbType.VarChar).Value = login.Trim();
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    res = true;
+                    break;
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: isuserinhierarchy", ex.Message);
+            }
+
+            return res;
+        }
+
+        private List<string> RestrictLoginsListToHierarchyType(List<string> logins, string HType)
+        {
+            List<string> res = new List<string>();
+
+            try
+            {
+                foreach (string s in logins)
+                {
+                    if (isuserinhierarchy(s, HType))
+                        res.Add(s);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: RestrictLoginsListToHierarchyType", ex.Message);
+            }
+
+            return res;
+        }
+
+        private bool SendMessageToThisUsersSupervisors(string SSN, string Login)
+        {
+            bool res = true;
+            List<string> resL = new List<string>();
+            try
+            {
+                // Get a list of programs that the member is part of currently
+                string sql = "SELECT SupervisorName AS Supervisor FROM tblUsersSupervisor WHERE UserName = @Login";
+                //             "AND ((GETDATE() between [mpmSDATE] AND [mpmEDATE]) OR (GETDATE() >= [mpmSDATE] AND  [mpmEDATE] IS NULL))";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN.Trim();
+                cmd.Parameters.Add("@Login", SqlDbType.VarChar).Value = Login.Trim();
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    //List<string> Logins = GetLoginsInASpecificGroup(r[0] + "");
+                    // List<string> RLogins = RestrictLoginsListToHierarchyType(Logins, "SUPER");
+                    resL.Add(r[0] + "");
+                }
+                MemberDetailsShort mem = GetCompleteMemberDetails(SSN, "Internal Messaging", "");
+
+                string Message = "An Encounter Note was added by " + Login + "\nFor Consumer " + mem.FirstName + " " + mem.LastName + "\n" +
+                    "And needs supervision review.";
+                //  resL.Add(Login + ""); //for now we will not be emailing the author and the supervisor of that person
+                SendMessageTo(resL, Message, Login);
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("PRIVATE: SendMessageToThisMembersProgramsSupervisors", ex.Message);
+            }
+
+            return res;
+        }
+
+        public bool SendMessageTo(List<String> Unames, string MessageBody, string Sender)
+        {
+            bool result = true;
+
+            try
+            {
+                foreach (string un in Unames)
+                {
+                    SendMessage(un, Sender, MessageBody, "03");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("SendMessageTo", ex.Message);
+
+                result = false;
+            }
+
+            return result;
+        }
+
+        private void SendMessage(string uname, string sender, string body, string type)
+        {
+            try
+            {
+                string sql = "INSERT INTO TBLUSERMESSAGES (SOURCE,DESTINATION,DATECREATED,MESSAGETYPE,READSTATUS,BODY) VALUES (" +
+                    "@SENDER,@UNAME,@DT,@MTYPE,'N',@BODY)";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@SENDER", SqlDbType.VarChar).Value = sender;
+                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar).Value = uname;
+                cmd.Parameters.Add("@DT", SqlDbType.DateTime).Value = DateTime.Now;
+                cmd.Parameters.Add("@MTYPE", SqlDbType.VarChar).Value = type;
+                cmd.Parameters.Add("@BODY", SqlDbType.VarChar).Value = body;
+
+                cmd.ExecuteNonQuery();
+
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("SendMessage", ex.Message);
+            }
+        }
+
+
+
     }
 
     #region Extra Classes
@@ -5407,6 +5975,8 @@ namespace CFCSMobileWebServices.Controllers
         public double ziplat = 0.0;
         public double ziplong = 0.0;
     }
+
+    
 
 
 }

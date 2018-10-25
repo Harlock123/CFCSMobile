@@ -55,7 +55,7 @@ namespace CFCSMobile
                 HttpClient c = new HttpClient();
 
                 var response = await c.GetStringAsync(URL);
-
+                
                 var theresult = JsonConvert.DeserializeObject<PersonLoggedIn>(response);
 
                 ActWorking.IsVisible = false;
