@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CFCSMobile.MemberEncounterNotes"
+             xmlns:base="clr-namespace:CFCSMobile"
+             x:Class="CFCSMobile.MemberCreateEncounterNote"
              BackgroundColor="Beige">
     <ContentPage.Content>
         <Grid>
@@ -22,7 +23,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Grid.Row="0" Orientation="Horizontal" HeightRequest="40">
-                <Label x:Name="lblWelcome" Text="Member Encounter Notes... " 
+                <Label x:Name="lblWelcome" Text="Create a new Encounter..." 
                        VerticalOptions="Center" TextColor="Black" FontSize="Small" FontAttributes="Italic">
                 </Label>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
@@ -45,22 +46,16 @@
             </ScrollView>
 
             <ScrollView Grid.Row="2" x:Name="svNotes" Orientation="Vertical">
-                <StackLayout x:Name="lstNotes" Orientation="Vertical"></StackLayout>
+                <StackLayout x:Name="lstCreateNote" Orientation="Vertical" Padding="10,5,10,5">
+
+                    
+                </StackLayout>
             </ScrollView>
 
-            <Button HorizontalOptions="Center" WidthRequest="200"  BackgroundColor="#C0C000" 
-                    TextColor="Black" BorderRadius="10" Margin="2" HeightRequest="50"
-                    Grid.Row="3" x:Name="btnAddNewContact" Clicked="btnAddNewContact_Clicked" 
-                    Text="Add new encounter" IsVisible="False" />
-
-            <ActivityIndicator x:Name="ActWorking" 
-                                   HorizontalOptions="Center" Grid.Row="4" 
-                                   IsVisible="False" IsRunning="False">
-                <ActivityIndicator.WidthRequest>
-                    <OnPlatform  iOS="100" Android="100" UWP="400" />
-                </ActivityIndicator.WidthRequest>
-            </ActivityIndicator>
-
+            <Button HorizontalOptions="Center" WidthRequest="200"   Grid.Row="3"
+                            BackgroundColor="{x:Static base:Settings.ButtonBackgroundColor}" 
+                            TextColor="Black" BorderRadius="10" Margin="2" HeightRequest="50"
+                            x:Name="TheSaveButton" Clicked="TheSaveButton_Clicked" Text="Save" />
 
         </Grid>
     </ContentPage.Content>

@@ -90,6 +90,13 @@ namespace CFCSMobile
             ActWorking.IsVisible = false;
             ActWorking.IsRunning = false;
 
+            btnAddNewContact.IsVisible = true;
+
+        }
+
+        private void btnAddNewContact_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new MemberCreateEncounterNote(SelectedMember);
         }
 
         private void Trec_Tapped(object sender, EventArgs e)
