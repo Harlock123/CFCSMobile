@@ -516,4 +516,18 @@ namespace CFCSMobile
         }
     }
 
+    public class LookupServices
+    {
+        public long svcID = 0;
+        public string Funder = "";
+        public string CostCenter = "";
+        public string SvcCode = "";
+        public string SvcDescription = "";
+        public string UnitType = "";
+        public double CostPerUnit = 0.0;
+        public string ACTIVE = "";
+        public string AUTHREQ = "";
+        public string RelatedSplitCode = "";
+        public bool BCBANoteRequired = false;
+    }
 }

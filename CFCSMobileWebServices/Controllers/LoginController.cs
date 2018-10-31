@@ -4346,7 +4346,7 @@ namespace CFCSMobileWebServices.Controllers
             return result;
         }
 
-        public List<CodedDescriptor> GetActiveMembers()
+        private List<CodedDescriptor> GetActiveMembers()
         {
             List<CodedDescriptor> result = new List<CodedDescriptor>();
 
@@ -5099,6 +5099,250 @@ namespace CFCSMobileWebServices.Controllers
             }
         }
 
+        [Route("api/Login/GetActiveServicesForMember/memb/encd")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember(string memb, string encd)
+        {
+
+            List<LookupServices> result = new List<LookupServices>();
+
+            try
+            {
+
+                DateTime encDate = Convert.ToDateTime(encd);
+
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.COSTCENTER = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.SSN = @SSN ";
+                sql += " AND (CAST(@ENCDATE AS DATE) BETWEEN CAST(AUS.STARTDATE AS DATE) AND CAST(AUS.ENDDATE AS DATE)) ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = memb;
+                cmd.Parameters.Add("@ENCDATE", SqlDbType.DateTime).Value = encDate;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    LookupServices i = new LookupServices();
+
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
+                    {
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.CostPerUnit = d;
+                        }
+                        else
+                        {
+                            i.CostPerUnit = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
+                    {
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                    }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
+            }
+
+            return Json(result);
+        }
+
+        [Route("api/Login/GetActiveServicesForAuth/AuthID")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth(string AuthID)
+        {
+            List<LookupServices> result = new List<LookupServices>();
+
+            try
+            {
+                long authID = Convert.ToInt64(AuthID);
+
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.MAUTHID = @MAUTHID ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@MAUTHID", SqlDbType.BigInt).Value = authID;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    LookupServices i = new LookupServices();
+
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
+                    {
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.CostPerUnit = d;
+                        }
+                        else
+                        {
+                            i.CostPerUnit = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
+                    {
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                    }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
+            }
+
+            return Json(result);
+        }
+
+        [Route("api/Login/GetActiveServicesForThisAuth/authNumber")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII(string authNumber)
+        {
+            List<LookupServices> result = new List<LookupServices>();
+
+            try
+            {
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.AUTHNUMBER = @AUTHNUMBER ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@AUTHNUMBER", SqlDbType.VarChar).Value = authNumber;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    LookupServices i = new LookupServices();
+
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
+                    {
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.CostPerUnit = d;
+                        }
+                        else
+                        {
+                            i.CostPerUnit = 0;
+                        }
+                    }
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
+                    {
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                    }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
+            }
+
+            return Json(result);
+        }
 
 
     }
@@ -5976,7 +6220,20 @@ namespace CFCSMobileWebServices.Controllers
         public double ziplong = 0.0;
     }
 
-    
+    public class LookupServices
+    {
+        public long svcID = 0;
+        public string Funder = "";
+        public string CostCenter = "";
+        public string SvcCode = "";
+        public string SvcDescription = "";
+        public string UnitType = "";
+        public double CostPerUnit = 0.0;
+        public string ACTIVE = "";
+        public string AUTHREQ = "";
+        public string RelatedSplitCode = "";
+        public bool BCBANoteRequired = false;
+    }
 
 
 }
