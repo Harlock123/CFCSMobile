@@ -529,5 +529,6 @@ namespace CFCSMobile
         public string AUTHREQ = "";
         public string RelatedSplitCode = "";
         public bool BCBANoteRequired = false;
+        public bool BANote = false;
     }
 }

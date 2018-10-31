@@ -5099,7 +5099,7 @@ namespace CFCSMobileWebServices.Controllers
             }
         }
 
-        [Route("api/Login/GetActiveServicesForMember/memb/encd")]
+        [Route("api/Login/GetActiveServicesForMember/{memb}/{encd}")]
         [HttpGet]
         public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember(string memb, string encd)
         {
@@ -5143,6 +5143,15 @@ namespace CFCSMobileWebServices.Controllers
                     i.CostCenter = r["COSTCENTER"] + "";
                     i.SvcCode = r["SVCCODE"] + "";
                     i.SvcDescription = r["SVCDESCRIPTION"] + "";
+
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
+
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
                     i.UnitType = r["UNITTYPE"] + "";
                     if (!r.IsDBNull(8))
                     {
@@ -5184,7 +5193,7 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-        [Route("api/Login/GetActiveServicesForAuth/AuthID")]
+        [Route("api/Login/GetActiveServicesForAuth/{AuthID}")]
         [HttpGet]
         public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth(string AuthID)
         {
@@ -5224,6 +5233,15 @@ namespace CFCSMobileWebServices.Controllers
                     i.CostCenter = r["COSTCENTER"] + "";
                     i.SvcCode = r["SVCCODE"] + "";
                     i.SvcDescription = r["SVCDESCRIPTION"] + "";
+
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
+
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
                     i.UnitType = r["UNITTYPE"] + "";
                     if (!r.IsDBNull(8))
                     {
@@ -5265,7 +5283,7 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-        [Route("api/Login/GetActiveServicesForThisAuth/authNumber")]
+        [Route("api/Login/GetActiveServicesForThisAuth/{authNumber}")]
         [HttpGet]
         public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII(string authNumber)
         {
@@ -5303,6 +5321,15 @@ namespace CFCSMobileWebServices.Controllers
                     i.CostCenter = r["COSTCENTER"] + "";
                     i.SvcCode = r["SVCCODE"] + "";
                     i.SvcDescription = r["SVCDESCRIPTION"] + "";
+
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
+
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
                     i.UnitType = r["UNITTYPE"] + "";
                     if (!r.IsDBNull(8))
                     {
@@ -6233,6 +6260,7 @@ namespace CFCSMobileWebServices.Controllers
         public string AUTHREQ = "";
         public string RelatedSplitCode = "";
         public bool BCBANoteRequired = false;
+        public bool BANote = false;
     }
 
 
