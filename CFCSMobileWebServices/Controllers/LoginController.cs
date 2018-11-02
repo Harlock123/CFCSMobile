@@ -26,28 +26,56 @@ namespace CFCSMobileWebServices.Controllers
             return Json(InternalGetLoginDetails("lwatson"));
         }
 
-        [Route("api/Login/MOTD/{uname}")]
+        [Route("api/Login/MOTD")]
         [HttpGet]
-        public JsonResult<string> MOTD(string uname)
+        public JsonResult<string> MOTD()
         {
+
+            string uname = "UNSET";
+
+            var req = Request;
+
+            var rhead = req.Headers;
+
+            if (rhead.Contains("LOGIN"))
+            {
+                uname = rhead.GetValues("LOGIN").First();
+            }
+
 
             string result = "This Message of the day was retrieved directly from the server " +
                 "and illustrates a convienient method for getting the word out to the Mobile " +
                 "user community supported by the CFCS System. These may be targeted to specific " +
-                "users or roles of users";
+                "users or roles of users for user " + uname;
 
             return Json(result);
 
         }
 
 
-        [Route("api/Login/DoLogin/{uname}/{pw}")]
+        [Route("api/Login/DoLogin")]
         [HttpGet]
-        public JsonResult<LoginResult>DoLogin(string uname, string pw)
+        public JsonResult<LoginResult>DoLogin()
         {
             bool res = DBLocked();
-                      
 
+            string uname = "";
+            string pw = "";
+
+            var req = Request;
+
+            var rhead = req.Headers;
+
+            if (rhead.Contains("LOGIN"))
+            {
+                uname = rhead.GetValues("LOGIN").First();
+            }
+
+            if (rhead.Contains("PW"))
+            {
+                pw = rhead.GetValues("PW").First();
+            }
+                                 
             LoginResult result = new LoginResult();
 
             result.Success = false;
@@ -585,9 +613,9 @@ namespace CFCSMobileWebServices.Controllers
             return locked;
         }
 
-        [Route("api/Login/GetCaseLoad/{userName}")]
+        [Route("api/Login/GetCaseLoad")]
         [HttpGet]
-        public JsonResult<List<MemberDetailsShort>> GetCurrentCaseLoad(string userName)
+        public JsonResult<List<MemberDetailsShort>> GetCurrentCaseLoad()
         {
             List<MemberDetailsShort> members = new List<MemberDetailsShort>();
             try
@@ -612,6 +640,17 @@ namespace CFCSMobileWebServices.Controllers
                 sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN,PHONE1,PHONE2 ";
                 sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
 
+                string userName = "";
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("LOGIN"))
+                {
+                    userName = rhead.GetValues("LOGIN").First();
+                }
+                
                 SqlConnection cn = new SqlConnection(DBCON());
                 cn.Open();
 

@@ -44,8 +44,8 @@ namespace CFCSMobile
         {
 
             string URL = CFCSMobile.Settings.BASEURL; //"";
-           
-            URL += "/Login/DoLogin/" + u + "/" + p;
+
+            URL += "/Login/DoLogin";
 
             try
             {
@@ -54,6 +54,9 @@ namespace CFCSMobile
 
                 HttpClient c = new HttpClient();
 
+                c.DefaultRequestHeaders.Add("LOGIN", u);
+                c.DefaultRequestHeaders.Add("PW", p);
+                
                 var response = await c.GetStringAsync(URL);
                 
                 var theresult = JsonConvert.DeserializeObject<PersonLoggedIn>(response);

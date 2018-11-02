@@ -36,10 +36,11 @@ namespace CFCSMobile
             string URL = Settings.BASEURL;//"";
             string u = Settings.USERNAME;
 
-           
-            URL += "/Login/GetCaseLoad/" + u;
+
+            URL += "/Login/GetCaseLoad";
 
             HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", u);
 
             var response = await c.GetStringAsync(URL);
 
@@ -117,11 +118,13 @@ namespace CFCSMobile
             string u = Settings.USERNAME;
 
 
-            URL += "/Login/MOTD/" + u;
+            URL += "/Login/MOTD";
 
 
             HttpClient c = new HttpClient();
 
+            c.DefaultRequestHeaders.Add("LOGIN", u);
+            
             var response = await c.GetStringAsync(URL);
 
             var theresult = JsonConvert.DeserializeObject<string>(response);
