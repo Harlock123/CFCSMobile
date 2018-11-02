@@ -5191,15 +5191,31 @@ namespace CFCSMobileWebServices.Controllers
             }
         }
 
-        [Route("api/Login/GetActiveServicesForMember/{memb}/{encd}")]
+        [Route("api/Login/GetActiveServicesForMember")]
         [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember(string memb, string encd)
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember()
         {
 
             List<LookupServices> result = new List<LookupServices>();
 
+            string memb = "";
+            string encd = "01-01-1980";
+
             try
             {
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("MEMB"))
+                {
+                    memb = rhead.GetValues("MEMB").First();
+                }
+
+                if (rhead.Contains("ENCD"))
+                {
+                    encd = rhead.GetValues("ENCD").First();
+                }
 
                 DateTime encDate = Convert.ToDateTime(encd);
 
@@ -5285,14 +5301,25 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-        [Route("api/Login/GetActiveServicesForAuth/{AuthID}")]
+        [Route("api/Login/GetActiveServicesForAuth")]
         [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth(string AuthID)
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth()
         {
             List<LookupServices> result = new List<LookupServices>();
 
+            string AuthID = "0";
+
             try
             {
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("AUTHID"))
+                {
+                    AuthID = rhead.GetValues("AUTHID").First();
+                }
+
                 long authID = Convert.ToInt64(AuthID);
 
                 string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
@@ -5375,14 +5402,27 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-        [Route("api/Login/GetActiveServicesForThisAuth/{authNumber}")]
+        [Route("api/Login/GetActiveServicesForThisAuth")]
         [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII(string authNumber)
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII()
         {
             List<LookupServices> result = new List<LookupServices>();
 
+            string authNumber = "";
+            
             try
             {
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("AUTHNUMBER"))
+                {
+                    authNumber = rhead.GetValues("AUTHNUMBER").First();
+                }
+
+
                 string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
                 sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
                 sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
