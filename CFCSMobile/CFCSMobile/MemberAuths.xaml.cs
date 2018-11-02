@@ -32,8 +32,7 @@ namespace CFCSMobile
 
             GetAuths();
         }
-
-
+        
         private void btnMOTD_Clicked(object sender, EventArgs e)
         {
             Application.Current.MainPage = new MemberFunctionsPage(SelectedMember);
@@ -53,9 +52,12 @@ namespace CFCSMobile
             ActWorking.IsVisible = true;
             ActWorking.IsRunning = true;
 
-            URL += "/Login/GetAuths/" + u;
+            URL += "/Login/GetAuths";
 
             HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
+
 
             var response = await c.GetStringAsync(URL);
 

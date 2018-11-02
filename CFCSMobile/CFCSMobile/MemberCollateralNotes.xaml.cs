@@ -56,9 +56,11 @@ namespace CFCSMobile
 
             btnAddNewContact.IsVisible = false;
 
-            URL += "/Login/AllExceptEncounterProgressNotes/" + u;
+            URL += "/Login/AllExceptEncounterProgressNotes";
 
             HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
 
             var response = await c.GetStringAsync(URL);
 

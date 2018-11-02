@@ -1154,15 +1154,26 @@ namespace CFCSMobileWebServices.Controllers
             return result;
         }
 
-        [Route("api/Login/GetAuths/{IDNUM}")]
+        [Route("api/Login/GetAuths")]
         [HttpGet]
-        public JsonResult<List<AuthorizedService>> GetAuthsAvailableForMember(string IDNUM)
+        public JsonResult<List<AuthorizedService>> GetAuthsAvailableForMember()
         {
             List<AuthorizedService> result = new List<AuthorizedService>();
 
+            string IDNUM = "";
+
             try
             {
-               
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
+
+
                 string sql = "SELECT DISTINCT B.mauthid,B.Providerid as 'PID'," +
                     "coalesce((SELECT TOP 1 SUBPROVIDERNAME FROM TBLPROVIDERSUBPROVIDER A WHERE A.SUBPROVIDERID = B.PROVIDERID)," +
                     "(SELECT TOP 1 PROVIDERNAME FROM TBLPROVIDERSUBPROVIDER A WHERE A.PROVIDERID = B.PROVIDERID)) as 'PNAME', " +
@@ -1340,14 +1351,25 @@ namespace CFCSMobileWebServices.Controllers
             return mem;
         }
 
-        [Route("api/Login/MemberObservers/{IDNUM}")]
+        [Route("api/Login/MemberObservers")]
         [HttpGet]
-        public JsonResult<List<MemberObservers>> GetListOfMemberObservers(string IDNUM)
+        public JsonResult<List<MemberObservers>> GetListOfMemberObservers()
         {
             List<MemberObservers> ret = new List<MemberObservers>();
 
+            string IDNUM = "";
+
             try
             {
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
+
                 //moID bigint NOT NULL IDENTITY (1, 1),
                 //moSSN varchar(10) NULL,
                 //moCASEMANAGER varchar(20) NULL,
@@ -1485,14 +1507,25 @@ namespace CFCSMobileWebServices.Controllers
             return result;
         }
 
-        [Route("api/Login/MemberReferrals/{IDNUM}")]
+        [Route("api/Login/MemberReferrals")]
         [HttpGet]
-        public JsonResult<List<MemberReferralSource>> GetListOfMemberReferralSourceForMember(string IDNUM)
+        public JsonResult<List<MemberReferralSource>> GetListOfMemberReferralSourceForMember()
         {
             List<MemberReferralSource> result = new List<MemberReferralSource>();
+
+            string IDNUM = "";
             try
             {
-                
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
+
                 string sql = "SELECT DISTINCT RS.*, BB.*, ";
                 sql += "(SELECT DESCRIPTION FROM tblLOOKUPSUPPORTSRELATIONSHIP WHERE CODE = RS.RSROLE) AS RELATIONSHIP, ";
                 sql += "(SELECT DESCRIPTION FROM tblLOOKUPREFERRALSOURCE WHERE CODE = rs.RSAGENCYID) AS AGENCY ";
@@ -1636,16 +1669,26 @@ namespace CFCSMobileWebServices.Controllers
             return numtype;
         }
 
-        [Route("api/Login/EncounterProgressNotes/{IDNUM}")]
+        [Route("api/Login/EncounterProgressNotes")]
         [HttpGet]
-        public JsonResult<List<MemberProgressNotes>> GetListOfEncounterNotesForType(string IDNUM)
+        public JsonResult<List<MemberProgressNotes>> GetListOfEncounterNotesForType()
 
         {
             List<MemberProgressNotes> result = new List<MemberProgressNotes>();
 
+            string IDNUM = "";
             try
             {
-               
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
+
                 //03172016 - per client, do not show encounter notes here
                 // added some coalesces to simulate supervision approval business requirements change
                 string sql = "SELECT MPNID," +
@@ -1956,15 +1999,25 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-        [Route("api/Login/AllExceptEncounterProgressNotes/{IDNUM}")]
+        [Route("api/Login/AllExceptEncounterProgressNotes")]
         [HttpGet]
-        public JsonResult<List<MemberProgressNotes>> GetListOfAllNotesExceptEncounterForType(string IDNUM)
+        public JsonResult<List<MemberProgressNotes>> GetListOfAllNotesExceptEncounterForType()
 
         {
             List<MemberProgressNotes> result = new List<MemberProgressNotes>();
 
+            string IDNUM = "";
+
             try
             {
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
 
                 //03172016 - per client, do not show encounter notes here
                 // added some coalesces to simulate supervision approval business requirements change

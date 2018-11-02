@@ -56,9 +56,12 @@ namespace CFCSMobile
             ActWorking.IsVisible = true;
             ActWorking.IsRunning = true;
 
-            URL += "/Login/MemberReferrals/" + u;
+            URL += "/Login/MemberReferrals";
 
             HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
+
 
             var response = await c.GetStringAsync(URL);
 
@@ -80,9 +83,11 @@ namespace CFCSMobile
             }
 
             URL = Settings.BASEURL;//"";
-            URL += "/Login/MemberObservers/" + u;
+            URL += "/Login/MemberObservers";
 
             c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
 
             var response2 = await c.GetStringAsync(URL);
 
