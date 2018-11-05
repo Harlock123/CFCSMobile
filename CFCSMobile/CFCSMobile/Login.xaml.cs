@@ -71,9 +71,32 @@ namespace CFCSMobile
                     Settings.FIRSTNAME = theresult.FirstName;
                     Settings.LASTNAME = theresult.LastName;
                     Settings.LOGGEDIN = true;
+                    Settings.LOGTYPE = theresult.logtype;
 
-                    Application.Current.MainPage = new MainPage();
 
+                    if (Settings.LOGTYPE == "MEMBER")
+                    {
+                        Settings.MEMBERID = theresult.MemberID;
+                        Settings.ADDRESS1 = theresult.Address1;
+                        Settings.ADDRESS2 = theresult.Address2;
+                        Settings.CITY = theresult.City;
+                        Settings.STATE = theresult.State;
+                        Settings.ZIP = theresult.ZipCode;
+
+                        Application.Current.MainPage = new MemberMainPage();
+
+                    }
+                    else
+                    {
+                        Settings.MEMBERID = "";
+                        Settings.ADDRESS1 = "";
+                        Settings.ADDRESS2 = "";
+                        Settings.CITY = "";
+                        Settings.STATE = "";
+                        Settings.ZIP = "";
+
+                        Application.Current.MainPage = new MainPage();
+                    }
                 }
                 else
                 {

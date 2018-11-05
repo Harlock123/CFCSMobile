@@ -8,9 +8,9 @@ namespace CFCSMobile
     public static class Settings
     {
 
-        //static public string BASEURL = "http://192.168.225.128/CFCSMobileWebServices/api"; // VM running in Work Mac
+        static public string BASEURL = "http://192.168.225.128/CFCSMobileWebServices/api"; // VM running in Work Mac
 
-        static public string BASEURL = "http://192.168.193.128/CFCSMobileWebServices/api"; // VM running in Linux Host Machine
+        //static public string BASEURL = "http://192.168.193.128/CFCSMobileWebServices/api"; // VM running in Linux Host Machine
         
         //static public string BASEURL = "http://192.168.1.250/CFCSMobileWebServices/api"; // Machine At Home
 
@@ -21,6 +21,14 @@ namespace CFCSMobile
         static public string FIRSTNAME = "";
         static public string LASTNAME = "";
         static public string DOB = "";
+        static public string MEMBERID = "";
+        static public string ADDRESS1 = "";
+        static public string ADDRESS2 = "";
+        static public string CITY = "";
+        static public string STATE = "";
+        static public string ZIP = "";
+        static public string LOGTYPE = "";
+
         static public bool LOGGEDIN = false;
 
         static public string MOTD = "";

@@ -12,10 +12,15 @@ namespace CFCSMobile
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+        public string logtype { get; set; }
+        public string MemberID { get; set; }
 
         public PersonLoggedIn()
         {
             Success = false;
+            logtype = "";
+            MemberID = "";
+
         }
     }
 }

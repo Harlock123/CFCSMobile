@@ -93,7 +93,33 @@ namespace CFCSMobileWebServices.Controllers
                 result.Success = true;
                 result.UserName = uname;
                 result.ZipCode = log.ZipCode;
+                result.logtype = "CASEWORKER";
+                result.MemberID = "";
 
+            }
+            else
+            {
+                // check for a User Login Here
+                if (AuthenticateConsumerUser(uname,pw))
+                {
+                    UserLogins log = GetConsumerUserDetails(uname);
+                    MemberDetailsShort mdet = GetCompleteMemberDetails(log.MEMBERID, "CFCSMOBILElogin", "");
+
+                    result.MemberID = log.MEMBERID;
+                    result.logtype = "MEMBER";
+                    result.FirstName = mdet.FirstName;
+                    result.LastName = mdet.LastName;
+                    result.Address1 = mdet.memberAddress.Address1;
+                    result.Address2 = mdet.memberAddress.Address2;
+                    result.City = mdet.memberAddress.City;
+                    result.State = mdet.memberAddress.State;
+                    result.ZipCode = mdet.memberAddress.ZipCode;
+                    result.UserName = uname;
+                    result.Success = true;
+                    
+                }
+                
+                
             }
 
             return Json(result);
@@ -5505,6 +5531,86 @@ namespace CFCSMobileWebServices.Controllers
         }
 
 
+        public bool AuthenticateConsumerUser(string userName, string password)
+        {
+            bool result = false;
+
+            try
+            {
+                string sql = @"Select Count(*) FROM tblUserConsumer Where userName = @userName AND userpassword =@password";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@userName", SqlDbType.VarChar).Value = userName;
+                cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = password;
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int num = reader.GetInt32(0);
+
+                    if (num != 0)
+                        result = true;
+                }
+                reader.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("AuthenticateConsumerUser", ex.Message);
+                result = false;
+            }
+
+            return result;
+        }
+
+        public UserLogins GetConsumerUserDetails(string userName)
+        {
+            var userLogin = new UserLogins();
+            try
+            {
+                string sql = @"Select [Username],[CP1],[CP2],[CP3],[CP4],[CP5],[CP6],[CP7],[CP8],[CP9],[CP10],[MEMBERID] FROM tblUserConsumer Where userName = @userName";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@userName", SqlDbType.VarChar).Value = userName;
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    userLogin.Username = reader["Username"].ToString();
+                    userLogin.CP1 = reader["CP1"].ToString();
+                    userLogin.CP2 = reader["CP2"].ToString();
+                    userLogin.CP3 = reader["CP3"].ToString();
+                    userLogin.CP4 = reader["CP4"].ToString();
+                    userLogin.CP5 = reader["CP5"].ToString();
+                    userLogin.CP6 = reader["CP6"].ToString();
+                    userLogin.CP7 = reader["CP7"].ToString();
+                    userLogin.CP8 = reader["CP8"].ToString();
+                    userLogin.CP9 = reader["CP9"].ToString();
+                    userLogin.CP10 = reader["CP10"].ToString();
+                    userLogin.MEMBERID = reader["MemberID"].ToString();
+                }
+                reader.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                return userLogin;
+            }
+            catch (Exception ex)
+            {
+                LogError("GetConsumerLoginDetails", ex.Message);
+                return null;
+            }
+
+        }
+
     }
 
     #region Extra Classes
@@ -5578,6 +5684,8 @@ namespace CFCSMobileWebServices.Controllers
         public string City = "";
         public string State = "";
         public string ZipCode = "";
+        public string logtype = "";
+        public string MemberID = "";
     }
     
     public class UserLogins
