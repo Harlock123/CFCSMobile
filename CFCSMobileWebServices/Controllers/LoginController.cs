@@ -639,6 +639,116 @@ namespace CFCSMobileWebServices.Controllers
             return locked;
         }
 
+        [Route("api/Login/GetMemberDetails")]
+        [HttpGet]
+        public JsonResult<MemberDetailsShort> GetMemberDetails()
+        {
+            MemberDetailsShort member = new MemberDetailsShort();
+            try
+            {
+                //string sql = "SELECT top 1000 MIN(MMID) as 'MMID',FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                //sql += "FROM tblMemberMain MM ";
+                //sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.SSN = MM.SSN ";
+                //sql += "LEFT OUTER JOIN tblMemberObservers OB ON OB.moSSN = MM.SSN ";
+                //sql += "WHERE AUS.CASEMANAGER = @CM ";
+                //sql += " AND OB.moCASEMANAGER = @CM ";
+                //sql += " AND (STARTDATE <= GETDATE() AND ENDDATE >= DATEADD(DAY,-1,GETDATE())) ";
+                //sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN ";
+                //sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
+
+                //04292013 - per client show where staff is observer since staff is not linked to auths on import
+                //will revert later
+                string sql = "SELECT top 1 MMID,FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN, PHONE1, PHONE2 ";
+                sql += "FROM tblMemberMain MM ";
+                //sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.SSN = MM.SSN ";
+                //sql += "LEFT OUTER JOIN tblMemberObservers OB ON OB.moSSN = MM.SSN ";
+                sql += "WHERE MM.SSN = @CM ";
+                //sql += " GROUP BY FIRSTNAME,LASTNAME,MIDDLENAME,DOB,GENDER,ETHNICITY,RACE,MM.SSN,PHONE1,PHONE2 ";
+                //sql += " ORDER BY LASTNAME,FIRSTNAME,MM.SSN ";
+
+                string CM = "";
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    CM = rhead.GetValues("IDNUM").First();
+                }
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                //cmd.Parameters.Add("@CM", SqlDbType.VarChar).Value = HttpContext.Current.Session["UserName"].ToString();
+                cmd.Parameters.Add("@CM", SqlDbType.VarChar).Value = CM;
+
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    MemberDetailsShort mem = new MemberDetailsShort();
+                    if (r["MMID"] != DBNull.Value)
+                    {
+                        mem.MMID = Convert.ToInt64(r["MMID"]);
+                    }
+                    mem.FirstName = r["FIRSTNAME"].ToString() + "";
+                    mem.LastName = r["LASTNAME"].ToString() + "";
+                    mem.MiddleName = r["MIDDLENAME"].ToString() + "";
+                    if (r["DOB"] != DBNull.Value)
+                    {
+                        mem.DOB = r.GetDateTime(r.GetOrdinal("DOB")).ToShortDateString();
+                    }
+                    else
+                    {
+                        mem.DOB = Convert.ToDateTime(null).ToShortDateString(); ;
+                    }
+
+                    if ((r["GENDER"].ToString() + "") == "1")
+                    {
+                        mem.Gender = "M";
+                    }
+                    else
+                    {
+                        if ((r["GENDER"].ToString() + "") == "2")
+                        {
+                            mem.Gender = "F";
+                        }
+                        else
+                        {
+                            mem.Gender = "U";
+                        }
+                    }
+
+
+
+                    //mem.Gender = r["GENDER"].ToString() + "";
+                    mem.Ethnicity = r["ETHNICITY"].ToString() + "";
+                    mem.Race = r["RACE"].ToString() + "";
+                    mem.SSN = r["SSN"].ToString() + "";
+                    mem.memberAddress = GetMemberAddress(mem.SSN);
+                    mem.Phone1 = r["PHONE1"].ToString() + "";
+                    mem.Phone2 = r["PHONE2"].ToString() + "";
+
+                    member = mem;
+                }
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetMemberDetails", ex.Message);
+            }
+            return Json(member);
+
+        }
+
         [Route("api/Login/GetCaseLoad")]
         [HttpGet]
         public JsonResult<List<MemberDetailsShort>> GetCurrentCaseLoad()

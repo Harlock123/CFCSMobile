@@ -12,13 +12,19 @@ namespace CFCSMobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MemberMainPage : ContentPage
 	{
-		public MemberMainPage ()
+        private CFCSMobile.Controls.MemberPlacard SelectedMember = null;
+
+        public MemberMainPage ()
 		{
 			InitializeComponent ();
 
             if (Settings.LOGGEDIN)
             {
                 lblWelcome.Text = "Welcome " + Settings.FIRSTNAME + " " + Settings.LASTNAME;
+
+                Controls.MemberPlacard m = new Controls.MemberPlacard(Settings.MemberLoggedIn.FirstName, Settings.MemberLoggedIn.LastName, Settings.MemberLoggedIn);
+
+                SelectedMember = m;
 
                 //GetMOTD();
                 //GetLookups();
@@ -39,6 +45,11 @@ namespace CFCSMobile
         {
             Application.Current.Properties.Clear();
             Application.Current.MainPage = new Login();
+        }
+
+        private void btnTeam_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new MemberTeam(SelectedMember);
         }
     }
 }

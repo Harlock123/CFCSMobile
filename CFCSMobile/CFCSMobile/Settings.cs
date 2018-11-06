@@ -37,6 +37,7 @@ namespace CFCSMobile
         static public Color OddColor = Color.LightYellow;
 
         static public Color ReferralBackgroundColor = Color.FromHex("#C8F1FC");
+
         static public Color StaffBackgroundColor = Color.FromHex("#C8FCDF");
 
         static public Color LabelColorForValueFields = Color.FromHex("#9090AO");
@@ -46,5 +47,7 @@ namespace CFCSMobile
         static public Color ButtonBackgroundColor = Color.FromHex("#C0C000");
 
         static public TheLookups Lookups = null; // Will get Populated at Startup after login
+
+        static public MemberDetailsShort MemberLoggedIn = null;
     }
 }

@@ -50,7 +50,13 @@
         </StackLayout>
 
         <ScrollView Grid.Row="1" x:Name="svMYCASELOAD" Orientation="Vertical">
-            <StackLayout x:Name="lstMyCaseLoad" Orientation="Vertical"></StackLayout>
+            <StackLayout x:Name="lstMyCaseLoad" Orientation="Vertical">
+
+                <Button x:Name="btnTeam" Text="Members Team"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
+
+            </StackLayout>
         </ScrollView>
 
 

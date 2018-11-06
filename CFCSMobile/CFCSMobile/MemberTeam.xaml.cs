@@ -33,10 +33,17 @@ namespace CFCSMobile
 
             GetTeam();
         }
-
+        
         private void btnBack_Clicked(object sender, EventArgs e)
         {
-            Application.Current.MainPage = new MemberFunctionsPage(SelectedMember);
+            if (Settings.LOGTYPE == "MEMBER")
+            {
+                Application.Current.MainPage = new MemberMainPage();
+            }
+            else
+            {
+                Application.Current.MainPage = new MemberFunctionsPage(SelectedMember);
+            }
         }
 
         private void btnLogout_Clicked(object sender, EventArgs e)

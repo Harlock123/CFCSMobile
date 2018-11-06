@@ -83,8 +83,19 @@ namespace CFCSMobile
                         Settings.STATE = theresult.State;
                         Settings.ZIP = theresult.ZipCode;
 
-                        Application.Current.MainPage = new MemberMainPage();
+                        Settings.MemberLoggedIn = null;
 
+                        GetMemberLoggedIn();
+
+                        while (Settings.MemberLoggedIn is null)
+                        {
+                            await Task.Delay(100);
+                        }
+
+                        if (Settings.MemberLoggedIn != null)
+                        {
+                            Application.Current.MainPage = new MemberMainPage();
+                        }
                     }
                     else
                     {
@@ -94,6 +105,8 @@ namespace CFCSMobile
                         Settings.CITY = "";
                         Settings.STATE = "";
                         Settings.ZIP = "";
+
+                        Settings.MemberLoggedIn = null;
 
                         Application.Current.MainPage = new MainPage();
                     }
@@ -107,6 +120,39 @@ namespace CFCSMobile
                     ActWorking.IsRunning = false;
 
                 }
+            }
+            catch (Exception ex)
+            {
+                txtPassword.Text = "";
+                txtUserName.Text = "";
+
+                await DisplayAlert("Big trouble in little china", ex.Message, "OK");
+
+                ActWorking.IsVisible = false;
+                ActWorking.IsRunning = false;
+            }
+
+        }
+
+        async void GetMemberLoggedIn()
+        {
+            string URL = CFCSMobile.Settings.BASEURL; //"";
+
+            URL += "/Login/GetMemberDetails";
+
+            try
+            {
+                HttpClient c = new HttpClient();
+
+                c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+                c.DefaultRequestHeaders.Add("IDNUM", Settings.MEMBERID);
+
+                var response = await c.GetStringAsync(URL);
+
+                var theresult = JsonConvert.DeserializeObject<MemberDetailsShort>(response);
+
+                Settings.MemberLoggedIn = theresult;
+
             }
             catch (Exception ex)
             {
