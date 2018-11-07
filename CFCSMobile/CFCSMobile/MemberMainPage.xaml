@@ -52,9 +52,23 @@
         <ScrollView Grid.Row="1" x:Name="svMYCASELOAD" Orientation="Vertical">
             <StackLayout x:Name="lstMyCaseLoad" Orientation="Vertical">
 
-                <Button x:Name="btnTeam" Text="Members Team"
+                <Button x:Name="btnTeam" Text="My Team"
                             BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
                             Clicked="btnTeam_Clicked" HeightRequest="100"></Button>
+
+                <Button x:Name="btnAssessments" Text="My Assessments"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="btnAssessments_Clicked" HeightRequest="100"></Button>
+
+                <Button x:Name="btnPlans" Text="My Plans"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="btnPlans_Clicked" HeightRequest="100"></Button>
+
+                <Button x:Name="btnMessages" Text="My Messages"
+                            BackgroundColor="#C0C000" TextColor="Black" BorderRadius="20" Margin="2"
+                            Clicked="btnMessages_Clicked" HeightRequest="100"></Button>
+
+
 
             </StackLayout>
         </ScrollView>

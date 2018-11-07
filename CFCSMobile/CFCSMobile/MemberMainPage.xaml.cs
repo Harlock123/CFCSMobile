@@ -51,5 +51,20 @@ namespace CFCSMobile
         {
             Application.Current.MainPage = new MemberTeam(SelectedMember);
         }
+
+        private void btnAssessments_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Under Construction", "Presently Under Construction", "OK");
+        }
+
+        private void btnPlans_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Under Construction", "Presently Under Construction", "OK");
+        }
+
+        private void btnMessages_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Under Construction", "Presently Under Construction", "OK");
+        }
     }
 }
