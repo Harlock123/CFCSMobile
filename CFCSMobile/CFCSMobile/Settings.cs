@@ -10,14 +10,16 @@ namespace CFCSMobile
 
         //static public string BASEURL = "http://192.168.225.128/CFCSMobileWebServices/api"; // VM running in Work Mac
 
-        static public string BASEURL = "http://192.168.12.55/CFCSMobileWebServices/api"; // MSI Big Boy 
+        //static public string BASEURL = "http://192.168.12.55/CFCSMobileWebServices/api"; // MSI Big Boy in office
+
+        static public string BASEURL = "http://192.168.1.191/CFCSMobileWebServices/api"; // MSI Big Boy at home WIFI
 
         //static public string BASEURL = "http://192.168.193.128/CFCSMobileWebServices/api"; // VM running in Linux Host Machine
 
         //static public string BASEURL = "http://192.168.1.250/CFCSMobileWebServices/api"; // Machine At Home
 
 
-        //static public string BASEURL = "http://192.168.1.9/CFCSMobileWebServices/api"; // VM In Scrantoin Office At Home
+        //static public string BASEURL = "http://192.168.1.9/CFCSMobileWebServices/api"; // VM In Scranton Office At Home
 
         static public string USERNAME = "";
         static public string FIRSTNAME = "";
