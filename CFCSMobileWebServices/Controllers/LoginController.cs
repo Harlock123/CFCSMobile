@@ -44,7 +44,7 @@ namespace CFCSMobileWebServices.Controllers
 
 
             string result = "This Message of the day was retrieved directly from the server " +
-                "and illustrates a convienient method for getting the word out to the Mobile " +
+                "and illustrates a convenient method for getting the word out to the Mobile " +
                 "user community supported by the CFCS System. These may be targeted to specific " +
                 "users or roles of users for user " + uname;
 
