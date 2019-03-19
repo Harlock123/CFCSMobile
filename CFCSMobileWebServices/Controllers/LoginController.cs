@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace CFCSMobileWebServices.Controllers
 {
-    public class LoginController : ApiController
+    public partial class LoginController : ApiController
     {
         // GET: api/Login
         [Route("api/Login/GetLoginDetails")]
@@ -51,7 +51,6 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
 
         }
-
 
         [Route("api/Login/DoLogin")]
         [HttpGet]
@@ -124,521 +123,7 @@ namespace CFCSMobileWebServices.Controllers
 
             return Json(result);
         }
-
-        // GET: api/Login/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST: api/Login
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Login/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Login/5
-        public void Delete(int id)
-        {
-        }
-
-        private bool USERAuthorized(string uname, string encryptedpw)
-        {
-            bool result = false;
-
-            try
-            {
-                string sql = "SELECT FIRSTNAME from TBLUSERLOGINS " +
-                    "WHERE USERNAME = @UNAME AND USERPASSWORD = @PW AND (LOGINATTEMPTS <= 3 OR LOGINATTEMPTS IS NULL) " +
-                    "AND DEACTIVE <> 'Y'"; 
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                cmd.Parameters.Add("@UNAME", System.Data.SqlDbType.VarChar, 20, "USERNAME").Value = uname;
-                cmd.Parameters.Add("@PW", System.Data.SqlDbType.VarChar, 100, "USERPASSWORD").Value = encryptedpw;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    result = true; // we got a login that passes password checks and is not deactivated or locked
-                }
-
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-                               
-            }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
-            {
-                result = false;
-            }
-
-            return result;
-        }
-
-        public UserLogins InternalGetLoginDetails(string Username)
-        {
-            UserLogins log = new UserLogins();
-
-            try
-            {
-                //LogError("GetLoginDetails", "Made It Here");
-
-                string sql = "SELECT USERNAME,FIRSTNAME,LASTNAME,ORGANIZATION," +
-                    "PASSWORDCHANGEDATE,DEACTIVE,NOTE,ReadOnlyMemberDemo, " +
-                    "ReadOnlyAuthorizations,ReadOnlyProgressNotes,GlobalGroupAccess, tblUserLoginID,LastGlobalMesssageDate,LastWhatsNewDate, " +
-                    "Address1,Address2,City,State,ZipCode,Email2,Gender,Religion,Race,Email,ContactNum,CredentialType1,CredentialType2,ClinicalLicenseNumber,BCBANumber,IndividualNPINumber, " +
-                    "PhysicalAbuse,SexualAbuse,ADHD,AdoptionFoster,AngerManagement,AppliedBehavior,ArtTherapy,Autism,BehaviorModification, " +
-                    "CognitiveBehavior,DevDisabled,DomesticViolence,EatingDisorder,EMDR,EvidenceBased,FaithChrisitian,FaithJewish, " +
-                    "FaithOther,FamilyTherapy,GangInvolvement,JuvenileJustice,LearningDisability,LGBTIssues,ParentingSkills, " +
-                    "PlayTherapy,PTSD,SelfMutilatition,SexOffenders,SexualBoundaryIssues,SocialSkillsTraining,SubstanceAbuse, " +
-                    "TraumaIssues,VocationalSkillsTraining,AcceptTexts,LATITUDE,LONGITUDE,MAPGROUP,TOOLTIP,GEO,OON,CP1,CP2,CP3,CP4,CP5,CP6,CP7,CP8,CP9,CP10 " +
-                    "FROM TBLUSERLOGINS WHERE " +
-                    "USERNAME = @UNAME";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = Username;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                bool found = false;
-
-                while (r.Read())
-                {
-                    found = true;
-
-                    log.Username = r[0] + "";
-
-                    log.FirstName = r[1] + "";
-
-                    log.LastName = r[2] + "";
-
-                    log.Organization = r[3] + "";
-
-                    log.GlobalOrganization = GetGlobalProviderID();
-
-                    if (!r.IsDBNull(4))
-                        log.PasswordChangeDate = r.GetDateTime(4);
-                    else
-                        log.PasswordChangeDate = DateTime.MinValue;
-
-                    log.Deactive = r[5] + "";
-                    log.Note = r[6] + "";
-
-                    if (!r.IsDBNull(7))
-                    {
-                        if (r[7] + "" == "Y")
-                        {
-                            log.IsMemberDemoRO = true;
-                        }
-                        else
-                        {
-                            log.IsMemberDemoRO = false;
-                        }
-                    }
-                    else
-                    {
-                        log.IsMemberDemoRO = false;
-                    }
-
-                    if (!r.IsDBNull(8))
-                    {
-                        if (r[8] + "" == "Y")
-                        {
-                            log.IsAuthRO = true;
-                        }
-                        else
-                        {
-                            log.IsAuthRO = false;
-                        }
-                    }
-                    else
-                    {
-                        log.IsAuthRO = false;
-                    }
-
-                    if (!r.IsDBNull(9))
-                    {
-                        if (r[9] + "" == "Y")
-                        {
-                            log.IsProgressNotesRO = true;
-                        }
-                        else
-                        {
-                            log.IsProgressNotesRO = false;
-                        }
-                    }
-                    else
-                    {
-                        log.IsProgressNotesRO = false;
-                    }
-
-                    if (!r.IsDBNull(10))
-                    {
-                        if (r[10] + "" == "Y")
-                        {
-                            log.IsGroupAccessGlobal = true;
-                        }
-                        else
-                        {
-                            log.IsGroupAccessGlobal = false;
-                        }
-                    }
-                    else
-                    {
-                        log.IsGroupAccessGlobal = false;
-                    }
-
-                    log.UserID = Convert.ToInt32(r[11]);
-
-                    if (!r.IsDBNull(12))
-                        log.LastGlobalMesssageDate = r.GetDateTime(12);
-                    else
-                        log.LastGlobalMesssageDate = DateTime.MinValue;
-
-                    if (!r.IsDBNull(13))
-                        log.LastWhatsNewDate = r.GetDateTime(13);
-                    else
-                        log.LastWhatsNewDate = DateTime.MinValue;
-
-                    log.Address1 = r[14] + "";
-                    log.Address2 = r[15] + "";
-                    log.City = r[16] + "";
-                    log.State = r[17] + "";
-                    log.ZipCode = r[18] + "";
-                    log.Email2 = r[19] + "";
-                    log.Gender = r[20] + "";
-                    log.Religion = r[21] + "";
-                    log.Race = r[22] + "";
-                    log.Email = r[23] + "";
-                    log.ContactNum = r[24] + "";
-
-                    log.Hierarchy = GetListOfHierarchyFor(r[0] + "");
-                    log.Roles = GetListOfRolesFor(r[0] + "");
-                    log.Groups = GetListOfGroupsFor(r[0] + "");
-                    log.Regions = GetListOfRegionsFor(r[0] + "");
-                    log.CostCenters = GetListOfCostCentersFor(r[0] + "");
-                    log.ServiceIDS = GetListOfServiceIDsFor(r[0] + "");
-                    log.Competencies = GetListOfUserCompetencies(r[0] + "");
-                    log.Languages = GetListOfLanguagesFor(r[0] + "");
-
-                    log.CredentialType1 = r["CredentialType1"] + "";
-                    log.CredentialType2 = r["CredentialType2"] + "";
-                    log.ClinicalLicenseNumber = r["ClinicalLicenseNumber"] + "";
-                    log.BCBANumber = r["BCBANumber"] + "";
-                    log.IndividualNPINumber = r["IndividualNPINumber"] + "";
-                    if (r["PhysicalAbuse"].ToString() != "")
-                    { log.PhysicalAbuse = Convert.ToBoolean(r["PhysicalAbuse"]); }
-                    if (r["SexualAbuse"].ToString() != "")
-                    { log.SexualAbuse = Convert.ToBoolean(r["SexualAbuse"]); }
-                    if (r["ADHD"].ToString() != "")
-                    { log.ADHD = Convert.ToBoolean(r["ADHD"]); }
-                    if (r["AdoptionFoster"].ToString() != "")
-                    { log.AdoptionFoster = Convert.ToBoolean(r["AdoptionFoster"]); }
-                    if (r["AngerManagement"].ToString() != "")
-                    { log.AngerManagement = Convert.ToBoolean(r["AngerManagement"]); }
-                    if (r["AppliedBehavior"].ToString() != "")
-                    { log.AppliedBehavior = Convert.ToBoolean(r["AppliedBehavior"]); }
-                    if (r["ArtTherapy"].ToString() != "")
-                    { log.ArtTherapy = Convert.ToBoolean(r["ArtTherapy"]); }
-                    if (r["Autism"].ToString() != "")
-                    { log.Autism = Convert.ToBoolean(r["Autism"]); }
-                    if (r["BehaviorModification"].ToString() != "")
-                    { log.BehaviorModification = Convert.ToBoolean(r["BehaviorModification"]); }
-                    if (r["CognitiveBehavior"].ToString() != "")
-                    { log.CognitiveBehavior = Convert.ToBoolean(r["CognitiveBehavior"]); }
-                    if (r["DevDisabled"].ToString() != "")
-                    { log.DevDisabled = Convert.ToBoolean(r["DevDisabled"]); }
-                    if (r["DomesticViolence"].ToString() != "")
-                    { log.DomesticViolence = Convert.ToBoolean(r["DomesticViolence"]); }
-                    if (r["EatingDisorder"].ToString() != "")
-                    { log.EatingDisorder = Convert.ToBoolean(r["EatingDisorder"]); }
-                    if (r["EMDR"].ToString() != "")
-                    { log.EMDR = Convert.ToBoolean(r["EMDR"]); }
-                    if (r["EvidenceBased"].ToString() != "")
-                    { log.EvidenceBased = Convert.ToBoolean(r["EvidenceBased"]); }
-                    if (r["FaithChrisitian"].ToString() != "")
-                    { log.FaithChrisitian = Convert.ToBoolean(r["FaithChrisitian"]); }
-                    if (r["FaithJewish"].ToString() != "")
-                    { log.FaithJewish = Convert.ToBoolean(r["FaithJewish"]); }
-                    if (r["FaithOther"].ToString() != "")
-                    { log.FaithOther = Convert.ToBoolean(r["FaithOther"]); }
-                    if (r["FamilyTherapy"].ToString() != "")
-                    { log.FamilyTherapy = Convert.ToBoolean(r["FamilyTherapy"]); }
-                    if (r["GangInvolvement"].ToString() != "")
-                    { log.GangInvolvement = Convert.ToBoolean(r["GangInvolvement"]); }
-                    if (r["JuvenileJustice"].ToString() != "")
-                    { log.JuvenileJustice = Convert.ToBoolean(r["JuvenileJustice"]); }
-                    if (r["LearningDisability"].ToString() != "")
-                    { log.LearningDisability = Convert.ToBoolean(r["LearningDisability"]); }
-                    if (r["LGBTIssues"].ToString() != "")
-                    { log.LGBTIssues = Convert.ToBoolean(r["LGBTIssues"]); }
-                    if (r["ParentingSkills"].ToString() != "")
-                    { log.ParentingSkills = Convert.ToBoolean(r["ParentingSkills"]); }
-                    if (r["PlayTherapy"].ToString() != "")
-                    { log.PlayTherapy = Convert.ToBoolean(r["PlayTherapy"]); }
-                    if (r["PTSD"].ToString() != "")
-                    { log.PTSD = Convert.ToBoolean(r["PTSD"]); }
-                    if (r["SelfMutilatition"].ToString() != "")
-                    { log.SelfMutilatition = Convert.ToBoolean(r["SelfMutilatition"]); }
-                    if (r["SexOffenders"].ToString() != "")
-                    { log.SexOffenders = Convert.ToBoolean(r["SexOffenders"]); }
-                    if (r["SexualBoundaryIssues"].ToString() != "")
-                    { log.SexualBoundaryIssues = Convert.ToBoolean(r["SexualBoundaryIssues"]); }
-                    if (r["SocialSkillsTraining"].ToString() != "")
-                    { log.SocialSkillsTraining = Convert.ToBoolean(r["SocialSkillsTraining"]); }
-                    if (r["SubstanceAbuse"].ToString() != "")
-                    { log.SubstanceAbuse = Convert.ToBoolean(r["SubstanceAbuse"]); }
-                    if (r["TraumaIssues"].ToString() != "")
-                    { log.TraumaIssues = Convert.ToBoolean(r["TraumaIssues"]); }
-                    if (r["VocationalSkillsTraining"].ToString() != "")
-                    { log.VocationalSkillsTraining = Convert.ToBoolean(r["VocationalSkillsTraining"]); }
-                    if (r["AcceptTexts"].ToString() != "")
-                    { log.AcceptTexts = Convert.ToBoolean(r["AcceptTexts"]); }
-
-                    if (r["LATITUDE"] != null)
-                    { log.LATITUDE = Convert.ToDouble(r["LATITUDE"]); }
-                    if (r["LONGITUDE"] != null)
-                    { log.LONGITUDE = Convert.ToDouble(r["LONGITUDE"]); }
-                    log.MAPGROUP = r["MAPGROUP"] + "";
-                    log.TOOLTIP = r["TOOLTIP"] + "";
-                    log.GEO = r["GEO"] + "";
-                    log.OON = r["OON"] + "";
-                    log.Note = r["NOTE"] + "";
-                    //log.IpAddress = GetIPAddress();
-                    log.IpAddress = "Mobile Phone";// HttpContext.Current.Request.UserHostAddress;
-
-                    log.IsOrgAReferralTarget = true; //IsProviderOrganizationAReferralTarget(log.Organization);
-
-                    log.CP1 = r["CP1"] + "";
-                    log.CP2 = r["CP2"] + "";
-                    log.CP3 = r["CP3"] + "";
-                    log.CP4 = r["CP4"] + "";
-                    log.CP5 = r["CP5"] + "";
-                    log.CP6 = r["CP6"] + "";
-                    log.CP7 = r["CP7"] + "";
-                    log.CP8 = r["CP8"] + "";
-                    log.CP9 = r["CP9"] + "";
-                    log.CP10 = r["CP10"] + "";
-
-                    //if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserName"] + "" != "" + log.Username)
-                    //{
-                    //    // only do this once per session
-                    //    HttpContext.Current.Session["UserName"] = log.Username;
-                    //    HttpContext.Current.Session["FirstName"] = log.FirstName;
-                    //    HttpContext.Current.Session["LastName"] = log.LastName;
-                    //    HttpContext.Current.Session["Organization"] = log.Organization;
-                    //    HttpContext.Current.Session["UserID"] = log.UserID;
-
-                    //    //log.IpAddress = HttpContext.Current.Request.UserHostAddress;
-                    //    //HttpContext.Current.Session["userLogin"] = log;
-                    //}
-
-
-
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-
-                if (!found) // maybe we have a consumer/member login
-                {
-                    sql = "SELECT [Username],[CP1],[CP2],[CP3],[CP4],[CP5],[CP6],[CP7],[CP8],[CP9],[CP10],[MemberID] " +
-                        "FROM [tblUserConsumer] where USERNAME = @UNAME";
-
-                    SqlConnection cn2 = new SqlConnection(DBCON());
-                    cn2.Open();
-
-                    SqlCommand cmd2 = new SqlCommand(sql, cn2);
-                    cmd2.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = Username;
-                    cmd2.CommandTimeout = 500;
-
-                    SqlDataReader r2 = cmd2.ExecuteReader();
-
-                    while (r2.Read())
-                    {
-                        log.Username = r2["Username"] + "";
-
-                        log.FirstName = r2["Username"] + "";
-
-                        log.LastName = "";
-
-                        CodedDescriptor rr = new CodedDescriptor();
-                        rr.code = "CONS";
-                        rr.description = "CONSUMER LOGIN";
-
-                        log.Roles = new List<CodedDescriptor>();
-
-                        log.Roles.Add(rr);
-
-                        CodedDescriptor hh = new CodedDescriptor();
-                        hh.code = "CONS";
-                        hh.description = "CONSUMER LOGIN";
-
-                        log.Hierarchy = new List<CodedDescriptor>();
-
-                        log.Hierarchy.Add(hh);
-
-                        log.IpAddress = "Mobile Phone";//HttpContext.Current.Request.UserHostAddress;
-
-                        log.CP1 = r2["CP1"] + "";
-                        log.CP2 = r2["CP2"] + "";
-                        log.CP3 = r2["CP3"] + "";
-                        log.CP4 = r2["CP4"] + "";
-                        log.CP5 = r2["CP5"] + "";
-                        log.CP6 = r2["CP6"] + "";
-                        log.CP7 = r2["CP7"] + "";
-                        log.CP8 = r2["CP8"] + "";
-                        log.CP9 = r2["CP9"] + "";
-                        log.CP10 = r2["CP10"] + "";
-                        log.MEMBERID = r2["MemberID"] + "";
-                    }
-                    r2.Close();
-                    cmd2.Dispose();
-                    cn2.Close();
-                    cn2.Dispose();
-
-                }
-
-
-                //LogError("GetLoginDetails", "Made It Here2");
-
-                // Trigger for any auto processing stuff
-
-                // If username is primary developer "LWATSON" then trigger auto processing stuff
-
-                if (Username.ToUpper() == "LWATSON")
-                {
-                    // do the nasty
-
-                    //TryAndSetAllALTsandLONGsinthePOITable();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError("GetLoginDetails", ex.Message);
-
-                log.FirstName = ex.Message;
-                log.LastName = ex.Message;
-                log.Organization = ex.Message;
-            }
-
-            //LogError("GetLoginDetails", "Made It Here3");
-
-            return log;
-        }
-
-        public void LogSystemError(string errorUrl, string errorMessage, string stackTrace)
-        {
-            LogError(errorUrl, errorMessage + "\n" + stackTrace);
-        }
-
-        private void LogError(string source, string message)
-        {
-            try
-            {
-                var IPaddr = "Mobile";
-                if (IPaddr == "::1")  //This is when running local Test IP address..BME 10/25/2017.
-                { IPaddr = "01.01.01.01"; }
-
-                string sql = "INSERT INTO tblSYSTEMERRORS (IPADDR,CREATEDATE,ERRORSOURCE,ERRORMSG) VALUES (@IP,@CD,@ES,@EM)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                cmd.Parameters.Add("@IP", SqlDbType.VarChar).Value = IPaddr;
-                cmd.Parameters.Add("@CD", SqlDbType.DateTime).Value = DateTime.Now;
-                cmd.Parameters.Add("@ES", SqlDbType.VarChar).Value = source;
-
-                string userName = "Mobile Phone User";
-                //if (HttpContext.Current.Session == null)
-                //{
-                //    userName = HttpContext.Current.User.Identity.Name;
-                //}
-                //else
-                //{
-                //    userName = HttpContext.Current.Session["UserName"].ToString();
-                //}
-                cmd.Parameters.Add("@EM", SqlDbType.VarChar).Value = message + "\nSystem User ATM: " + userName;
-
-                cmd.ExecuteNonQuery();
-
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                // here we should try an alternative to the database logging of the error
-
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        private string DBCON()
-        {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["CFCSData"].ConnectionString;
-        }
-               
-        private bool DBLocked()
-        {
-            bool locked = false;
-
-            try
-            {
-                SqlConnection cn = new SqlConnection(DBCON());
-                string sql = "SELECT DBLOCKED FROM TBLSYSTEMSETTINGS";
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-
-                    if (r[0] + "" == "Y")
-                        locked = true;
-                    else
-                        locked = false;
-
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-
-
-            }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception Ex)
-#pragma warning restore CS0168 // Variable is declared but never used
-            {
-                // fail silently
-                locked = false;
-            }
-
-            return locked;
-        }
-
+        
         [Route("api/Login/GetMemberDetails")]
         [HttpGet]
         public JsonResult<MemberDetailsShort> GetMemberDetails()
@@ -859,437 +344,6 @@ namespace CFCSMobileWebServices.Controllers
 
         }
         
-        private List<CodedDescriptor> GetListOfHierarchyFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT CODE,DESCRIPTION from tblLOOKUPHIERARCHY " +
-                    "WHERE CODE in (SELECT DISTINCT HIERCODE FROM TBLUSERHIERARCHY WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfHierarchyFor", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfLanguagesFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT UL.ULCODE,LL.DESCRIPTION ";
-                sql += "FROM TBLUSERLANGUAGES UL ";
-                sql += "LEFT OUTER JOIN TBLLOOKUPLANGUAGES LL ON LL.CODE = UL.ULCODE ";
-                sql += "WHERE LL.CODE IN (SELECT DISTINCT ULCODE FROM TBLUSERLANGUAGES WHERE ULUSERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfLanguagesFor", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfGroupsFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT CODE,DESCRIPTION from [tblLOOKUPPROGRAMMEMBERSHIP] " +
-                    "WHERE CODE in (SELECT DISTINCT GROUPCODE FROM TBLUSERGROUPS WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfGroupsFor", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfCostCentersFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT A.COSTCENTER," +
-                    "(SELECT TOP 1 SVCDESCRIPTION FROM TBLLOOKUPSERVICES B WHERE A.COSTCENTER = B.COSTCENTER) as 'SVCDESCRIPTION' " +
-                    "from [TBLUSERCOSTCENTERS] A " +
-                    "WHERE COSTCENTER in (SELECT DISTINCT COSTCENTER FROM TBLUSERCOSTCENTERS WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfCostCentersFor", ex.Message);
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptorWID> GetListOfServiceIDsFor(string UserName)
-        {
-            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT A.COSTCENTER," +
-                    "(SELECT TOP 1 SVCDESCRIPTION FROM TBLLOOKUPSERVICES B WHERE A.COSTCENTER = CAST(B.SVCID AS VARCHAR(10))) as 'SVCDESCRIPTION' " +
-                    "from [TBLUSERCOSTCENTERS] A " +
-                    "WHERE COSTCENTER in (SELECT DISTINCT COSTCENTER FROM TBLUSERCOSTCENTERS WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWID res = new CodedDescriptorWID();
-
-                    //if (r[0].ToString() != "")
-                    //{ res.code = r[0].ToString(); }
-                    if (r[0] != System.DBNull.Value)
-                        res.id = Convert.ToInt64(r[0]);
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServidIDsFor", ex.Message);
-
-                CodedDescriptorWID cd = new CodedDescriptorWID();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfRolesFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT CODE,DESCRIPTION from tblLOOKUPROLES " +
-                    "WHERE CODE in (SELECT DISTINCT ROLECODE FROM TBLUSERROLES WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfRolesFor", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfRegionsFor(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-
-                string sql = "SELECT DISTINCT CODE,DESCRIPTION from tblLOOKUPCOUNTYNAME " +
-                    "WHERE CODE in (SELECT DISTINCT COUNTYCODE FROM TBLUSERREGIONS WHERE USERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfRegionsFor", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfUserCompetencies(string UserName)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT A.CODE, A.DESCRIPTION ";
-                sql += "FROM [TBLLOOKUPUSERCOMPETENCY] A ";
-                sql += "WHERE CODE IN (SELECT DISTINCT UCCODE FROM TBLUSERCOMPETENCY WHERE UCUSERNAME = @UNAME)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = UserName;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfUserCompetencies", ex.Message);
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private string GetGlobalProviderID()
-        {
-            string result = "";
-
-            try
-            {
-                string sql = "SELECT GLOBALPROVIDERNUM from TBLSYSTEMSETTINGS";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    result = r[0] + "";
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetGlobalProviderID", ex.Message);
-            }
-
-            return result;
-        }
-
         [Route("api/Login/GetAuths")]
         [HttpGet]
         public JsonResult<List<AuthorizedService>> GetAuthsAvailableForMember()
@@ -1431,62 +485,6 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
         
-        public MemberAddress GetMemberAddress(string IDNUM)
-        {
-            MemberAddress mem = new MemberAddress();
-
-            try
-            {
-                string sql = "SELECT maID,SSN,ADDRESS1,ADDRESS2,ADDRESS3,APARTMENT_SUITE,ADDRESSTYPE,CITY," +
-                    "COALESCE((SELECT top 1 COUNTY FROM tblLOOKUPZIPCOUNTYCITY B WHERE B.ZIP = ZIPCODE),'Unknown') as 'COUNTY',ZIPCODE,[STATE], " +
-                    "CREATEDATE,CREATEDBY,UPDATEDATE,UPDATEDBY FROM tblMemberAddress WHERE SSN=@SSN ";
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
-
-                SqlDataReader r = cmd.ExecuteReader();
-                while (r.Read())
-                {
-                    if (r["maID"] != DBNull.Value)
-                    {
-                        mem.MAID = Convert.ToInt64(r["maID"]);
-                    }
-                    mem.SSN = r["SSN"].ToString() + "";
-                    mem.Address1 = r["ADDRESS1"].ToString() + "";
-                    mem.Address2 = r["ADDRESS2"].ToString() + "";
-                    mem.Address3 = r["ADDRESS3"].ToString() + "";
-                    mem.ApartmentSuite = r["APARTMENT_SUITE"].ToString() + "";
-                    mem.AddressType = r["ADDRESSTYPE"].ToString() + "";
-                    mem.City = r["CITY"].ToString() + "";
-                    mem.County = r["COUNTY"].ToString() + "";
-                    mem.ZipCode = r["ZIPCODE"].ToString() + "";
-                    mem.State = r["STATE"].ToString() + "";
-                    if (r["CREATEDATE"] != DBNull.Value)
-                    {
-                        mem.CreateDate = r.GetDateTime(r.GetOrdinal("CREATEDATE"));
-                    }
-                    mem.CreateBy = r["CreatedBy"].ToString() + "";
-                    if (r["UPDATEDATE"] != DBNull.Value)
-                    {
-                        mem.UpdateDate = r.GetDateTime(r.GetOrdinal("UPDATEDATE"));
-                    }
-                    mem.UpdatedBy = r["UPDATEDBY"].ToString() + "";
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetMemberAddress", ex.Message);
-            }
-            return mem;
-        }
-
         [Route("api/Login/MemberObservers")]
         [HttpGet]
         public JsonResult<List<MemberObservers>> GetListOfMemberObservers()
@@ -1596,51 +594,6 @@ namespace CFCSMobileWebServices.Controllers
             }
 
             return Json(ret);
-        }
-
-        public string GetListOfAllSupervisorsForUser(string UserName)
-        {
-            string result = "";
-            UserName = UserName.TrimEnd(',', ' ');
-            UserName = UserName.Replace(",", "','");
-
-            try
-            {
-                string sql = "Select distinct SupervisorName  + ',' AS SupervisorName from tblUsersSupervisor ";
-                sql += "where UserName = '" + UserName + "'";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    result += r["SupervisorName"] + " ";
-                }
-
-                result = result.TrimEnd(',');
-
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfAllSupervisorsForUser", ex.Message);
-
-                result = "";
-            }
-
-            return result;
         }
 
         [Route("api/Login/MemberReferrals")]
@@ -1776,33 +729,6 @@ namespace CFCSMobileWebServices.Controllers
                 throw (new Exception("tblREFERRALSOURCE.GetListOftblREFERRALSOURCEForMember" + ex.ToString()));
             }
             return Json(result);
-        }
-
-        public double GetUnitType(string UNITTYPE)
-        {
-            double numtype = 0;
-
-            try
-            {
-                if (UNITTYPE == "01" || UNITTYPE == "1")
-                { numtype = Convert.ToDouble("15"); }
-                else if (UNITTYPE == "02" || UNITTYPE == "2")
-                { numtype = Convert.ToDouble("30"); }
-                else if (UNITTYPE == "03" || UNITTYPE == "3")
-                { numtype = Convert.ToDouble("45"); }
-                else if (UNITTYPE == "04" || UNITTYPE == "4")
-                { numtype = Convert.ToDouble("60"); }
-                else if (UNITTYPE == "05" || UNITTYPE == "5")
-                { numtype = Convert.ToDouble("1"); }
-
-            }
-            catch (Exception ex)
-            {
-                LogError("GetUnitType", ex.Message);
-            }
-
-
-            return numtype;
         }
 
         [Route("api/Login/EncounterProgressNotes")]
@@ -2305,57 +1231,6 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-
-        private string Elipsis(string src, int len)
-        {
-            string result = "";
-
-            try
-            {
-                string[] delim = { System.Environment.NewLine, "\r", "\n" };
-
-                string[] arr = src.Split(delim, StringSplitOptions.RemoveEmptyEntries);
-
-                int line = 0;
-
-                foreach (string s in arr)
-                {
-                    result += s;
-
-                    line += 1;
-
-                    if (result.Length < len)
-                    {
-                        result += System.Environment.NewLine;
-                    }
-                    else
-                    {
-                        result += "...";
-                        break;
-                    }
-
-                    if (line > 4)
-                    {
-                        break;
-                    }
-                }
-
-                if (result.Length > len)
-                {
-                    result = result.Substring(0, len) + "...";
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError("Elipsis routine", ex.Message);
-
-                result = "";
-            }
-
-            return result;
-        }
-
-
         [Route("api/Login/GetServiceDescriptions")]
         [HttpGet]
         public JsonResult<List<ServiceDescription>> TheServiceDescriptions()
@@ -2365,110 +1240,7 @@ namespace CFCSMobileWebServices.Controllers
             return Json(TheList);
 
         }
-
-        private List<ServiceDescription> GetListOfServiceDescriptions()
-        {
-            List<ServiceDescription> result = new List<ServiceDescription>();
-
-            try
-            {
-                string sql = "SELECT [SvcID],[Funder],B.DESCRIPTION as 'FUNDERNAME',[CostCenter],[SvcCode]" +
-                    ",[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE]" +
-                    ",[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE] " +
-                    "FROM [dbo].[tblLOOKUPSERVICES] A " +
-                    "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE " +
-                    "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE " +
-                    "WHERE a.active = 'Y' ORDER BY [SVCDESCRIPTION] ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    ServiceDescription i = new ServiceDescription();
-
-                    i.ID = r.GetInt64(0);
-                    i.FUNDER = r["FUNDER"] + "";
-                    i.FUNDERDESCRIPTION = r["FUNDERNAME"] + "";
-                    i.COSTCENTER = r["COSTCENTER"] + "";
-                    i.SVCCODE = r["SVCCODE"] + "";
-                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
-                    i.UNITTYPE = r["UNITTYPE"] + "";
-                    i.UNITTYPEDESCRIPTION = r["UNITTYPEDESC"] + "";
-                    if (!r.IsDBNull(8))
-                    {
-                        string v = r[8] + "";
-
-                        double d = 0.0;
-
-                        if (double.TryParse(v, out d))
-                        {
-                            i.COSTPERUNIT = d;
-                        }
-                        else
-                        {
-                            i.COSTPERUNIT = 0;
-                        }
-                    }
-
-                    i.ACTIVE = r["ACTIVE"] + "";
-                    i.AUTHREQ = r["AUTHREQ"] + "";
-                    i.COPAY = r["COPAY"] + "";
-                    i.MOD1 = r["MODIFIER1"] + "";
-                    i.MOD2 = r["MODIFIER2"] + "";
-                    i.MOD3 = r["MODIFIER3"] + "";
-                    i.MOD4 = r["MODIFIER4"] + "";
-
-                    if (!r.IsDBNull(16))
-                    {
-                        string v = r[16] + "";
-
-                        int d = -1;
-
-                        if (int.TryParse(v, out d))
-                        {
-                            i.AUTOUNIT = d;
-                        }
-                        else
-                        {
-                            i.AUTOUNIT = -1;
-                        }
-                    }
-
-                    if (!r.IsDBNull(17))
-                    {
-                        string v = r[17] + "";
-
-                        int d = 0;
-
-                        if (int.TryParse(v, out d))
-                        {
-                            i.ROUNDRULE = d;
-                        }
-                        else
-                        {
-                            i.ROUNDRULE = 0;
-                        }
-                    }
-
-                    result.Add(i);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServiceDescriptions", ex.Message);
-            }
-
-            return result;
-        }
-
+        
         [Route("api/Login/GetAllLookups")]
         [HttpGet]
         public JsonResult<TheLookups> GetAllLookups()
@@ -2886,1168 +1658,100 @@ namespace CFCSMobileWebServices.Controllers
 
         }
 
-        private List<CodedDescriptor> GetSpecificLookupList(string TNAME)
+        [Route("api/Login/GetActiveServicesForMember")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember()
         {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
+
+            List<LookupServices> result = new List<LookupServices>();
+
+            string memb = "";
+            string encd = "01-01-1980";
 
             try
             {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
+                var req = Request;
 
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
+                var rhead = req.Headers;
 
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
+                if (rhead.Contains("MEMB"))
                 {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorExt> GetSpecificLookupListExt(string TNAME)
-        {
-            List<CodedDescriptorExt> result = new List<CodedDescriptorExt>();
-            string sql = "";
-
-            try
-            {
-                if (TNAME == "tblLOOKUPUNITS")
-                { sql = "SELECT * FROM " + TNAME + " ORDER BY DESCRIPTON "; }
-                else
-                { sql = "SELECT * FROM " + TNAME + " ORDER BY DESCRIPTION "; }
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorExt res = new CodedDescriptorExt();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-                    res.authreq = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupListExt", ex.Message);
-
-                CodedDescriptorExt err = new CodedDescriptorExt();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-                err.authreq = "";
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetEncounterStatusWithoutBilled()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                //string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
-                //sql += "WHERE ACTIVE = 'Y' AND DESCRIPTION <> 'BILLED' ORDER BY [DESCRIPTION]";
-
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
-                sql += "WHERE ACTIVE = 'Y' ";
-                sql += "AND CODE NOT IN ('03','04','07','08','09','10') ";
-                sql += "ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetEncounterStatusWithoutBilled", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetEncounterStatusAll()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPENCOUNTERSTATUS ";
-                sql += "ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetEncounterStatusAll", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWPrograms> GetSpecificLookupListWithProgram(string TNAME)
-        {
-            List<CodedDescriptorWPrograms> result = new List<CodedDescriptorWPrograms>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION],[ACTIVE],[PROGRAM] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWPrograms res = new CodedDescriptorWPrograms();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-                    res.active = r[2] + "";
-                    res.program = r[3] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupListWithProgram", ex.Message + System.Environment.NewLine + TNAME);
-
-                CodedDescriptorWPrograms err = new CodedDescriptorWPrograms();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWID> GetSpecificLookupWithID()
-        {
-            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT TBLUSERLOGINID, UL.Username, FIRSTNAME + ' ' + LASTNAME ";
-                sql += "FROM TBLUSERLOGINS UL ";
-                sql += "LEFT OUTER JOIN tblUserHierarchy UH ON UH.UserName = UL.Username ";
-                sql += "WHERE UH.HierCode <> 'SUPER' AND UH.HierCode <> 'CFBH' ";
-                sql += "ORDER BY USERNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWID res = new CodedDescriptorWID();
-
-                    if (r[0] != null)
-                        res.id = Convert.ToInt64(r[0]);
-                    res.code = r[1] + "";
-                    res.description = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupWithID", ex.Message);
-
-                result = new List<CodedDescriptorWID>();
-            }
-
-            return result;
-        }
-
-        private List<ZipCodeDescriptor> GetZipCodeList()
-        {
-            List<ZipCodeDescriptor> result = new List<ZipCodeDescriptor>();
-
-            try
-            {
-                string sql = "SELECT * , (SELECT TOP 1 county from [tblLOOKUPZIPCOUNTYCITY] B where a.zipcode = b.zip) as 'COUNTY' FROM tblLOOKUPZIPCODES A " +
-                    "WHERE A.ZIPCODESTATE in ('PA','NJ','TN','FL','MD','NY','DC','RI','MA','CN') ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    ZipCodeDescriptor zip = new ZipCodeDescriptor();
-
-                    zip.zipcode = r[0] + "";
-                    zip.zipcodecity = r[1] + "";
-                    zip.zipcodestate = r[2] + "";
-
-                    if (!r.IsDBNull(3))
-                        zip.ziplong = r.GetDouble(3);
-
-                    if (!r.IsDBNull(4))
-                        zip.ziplat = r.GetDouble(4);
-
-                    zip.zipcounty = r[6] + "";
-
-                    result.Add(zip);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetZipCodeList", ex.Message);
-
-                result.Clear();
-
-                ZipCodeDescriptor res = new ZipCodeDescriptor();
-                res.zipcode = ex.Message;
-                res.zipcodecity = ex.Message;
-
-                result.Add(res);
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetFundersNoMedicaid()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
-                sql += "WHERE ACTIVE = 'Y' ";
-                sql += " AND REFERENCENUM IS NOT NULL ";
-                //sql += " AND DESCRIPTION NOT LIKE '%MEDICAID%' ";
-                sql += " AND GROUPHEALTH = 1 ";
-                sql += "ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetFundersNoMedicaid", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetFundersMedicaidandCommercial()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
-                sql += "WHERE ACTIVE = 'Y' ";
-                sql += " AND REFERENCENUM IS NOT NULL ";
-                //sql += " AND DESCRIPTION NOT LIKE '%MEDICAID%' ";
-                sql += " AND GROUPHEALTH = 1 OR MEDICAID = 1 ";
-                sql += "ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetFundersMedicaidandCommercial", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWithOther> GetReferralSourceBlueBook()
-        {
-            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
-                sql += "FROM tblREFERRALSOURCE ";
-                sql += " WHERE RSISAGENCY = 0 ";
-                sql += " AND RSACTIVE = 1 ";
-                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
-
-                    if (r[0].ToString() != "")
-                    { res.id = Convert.ToInt64(r[0]); }
-                    res.code = r[1] + "";
-                    res.other = r[2] + "";
-                    res.description = r[1] + "" + " " + r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetReferralSourceBlueBook", ex.Message);
-
-                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
-
-                err.id = 0;
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetTeamReferralSource()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT CODE, DESCRIPTION FROM tblLOOKUPREFERRALSOURCE ";
-                sql += "ORDER BY DESCRIPTION ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetTeamReferralSource", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-
-        }
-
-        private List<CodedDescriptorWID> GetStaffBlueBook(long rsid)
-        {
-            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
-
-            try
-            {
-                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
-                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
-                sql += "FROM tblREFERRALSOURCE ";
-                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
-                sql += " AND RSISAGENCY = 0 ";
-                sql += " AND RSACTIVE = 1 ";
-                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWID res = new CodedDescriptorWID();
-
-                    if (r[0].ToString() != "")
-                    { res.id = Convert.ToInt64(r[0]); }
-                    res.code = r[1] + "";
-                    res.description = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetStaffBlueBook", ex.Message);
-
-                CodedDescriptorWID err = new CodedDescriptorWID();
-
-                err.id = 0;
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWithOther> GetStaffBlueBookWithOther(long rsid)
-        {
-            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
-
-            try
-            {
-                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
-                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
-                sql += "FROM tblREFERRALSOURCE ";
-                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
-                sql += " AND RSISAGENCY = 0 ";
-                sql += " AND RSACTIVE = 1 ";
-                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
-
-                    if (r[0].ToString() != "")
-                    { res.id = Convert.ToInt64(r[0]); }
-                    res.code = r[1] + "";
-                    res.other = r[2] + "";
-                    res.description = r[1] + "" + " " + r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetStaffBlueBookWithOther", ex.Message);
-
-                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
-
-                err.id = 0;
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWithOther> GetStaffBlueBookWithInactive(long rsid)
-        {
-            List<CodedDescriptorWithOther> result = new List<CodedDescriptorWithOther>();
-
-            try
-            {
-                //string sql = "SELECT DISTINCT RSID, RSLASTNAME, LTRIM(RTRIM(COALESCE(RSFIRSTNAME, ''))) + ' ' + LTRIM(RTRIM(RSLASTNAME)) AS DESCRIPTION ";
-                string sql = "SELECT DISTINCT RSID, RSFIRSTNAME, RSLASTNAME ";
-                sql += "FROM tblREFERRALSOURCE ";
-                sql += "WHERE RSAGENCYID = @RSAGENCYID ";
-                sql += " AND RSISAGENCY = 0 ";
-                sql += "ORDER BY RSFIRSTNAME, RSLASTNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.Parameters.Add("@RSAGENCYID", SqlDbType.BigInt).Value = rsid;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWithOther res = new CodedDescriptorWithOther();
-
-                    if (r[0].ToString() != "")
-                    { res.id = Convert.ToInt64(r[0]); }
-                    res.code = r[1] + "";
-                    res.other = r[2] + "";
-                    res.description = r[1] + "" + " " + r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetStaffBlueBookWithInactive", ex.Message);
-
-                CodedDescriptorWithOther err = new CodedDescriptorWithOther();
-
-                err.id = 0;
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<ServiceGapDescriptor> GetEntireListOfServiceGapDescriptors()
-        {
-            List<ServiceGapDescriptor> result = new List<ServiceGapDescriptor>();
-            try
-            {
-                string sql = "SELECT [CMSID],[GAPDESCRIPTION],[GAPDOMAIN],[MEASURE],[TYPE],[CPT],[HCPCS],[UB],[DIAG],[LOINC] " +
-                                "FROM [tblLOOKUPSERVICEGAPDESCRIPTORS] ORDER BY [GAPDESCRIPTION] ";
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                SqlDataReader r = cmd.ExecuteReader();
-                while (r.Read())
-                {
-                    ServiceGapDescriptor a = new ServiceGapDescriptor();
-
-                    a.CMSID = r[0] + "";
-                    a.GAPDESCRIPTION = r[1] + "";
-                    a.GAPDOMAIN = r[2] + "";
-                    a.MEASURE = r[3] + "";
-                    a.TYPE = r[4] + "";
-                    a.CPT = r[5] + "";
-                    a.HCPCS = r[6] + "";
-                    a.UB = r[7] + "";
-                    a.DIAG = r[8] + "";
-                    a.LOINC = r[9] + "";
-
-                    result.Add(a);
-                }
-                r.Close();
-                cmd.Cancel();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                throw (new Exception("GetEntireListOfServiceGapDescriptors" + ex.ToString()));
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetSpecificLookupListTeam(string TNAME)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' AND TEAMTAB = 'Y' ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetSpecificLookupListFAMILY(string TNAME)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' AND FAMILYTAB = 'Y' ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }        //
-
-        private List<ProviderDesignation> GetListOf211ReferralProviders()
-        {
-            List<ProviderDesignation> result = new List<ProviderDesignation>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT PROVIDERID,PROVIDERNAME " +
-                    "from tblLOOKUPREFERRALPROVIDERS WHERE REFERRAL211 = 'Y' ORDER BY PROVIDERNAME";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    ProviderDesignation p = new ProviderDesignation();
-
-                    p.ProviderID = r[0] + "";
-                    p.ProviderName = r[1] + "";
-
-                    result.Add(p);
+                    memb = rhead.GetValues("MEMB").First();
                 }
 
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOf211ReferralProviders", ex.Message);
-                result.Clear();
-
-                ProviderDesignation p = new ProviderDesignation();
-
-                p.ProviderName = ex.Message;
-
-                result.Add(p);
-            }
-
-            return result;
-        }
-
-        private List<ProviderDesignation> GetListOfProvidersForTrackingElements()
-        {
-            List<ProviderDesignation> result = new List<ProviderDesignation>();
-
-            try
-            {
-                string sql = "SELECT MIN(PMID) as 'PMID',SUBPROVIDERID,SUBPROVIDERNAME " +
-                            "FROM tblProviderSubProvider WHERE SUBPROVIDERID IN (" +
-                            "select DISTINCT SUBPROVIDERID " +
-                            "FROM tblProviderSubProvider " +
-                            "WHERE RIGHT(LEFT(SUBPROVIDERID,3),1) = '-') " +
-                            "GROUP BY SUBPROVIDERID,SUBPROVIDERNAME " +
-                            "ORDER BY SUBPROVIDERNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
+                if (rhead.Contains("ENCD"))
                 {
-                    ProviderDesignation p = new ProviderDesignation();
-                    p.mpcID = r.GetInt64(0);
-                    p.ProviderID = r[1] + "";
-                    p.ProviderName = r[2] + "";
-
-                    result.Add(p);
+                    encd = rhead.GetValues("ENCD").First();
                 }
 
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfProvidersForTrackingElements", ex.Message);
-            }
+                DateTime encDate = Convert.ToDateTime(encd);
 
-            return result;
-        }
-
-        private List<ServiceDescription> GetListOfServiceDescriptionsNoID()
-        {
-            List<ServiceDescription> result = new List<ServiceDescription>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT [CostCenter],[SvcCode]" +
-                    ",[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE]" +
-                    ",[AUTHREQ],[RELATEDSPLITCODE] " +
-                    //[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT] " +
-                    "FROM [dbo].[tblLOOKUPSERVICES] A " +
-                    "WHERE a.active = 'Y' " +
-                    " AND FUNDER = 'xxxxx' " +
-                    "ORDER BY [SVCDESCRIPTION] ";
-
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    ServiceDescription i = new ServiceDescription();
-
-                    i.COSTCENTER = r["COSTCENTER"] + "";
-                    i.SVCCODE = r["SVCCODE"] + "";
-                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
-                    i.UNITTYPE = r["UNITTYPE"] + "";
-                    if (r["COSTPERUNIT"].ToString() != "")
-                    {
-                        string v = r["COSTPERUNIT"] + "";
-
-                        double d = 0.0;
-
-                        if (double.TryParse(v, out d))
-                        {
-                            i.COSTPERUNIT = d;
-                        }
-                        else
-                        {
-                            i.COSTPERUNIT = 0;
-                        }
-                    }
-
-                    i.ACTIVE = r["ACTIVE"] + "";
-                    i.AUTHREQ = r["AUTHREQ"] + "";
-                    //i.COPAY = r["COPAY"] + "";
-                    //i.MOD1 = r["MODIFIER1"] + "";
-                    //i.MOD2 = r["MODIFIER2"] + "";
-                    //i.MOD3 = r["MODIFIER3"] + "";
-                    //i.MOD4 = r["MODIFIER4"] + "";
-
-                    //if (r["AUTOUNIT"].ToString() != "")
-                    //{
-                    //    string v = r["AUTOUNIT"] + "";
-
-                    //    int d = -1;
-
-                    //    if (int.TryParse(v, out d))
-                    //    {
-                    //        i.AUTOUNIT = d;
-                    //    }
-                    //    else
-                    //    {
-                    //        i.AUTOUNIT = -1;
-                    //    }
-                    //}
-
-                    i.RELATEDSPLITCODE = r["RELATEDSPLITCODE"] + "";
-
-                    result.Add(i);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServiceDescriptionsNoID", ex.Message);
-            }
-
-            return result;
-        }
-
-        private List<ServiceDescription> GetListOfServiceDescriptionsNoIDNoSplit()
-        {
-            List<ServiceDescription> result = new List<ServiceDescription>();
-
-            try
-            {
-                //string sql = "SELECT DISTINCT [CostCenter],[SvcCode]" +
-                //    ",[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE]" +
-                //    ",[AUTHREQ],[RELATEDSPLITCODE] " +
-                //    //[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT] " +
-                //    "FROM [dbo].[tblLOOKUPSERVICES] A " +
-                //    "WHERE a.active = 'Y' " +
-                //    " AND FUNDER = 'xxxxx' " +
-                //    "ORDER BY [SVCDESCRIPTION] ";
-
-                //string sql = "SELECT DISTINCT SVCID,[CostCenter],[SvcCode], ";
-                //sql += "[SvcDescription],[UnitType],[CostPerUnit],A.[ACTIVE], ";
-                //sql += "[AUTHREQ],MODIFIER1,MODIFIER2,MODIFIER3,MODIFIER4,[RELATEDSPLITCODE] ";
-                //sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
-                //sql += "WHERE  (a.active = 'Y' AND FUNDER = 'xxxxx' ";
-                //sql += " AND NOT EXISTS (SELECT * FROM tbllookupservices c WHERE cast(a.svcid as varchar) = c.RelatedSplitCode)) ";
-                //sql += "ORDER BY [SVCDESCRIPTION] ";
-
-                string sql = "SELECT * FROM [dbo].[tblLOOKUPSERVICES] A ";
-                sql += "WHERE  (a.active = 'Y' AND FUNDER = 'xxxxx' ";
-                sql += " AND NOT EXISTS (SELECT * FROM tbllookupservices c WHERE cast(a.svcid as varchar) = c.RelatedSplitCode)) ";
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.COSTCENTER = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.SSN = @SSN ";
+                sql += " AND (CAST(@ENCDATE AS DATE) BETWEEN CAST(AUS.STARTDATE AS DATE) AND CAST(AUS.ENDDATE AS DATE)) ";
                 sql += "ORDER BY [SVCDESCRIPTION] ";
 
                 SqlConnection cn = new SqlConnection(DBCON());
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = memb;
+                cmd.Parameters.Add("@ENCDATE", SqlDbType.DateTime).Value = encDate;
+
                 SqlDataReader r = cmd.ExecuteReader();
 
                 while (r.Read())
                 {
-                    ServiceDescription i = new ServiceDescription();
+                    LookupServices i = new LookupServices();
 
-                    i.ID = Convert.ToInt64(r["SVCID"]);
-                    i.COSTCENTER = r["COSTCENTER"] + "";
-                    i.SVCCODE = r["SVCCODE"] + "";
-                    i.SVCDESCRIPTION = r["SVCDESCRIPTION"] + "";
-                    i.UNITTYPE = r["UNITTYPE"] + "";
-                    if (r["COSTPERUNIT"].ToString() != "")
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
+
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
+
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
                     {
-                        string v = r["COSTPERUNIT"] + "";
+                        string v = r[8] + "";
 
                         double d = 0.0;
 
                         if (double.TryParse(v, out d))
                         {
-                            i.COSTPERUNIT = d;
+                            i.CostPerUnit = d;
                         }
                         else
                         {
-                            i.COSTPERUNIT = 0;
+                            i.CostPerUnit = 0;
                         }
                     }
 
                     i.ACTIVE = r["ACTIVE"] + "";
                     i.AUTHREQ = r["AUTHREQ"] + "";
-                    i.COPAY = r["COPAY"] + "";
-                    i.MOD1 = r["MODIFIER1"] + "";
-                    i.MOD2 = r["MODIFIER2"] + "";
-                    i.MOD3 = r["MODIFIER3"] + "";
-                    i.MOD4 = r["MODIFIER4"] + "";
-                    i.RELATEDSPLITCODE = r["RELATEDSPLITCODE"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
 
-                    if (r["BCBANOTEREQUIRED"] != DBNull.Value)
-                    { i.BCBANOTE = Convert.ToBoolean(r["BCBANOTEREQUIRED"]); }
-                    else
-                    { i.BCBANOTE = false; }
-
-                    if (r["AUTOUNIT"] != DBNull.Value)
-                    { i.AUTOUNIT = Convert.ToInt32(r["AUTOUNIT"]); }
-                    else
-                    { i.AUTOUNIT = 0; }
-
-                    if (r["ROUNDRULE"] != DBNull.Value)
-                    { i.ROUNDRULE = Convert.ToInt32(r["ROUNDRULE"]); }
-                    else
-                    { i.ROUNDRULE = 0; }
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
+                    {
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                    }
 
                     result.Add(i);
                 }
@@ -4058,731 +1762,99 @@ namespace CFCSMobileWebServices.Controllers
             }
             catch (Exception ex)
             {
-                LogError("GetListOfServiceDescriptionsNoIDNoSplit", ex.Message);
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
             }
 
-            return result;
+            return Json(result);
         }
 
-        private List<CodedDescriptorWID> GetListOfSupervisors()
+        [Route("api/Login/GetActiveServicesForAuth")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth()
         {
-            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
+            List<LookupServices> result = new List<LookupServices>();
+
+            string AuthID = "0";
 
             try
             {
-                //string sql = "SELECT DISTINCT UL.TBLUSERLOGINID AS ID, US.SUPERVISORNAME AS CODE, UL.FIRSTNAME + UL.LASTNAME AS DESCRIPTION ";
-                //sql += "FROM TBLUSERSSUPERVISOR US ";
-                //sql += "LEFT OUTER JOIN TBLUSERLOGINS UL ON UL.USERNAME = US.SUPERVISORNAME ";
-                //sql += "WHERE UL.TBLUSERLOGINID IS NOT NULL ";
-                //sql += "ORDER BY SUPERVISORNAME ";
+                var req = Request;
 
-                string sql = "SELECT DISTINCT UL.TBLUSERLOGINID AS ID, UL.Username AS CODE, UL.FIRSTNAME + ' ' + UL.LASTNAME AS DESCRIPTION ";
-                sql += "FROM tblUserLogins UL ";
-                sql += "LEFT OUTER JOIN tblUserHierarchy UH ON UL.USERNAME = UH.UserName ";
-                sql += "WHERE UL.TBLUSERLOGINID IS NOT NULL ";
-                sql += "AND UH.HierCode = 'SUPER' ";
-                sql += "ORDER BY ul.Username ";
+                var rhead = req.Headers;
 
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
+                if (rhead.Contains("AUTHID"))
                 {
-                    CodedDescriptorWID res = new CodedDescriptorWID();
-
-                    if (r[0] != null)
-                    { res.id = Convert.ToInt64(r[0]); }
-                    res.code = r[1] + "";
-                    res.description = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfSupervisors", ex.Message);
-
-                result = null;
-
-                CodedDescriptorWID cd = new CodedDescriptorWID();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfDSP()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT UL.USERNAME, FIRSTNAME + ' ' + LASTNAME ";
-                sql += "FROM TBLUSERROLES UR ";
-                sql += "LEFT OUTER JOIN TBLUSERLOGINS UL ON UL.USERNAME = UR.USERNAME ";
-                sql += "WHERE UR.RoleCode = 'DSP' AND COALESCE(UL.DEACTIVE,'N') <> 'Y' ";
-                sql += "ORDER BY UL.USERNAME ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfDSP", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfCounties()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT COUNTY AS CODE, COUNTY AS DESCRIPTION ";
-                sql += "FROM tblMemberAddress ";
-                sql += "ORDER BY COUNTY ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfCounties", ex.Message);
-
-                result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<ProviderDesignation> GetAllProviderDesignations()
-        {
-            List<ProviderDesignation> result = new List<ProviderDesignation>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT PID,PNAME,CNPI,SNPI FROM (" +
-                                "select PROVIDERID as 'PID', PROVIDERNAME as 'PNAME',CONTRACTNPI AS 'CNPI',SUBPROVNPI as 'SNPI' from dbo.tblProviderSubProvider " +
-                                "union " +
-                                "select SUBPROVIDERID , SUBPROVIDERNAME,CONTRACTNPI,SUBPROVNPI from dbo.tblProviderSubProvider " +
-                                ") A " +
-                                "ORDER BY PNAME";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    ProviderDesignation p = new ProviderDesignation();
-
-                    p.ProviderID = r["PID"] + "";
-                    p.ProviderName = r["PNAME"] + "";
-                    p.ContractNPI = r["CNPI"] + "";
-                    p.ProviderNPI = r["SNPI"] + "";
-
-                    // we might have some cruft in the system so lets weed out all provider id's without a - as the third character
-                    //if (p.ProviderID.Substring(0, 3).EndsWith("-"))
-                    result.Add(p);
+                    AuthID = rhead.GetValues("AUTHID").First();
                 }
 
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
+                long authID = Convert.ToInt64(AuthID);
 
-                
-            }
-            catch (Exception ex)
-            {
-                LogError("GetAllProviderDesignations", ex.Message);
-                result.Clear();
-
-                ProviderDesignation p = new ProviderDesignation();
-
-                p.ProviderName = ex.Message;
-
-                result.Add(p);
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptorWithActive> GetSpecificLookupListWACtive(string TNAME)
-        {
-            List<CodedDescriptorWithActive> result = new List<CodedDescriptorWithActive>();
-
-            try
-            {
-                string sql = "SELECT CODE,[DESCRIPTION],ACTIVE FROM " + TNAME + " ORDER BY [DESCRIPTION]";
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.MAUTHID = @MAUTHID ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
 
                 SqlConnection cn = new SqlConnection(DBCON());
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
 
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWithActive res = new CodedDescriptorWithActive();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-                    res.active = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupListWACtive", ex.Message);
-
-                CodedDescriptorWithActive err = new CodedDescriptorWithActive();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-                err.active = "";
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<NumericDescriptor> GetSpecificLookupListWithOther(string TNAME)
-        {
-            List<NumericDescriptor> result = new List<NumericDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [MEDID],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    NumericDescriptor res = new NumericDescriptor();
-
-                    if (r[0] != null)
-                        res.number = Convert.ToInt64(r[0]);
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupListWithOther", ex.Message + System.Environment.NewLine + TNAME);
-
-                NumericDescriptor err = new NumericDescriptor();
-
-                err.number = 0;
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetSpecificLookupListAlternatOrder(string TNAME)
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM " + TNAME + " WHERE ACTIVE = 'Y' ORDER BY [CODE]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetSpecificLookupList", ex.Message + System.Environment.NewLine + TNAME);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetListOfTaskSteps()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT TASKCODE AS CODE, TASKSTEPDESCRIPTION AS DESCRIPTION ";
-                sql += "FROM tblLOOKUPTASKSTEPS ";
-                sql += "ORDER BY TASKCODE ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfTaskSteps", ex.Message);
-
-                //result = null;
-
-                CodedDescriptor cd = new CodedDescriptor();
-                cd.code = "----";
-                cd.description = ex.Message;
-
-                result.Add(cd);
-            }
-            return result;
-        }
-
-        private List<CodedDescriptor> GetFundersForEncounters()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT [CODE],[DESCRIPTION] FROM tblLOOKUPFUNDERS ";
-                sql += "WHERE ACTIVE = 'Y' ";
-                sql += " AND REFERENCENUM IS NOT NULL ";
-                sql += "ORDER BY [DESCRIPTION]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                //cmd.Parameters.Add("@TNAME",SqlDbType.VarChar).Value = TNAME;
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetFundersForEncounters", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetAllLookupsTables()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "select OBJECT_ID,NAME " +
-                            "from sys.tables st " +
-                            "where name like 'tblLOOKUP%' and type_desc = 'USER_TABLE' " +
-                            "and (select COUNT(*) from syscolumns where id = object_id(st.NAME)) = 3 " +
-                            "order by name";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    CodedDescriptor cd = new CodedDescriptor();
-                    cd.code = r[0] + "";
-                    cd.description = r[1] + "";
-
-                    result.Add(cd);
-                }
-
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetAllLookupsTables", ex.Message);
-            }
-
-            return result;
-        }
-
-        private List<CodedDescriptor> GetActiveMembers()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "select distinct firstname + ' ' + lastname as membername, MM.SSN ";
-                sql += "from tblmembermain mm ";
-                sql += "inner join tblMemberAuthorizedServices aus on aus.SSN = mm.SSN ";
-                sql += "where (aus.ENDDATE is null or aus.ENDDATE = '' or CAST(aus.ENDDATE as Date) >= CAST(DATEADD(Year,-1,GETDATE()) AS Date)) ";
-                sql += "and mm.ssn in (select MCDSSN from tblMemberCopayDeductible) ";
-                sql += "order by membername ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[1] + "";
-                    res.description = r[0] + "";
-
-                    result.Add(res);
-                }
-
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-
-            }
-            catch (Exception ex)
-            {
-                LogError("GetActiveMembers", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-
-        }
-
-        private List<CodedDescriptor> GetDistinctServices()
-        {
-            List<CodedDescriptor> result = new List<CodedDescriptor>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT COSTCENTER,SVCDESCRIPTION FROM tblLookupServices WHERE ACTIVE = 'Y' " +
-                                "ORDER BY SvcDescription";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptor res = new CodedDescriptor();
-
-                    res.code = r[0] + "";
-                    res.description = r[1] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetDistinctServices", ex.Message);
-
-                CodedDescriptor err = new CodedDescriptor();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-
-
-        }
-
-        private List<CodedDescriptorWID> GetDistinctServicesWithID()
-        {
-            List<CodedDescriptorWID> result = new List<CodedDescriptorWID>();
-
-            try
-            {
-                string sql = "SELECT DISTINCT SVCID,COSTCENTER,SVCDESCRIPTION, ";
-                sql += "(SELECT DESCRIPTION FROM TBLLOOKUPFUNDERS WHERE CODE = FUNDER) AS FUNDER ";
-                sql += "FROM tblLookupServices WHERE ACTIVE = 'Y' ";
-                sql += " AND FUNDER = 'xxxxx' ";
-                sql += "ORDER BY SvcDescription ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                result.Clear();
-
-                while (r.Read())
-                {
-                    CodedDescriptorWID res = new CodedDescriptorWID();
-
-                    res.id = Convert.ToInt32(r[0]);
-                    res.code = r[1] + "";
-                    //res.description = r[2] + " - " + r[3] + "";
-                    res.description = r[2] + "";
-
-                    result.Add(res);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetDistinctServicesWithID", ex.Message);
-
-                CodedDescriptorWID err = new CodedDescriptorWID();
-
-                err.code = "";
-                err.description = ex.Message; // build a aresult that shows the message
-
-                result.Clear(); // clear any results we maay have at the moment
-
-                result.Add(err); // add it to the results list
-            }
-
-            return result;
-
-
-        }
-
-        private List<GMRRegions> GetListOfGMRRegions()
-        {
-            List<GMRRegions> result = new List<GMRRegions>();
-
-            try
-            {
-                string sql = "SELECT [gmrID],[gmrNAME],[gmrDESC],[gmrLAT],[gmrLON],[gmrZOOM] FROM [tblPOIGeoMapRegions] ORDER BY [gmrNAME]";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@MAUTHID", SqlDbType.BigInt).Value = authID;
 
                 SqlDataReader r = cmd.ExecuteReader();
 
                 while (r.Read())
                 {
-                    GMRRegions gmr = new GMRRegions();
+                    LookupServices i = new LookupServices();
 
-                    gmr.ID = r[0].ToString();
-                    gmr.NAME = r[1] + "";
-                    gmr.DESC = r[2] + "";
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
 
-                    double d = 0.0;
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
 
-                    if (double.TryParse(r[3] + "", out d))
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
                     {
-                        gmr.LAT = d;
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.CostPerUnit = d;
+                        }
+                        else
+                        {
+                            i.CostPerUnit = 0;
+                        }
                     }
 
-                    if (double.TryParse(r[4] + "", out d))
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
                     {
-                        gmr.LON = d;
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
                     }
 
-                    int i = 0;
-
-                    if (int.TryParse(r[5] + "", out i))
-                    {
-                        gmr.ZOOM = i;
-                    }
-
-                    result.Add(gmr);
+                    result.Add(i);
                 }
                 r.Close();
                 cmd.Dispose();
@@ -4791,13 +1863,243 @@ namespace CFCSMobileWebServices.Controllers
             }
             catch (Exception ex)
             {
-                LogError("", ex.Message);
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
+            }
+
+            return Json(result);
+        }
+
+        [Route("api/Login/GetActiveServicesForThisAuth")]
+        [HttpGet]
+        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII()
+        {
+            List<LookupServices> result = new List<LookupServices>();
+
+            string authNumber = "";
+
+            try
+            {
+
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("AUTHNUMBER"))
+                {
+                    authNumber = rhead.GetValues("AUTHNUMBER").First();
+                }
+
+
+                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
+                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
+                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
+                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
+                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
+                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
+                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
+                sql += "WHERE A.ACTIVE = 'Y' ";
+                sql += " AND B.DESCRIPTION IS NOT NULL ";
+                sql += " AND AUS.AUTHNUMBER = @AUTHNUMBER ";
+                sql += "ORDER BY [SVCDESCRIPTION] ";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@AUTHNUMBER", SqlDbType.VarChar).Value = authNumber;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    LookupServices i = new LookupServices();
+
+                    i.svcID = r.GetInt64(0);
+                    i.Funder = r["FUNDER"] + "";
+                    i.CostCenter = r["COSTCENTER"] + "";
+                    i.SvcCode = r["SVCCODE"] + "";
+                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
+
+                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
+                    // The UI on the phone will real the boolean to enable or disable that UI element
+
+                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
+                        i.BANote = true;
+                    else
+                        i.BANote = false;
+
+                    i.UnitType = r["UNITTYPE"] + "";
+                    if (!r.IsDBNull(8))
+                    {
+                        string v = r[8] + "";
+
+                        double d = 0.0;
+
+                        if (double.TryParse(v, out d))
+                        {
+                            i.CostPerUnit = d;
+                        }
+                        else
+                        {
+                            i.CostPerUnit = 0;
+                        }
+                    }
+
+
+                    i.ACTIVE = r["ACTIVE"] + "";
+                    i.AUTHREQ = r["AUTHREQ"] + "";
+                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
+                    {
+                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                    }
+
+                    result.Add(i);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
+            }
+
+            return Json(result);
+        }
+
+
+
+        public MemberAddress GetMemberAddress(string IDNUM)
+        {
+            MemberAddress mem = new MemberAddress();
+
+            try
+            {
+                string sql = "SELECT maID,SSN,ADDRESS1,ADDRESS2,ADDRESS3,APARTMENT_SUITE,ADDRESSTYPE,CITY," +
+                    "COALESCE((SELECT top 1 COUNTY FROM tblLOOKUPZIPCOUNTYCITY B WHERE B.ZIP = ZIPCODE),'Unknown') as 'COUNTY',ZIPCODE,[STATE], " +
+                    "CREATEDATE,CREATEDBY,UPDATEDATE,UPDATEDBY FROM tblMemberAddress WHERE SSN=@SSN ";
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
+
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    if (r["maID"] != DBNull.Value)
+                    {
+                        mem.MAID = Convert.ToInt64(r["maID"]);
+                    }
+                    mem.SSN = r["SSN"].ToString() + "";
+                    mem.Address1 = r["ADDRESS1"].ToString() + "";
+                    mem.Address2 = r["ADDRESS2"].ToString() + "";
+                    mem.Address3 = r["ADDRESS3"].ToString() + "";
+                    mem.ApartmentSuite = r["APARTMENT_SUITE"].ToString() + "";
+                    mem.AddressType = r["ADDRESSTYPE"].ToString() + "";
+                    mem.City = r["CITY"].ToString() + "";
+                    mem.County = r["COUNTY"].ToString() + "";
+                    mem.ZipCode = r["ZIPCODE"].ToString() + "";
+                    mem.State = r["STATE"].ToString() + "";
+                    if (r["CREATEDATE"] != DBNull.Value)
+                    {
+                        mem.CreateDate = r.GetDateTime(r.GetOrdinal("CREATEDATE"));
+                    }
+                    mem.CreateBy = r["CreatedBy"].ToString() + "";
+                    if (r["UPDATEDATE"] != DBNull.Value)
+                    {
+                        mem.UpdateDate = r.GetDateTime(r.GetOrdinal("UPDATEDATE"));
+                    }
+                    mem.UpdatedBy = r["UPDATEDBY"].ToString() + "";
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetMemberAddress", ex.Message);
+            }
+            return mem;
+        }
+
+        public string GetListOfAllSupervisorsForUser(string UserName)
+        {
+            string result = "";
+            UserName = UserName.TrimEnd(',', ' ');
+            UserName = UserName.Replace(",", "','");
+
+            try
+            {
+                string sql = "Select distinct SupervisorName  + ',' AS SupervisorName from tblUsersSupervisor ";
+                sql += "where UserName = '" + UserName + "'";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    result += r["SupervisorName"] + " ";
+                }
+
+                result = result.TrimEnd(',');
+
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetListOfAllSupervisorsForUser", ex.Message);
+
+                result = "";
             }
 
             return result;
         }
 
-        
+        public double GetUnitType(string UNITTYPE)
+        {
+            double numtype = 0;
+
+            try
+            {
+                if (UNITTYPE == "01" || UNITTYPE == "1")
+                { numtype = Convert.ToDouble("15"); }
+                else if (UNITTYPE == "02" || UNITTYPE == "2")
+                { numtype = Convert.ToDouble("30"); }
+                else if (UNITTYPE == "03" || UNITTYPE == "3")
+                { numtype = Convert.ToDouble("45"); }
+                else if (UNITTYPE == "04" || UNITTYPE == "4")
+                { numtype = Convert.ToDouble("60"); }
+                else if (UNITTYPE == "05" || UNITTYPE == "5")
+                { numtype = Convert.ToDouble("1"); }
+
+            }
+            catch (Exception ex)
+            {
+                LogError("GetUnitType", ex.Message);
+            }
+
+
+            return numtype;
+        }
 
         public bool WriteProgressNote(MemberProgressNotes pn)
         {
@@ -5020,627 +2322,7 @@ namespace CFCSMobileWebServices.Controllers
             }
             return mem;
         }
-
-        private void LogThisAccess(string ssn, string uname, string ipaddr, string context)
-        {
-            try
-            {
-                string sql = "INSERT INTO TBLACCESSLOG (USERNAME,USERIP,SSNACCESSED,DATEACCESSED,CONTEXT) VALUES (@UN,@UIP,@SSN,@DT,@CONTXT)";
-
-                //ignore passed in username. Use session value instead DB 05-23-2012
-                // MCompton 7/10/2017 This does not appear to be used, and causing exception in new Family Link 
-                //string _userName = HttpContext.Current.Session["UserName"].ToString();
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-
-                //ignore passed in username. Use session value instead DB 05-23-2012
-                //cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = uname;
-                //FB 18190 - dmcgrady
-                cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = uname;
-                //cmd.Parameters.Add("@UN", SqlDbType.VarChar).Value = _userName;
-
-                cmd.Parameters.Add("@UIP", SqlDbType.VarChar).Value = ipaddr;
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = ssn;
-                cmd.Parameters.Add("@DT", SqlDbType.DateTime).Value = ServerDateTime();
-                cmd.Parameters.Add("@CONTXT", SqlDbType.VarChar).Value = context;
-
-                cmd.ExecuteNonQuery();
-
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-
-            }
-            catch (Exception ex)
-            {
-                LogError("LogThisAccess", ex.Message);
-
-                // Fail Silently?
-
-            }
-
-        }
         
-        private bool SendMessageToThisMembersProgramsSupervisors(string SSN, string Login)
-        {
-            bool res = true;
-
-            try
-            {
-                // Get a list of programs that the member is part of currently
-                string sql = "SELECT [mpmPROGRAM] AS PROGRAM FROM [tblMemberProgramMembership] WHERE [mpmSSN] = @SSN " +
-                             "AND ((GETDATE() between [mpmSDATE] AND [mpmEDATE]) OR (GETDATE() >= [mpmSDATE] AND  [mpmEDATE] IS NULL))";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN.Trim();
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    List<string> Logins = GetLoginsInASpecificGroup(r[0] + "");
-                    List<string> RLogins = RestrictLoginsListToHierarchyType(Logins, "SUPER");
-
-                    MemberDetailsShort mem = GetCompleteMemberDetails(SSN, "Internal Messaging", "");
-
-                    string Message = "An Encounter Note was added by " + Login + "\nFor Consumer " + mem.FirstName + " " + mem.LastName + "\n" +
-                        "And needs supervision review.";
-
-                    SendMessageTo(Logins, Message, Login);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: SendMessageToThisMembersProgramsSupervisors", ex.Message);
-            }
-
-            return res;
-        }
-
-        private List<string> GetLoginsInASpecificGroup(string groupcode)
-        {
-            List<string> res = new List<string>();
-
-            try
-            {
-                string sql = "SELECT UserName AS UGUserName FROM tblUserGroups WHERE GROUPCODE = @GRP";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@GRP", SqlDbType.VarChar).Value = groupcode.Trim();
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    res.Add(r[0] + "");
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: GetLoginsInASpecificGroup", ex.Message);
-            }
-
-            return res;
-        }
-
-        private List<string> GetLoginsOfUserSupers(string login)
-        {
-            List<string> res = new List<string>();
-
-            try
-            {
-                string sql = " SELECT SupervisorName AS Supervisor FROM tblUsersSupervisor WHERE UserName = @Login";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@Login", SqlDbType.VarChar).Value = login.Trim();
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    res.Add(r[0] + "");
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: GetLoginsOfUserSupers", ex.Message);
-            }
-
-            return res;
-        }
-
-        private bool isuserinhierarchy(string login, string htype)
-        {
-            bool res = false;
-
-            try
-            {
-                string sql = "SELECT [UserName] from [tblUserHierarchy] WHERE [HierCode] = @HTYPE AND [UserName] = @LOGIN";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@HTYPE", SqlDbType.VarChar).Value = htype.Trim();
-                cmd.Parameters.Add("@LOGIN", SqlDbType.VarChar).Value = login.Trim();
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    res = true;
-                    break;
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: isuserinhierarchy", ex.Message);
-            }
-
-            return res;
-        }
-
-        private List<string> RestrictLoginsListToHierarchyType(List<string> logins, string HType)
-        {
-            List<string> res = new List<string>();
-
-            try
-            {
-                foreach (string s in logins)
-                {
-                    if (isuserinhierarchy(s, HType))
-                        res.Add(s);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: RestrictLoginsListToHierarchyType", ex.Message);
-            }
-
-            return res;
-        }
-
-        private bool SendMessageToThisUsersSupervisors(string SSN, string Login)
-        {
-            bool res = true;
-            List<string> resL = new List<string>();
-            try
-            {
-                // Get a list of programs that the member is part of currently
-                string sql = "SELECT SupervisorName AS Supervisor FROM tblUsersSupervisor WHERE UserName = @Login";
-                //             "AND ((GETDATE() between [mpmSDATE] AND [mpmEDATE]) OR (GETDATE() >= [mpmSDATE] AND  [mpmEDATE] IS NULL))";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = SSN.Trim();
-                cmd.Parameters.Add("@Login", SqlDbType.VarChar).Value = Login.Trim();
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    //List<string> Logins = GetLoginsInASpecificGroup(r[0] + "");
-                    // List<string> RLogins = RestrictLoginsListToHierarchyType(Logins, "SUPER");
-                    resL.Add(r[0] + "");
-                }
-                MemberDetailsShort mem = GetCompleteMemberDetails(SSN, "Internal Messaging", "");
-
-                string Message = "An Encounter Note was added by " + Login + "\nFor Consumer " + mem.FirstName + " " + mem.LastName + "\n" +
-                    "And needs supervision review.";
-                //  resL.Add(Login + ""); //for now we will not be emailing the author and the supervisor of that person
-                SendMessageTo(resL, Message, Login);
-
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("PRIVATE: SendMessageToThisMembersProgramsSupervisors", ex.Message);
-            }
-
-            return res;
-        }
-
-        public bool SendMessageTo(List<String> Unames, string MessageBody, string Sender)
-        {
-            bool result = true;
-
-            try
-            {
-                foreach (string un in Unames)
-                {
-                    SendMessage(un, Sender, MessageBody, "03");
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError("SendMessageTo", ex.Message);
-
-                result = false;
-            }
-
-            return result;
-        }
-
-        private void SendMessage(string uname, string sender, string body, string type)
-        {
-            try
-            {
-                string sql = "INSERT INTO TBLUSERMESSAGES (SOURCE,DESTINATION,DATECREATED,MESSAGETYPE,READSTATUS,BODY) VALUES (" +
-                    "@SENDER,@UNAME,@DT,@MTYPE,'N',@BODY)";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(sql, cn);
-                cmd.CommandTimeout = 500;
-                cmd.Parameters.Add("@SENDER", SqlDbType.VarChar).Value = sender;
-                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar).Value = uname;
-                cmd.Parameters.Add("@DT", SqlDbType.DateTime).Value = DateTime.Now;
-                cmd.Parameters.Add("@MTYPE", SqlDbType.VarChar).Value = type;
-                cmd.Parameters.Add("@BODY", SqlDbType.VarChar).Value = body;
-
-                cmd.ExecuteNonQuery();
-
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("SendMessage", ex.Message);
-            }
-        }
-
-        [Route("api/Login/GetActiveServicesForMember")]
-        [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForMember()
-        {
-
-            List<LookupServices> result = new List<LookupServices>();
-
-            string memb = "";
-            string encd = "01-01-1980";
-
-            try
-            {
-                var req = Request;
-
-                var rhead = req.Headers;
-
-                if (rhead.Contains("MEMB"))
-                {
-                    memb = rhead.GetValues("MEMB").First();
-                }
-
-                if (rhead.Contains("ENCD"))
-                {
-                    encd = rhead.GetValues("ENCD").First();
-                }
-
-                DateTime encDate = Convert.ToDateTime(encd);
-
-                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
-                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
-                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
-                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
-                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
-                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
-                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON AUS.COSTCENTER = CAST(A.SvcID AS VARCHAR) ";
-                sql += "WHERE A.ACTIVE = 'Y' ";
-                sql += " AND B.DESCRIPTION IS NOT NULL ";
-                sql += " AND AUS.SSN = @SSN ";
-                sql += " AND (CAST(@ENCDATE AS DATE) BETWEEN CAST(AUS.STARTDATE AS DATE) AND CAST(AUS.ENDDATE AS DATE)) ";
-                sql += "ORDER BY [SVCDESCRIPTION] ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = memb;
-                cmd.Parameters.Add("@ENCDATE", SqlDbType.DateTime).Value = encDate;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    LookupServices i = new LookupServices();
-
-                    i.svcID = r.GetInt64(0);
-                    i.Funder = r["FUNDER"] + "";
-                    i.CostCenter = r["COSTCENTER"] + "";
-                    i.SvcCode = r["SVCCODE"] + "";
-                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
-
-                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
-                    // The UI on the phone will real the boolean to enable or disable that UI element
-
-                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
-                        i.BANote = true;
-                    else
-                        i.BANote = false;
-
-                    i.UnitType = r["UNITTYPE"] + "";
-                    if (!r.IsDBNull(8))
-                    {
-                        string v = r[8] + "";
-
-                        double d = 0.0;
-
-                        if (double.TryParse(v, out d))
-                        {
-                            i.CostPerUnit = d;
-                        }
-                        else
-                        {
-                            i.CostPerUnit = 0;
-                        }
-                    }
-
-                    i.ACTIVE = r["ACTIVE"] + "";
-                    i.AUTHREQ = r["AUTHREQ"] + "";
-                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
-
-                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
-                    {
-                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
-                    }
-
-                    result.Add(i);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
-            }
-
-            return Json(result);
-        }
-
-        [Route("api/Login/GetActiveServicesForAuth")]
-        [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuth()
-        {
-            List<LookupServices> result = new List<LookupServices>();
-
-            string AuthID = "0";
-
-            try
-            {
-                var req = Request;
-
-                var rhead = req.Headers;
-
-                if (rhead.Contains("AUTHID"))
-                {
-                    AuthID = rhead.GetValues("AUTHID").First();
-                }
-
-                long authID = Convert.ToInt64(AuthID);
-
-                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
-                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
-                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
-                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
-                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
-                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
-                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
-                sql += "WHERE A.ACTIVE = 'Y' ";
-                sql += " AND B.DESCRIPTION IS NOT NULL ";
-                sql += " AND AUS.MAUTHID = @MAUTHID ";
-                sql += "ORDER BY [SVCDESCRIPTION] ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                cmd.Parameters.Add("@MAUTHID", SqlDbType.BigInt).Value = authID;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    LookupServices i = new LookupServices();
-
-                    i.svcID = r.GetInt64(0);
-                    i.Funder = r["FUNDER"] + "";
-                    i.CostCenter = r["COSTCENTER"] + "";
-                    i.SvcCode = r["SVCCODE"] + "";
-                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
-
-                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
-                    // The UI on the phone will real the boolean to enable or disable that UI element
-
-                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
-                        i.BANote = true;
-                    else
-                        i.BANote = false;
-
-                    i.UnitType = r["UNITTYPE"] + "";
-                    if (!r.IsDBNull(8))
-                    {
-                        string v = r[8] + "";
-
-                        double d = 0.0;
-
-                        if (double.TryParse(v, out d))
-                        {
-                            i.CostPerUnit = d;
-                        }
-                        else
-                        {
-                            i.CostPerUnit = 0;
-                        }
-                    }
-
-                    i.ACTIVE = r["ACTIVE"] + "";
-                    i.AUTHREQ = r["AUTHREQ"] + "";
-                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
-
-                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
-                    {
-                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
-                    }
-
-                    result.Add(i);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
-            }
-
-            return Json(result);
-        }
-
-        [Route("api/Login/GetActiveServicesForThisAuth")]
-        [HttpGet]
-        public JsonResult<List<LookupServices>> GetListOfServiceDescriptionsForThisAuthII()
-        {
-            List<LookupServices> result = new List<LookupServices>();
-
-            string authNumber = "";
-            
-            try
-            {
-
-                var req = Request;
-
-                var rhead = req.Headers;
-
-                if (rhead.Contains("AUTHNUMBER"))
-                {
-                    authNumber = rhead.GetValues("AUTHNUMBER").First();
-                }
-
-
-                string sql = "SELECT [SvcID],A.[Funder],B.DESCRIPTION as 'FUNDERNAME',A.[CostCenter],[SvcCode], ";
-                sql += "[SvcDescription],[UnitType],c.DESCRIPTON  as 'UNITTYPEDESC',[CostPerUnit],A.[ACTIVE], ";
-                sql += "[AUTHREQ],[COPAY],[Modifier1],[Modifier2],[Modifier3],[Modifier4],[AUTOUNIT],[ROUNDRULE],[RelatedSplitCode],[BCBANOTEREQUIRED] ";
-                sql += "FROM [dbo].[tblLOOKUPSERVICES] A ";
-                sql += "LEFT OUTER JOIN tblLOOKUPFUNDERS B ON A.Funder = b.CODE ";
-                sql += "LEFT OUTER JOIN tblLOOKUPUNITS C on A.UnitType = C.CODE ";
-                sql += "LEFT OUTER JOIN tblMemberAuthorizedServices AUS ON ltrim(rtrim(AUS.COSTCENTER)) = CAST(A.SvcID AS VARCHAR) ";
-                sql += "WHERE A.ACTIVE = 'Y' ";
-                sql += " AND B.DESCRIPTION IS NOT NULL ";
-                sql += " AND AUS.AUTHNUMBER = @AUTHNUMBER ";
-                sql += "ORDER BY [SVCDESCRIPTION] ";
-
-                SqlConnection cn = new SqlConnection(DBCON());
-                cn.Open();
-
-                SqlCommand cmd = new SqlCommand(sql, cn);
-
-                cmd.Parameters.Add("@AUTHNUMBER", SqlDbType.VarChar).Value = authNumber;
-
-                SqlDataReader r = cmd.ExecuteReader();
-
-                while (r.Read())
-                {
-                    LookupServices i = new LookupServices();
-
-                    i.svcID = r.GetInt64(0);
-                    i.Funder = r["FUNDER"] + "";
-                    i.CostCenter = r["COSTCENTER"] + "";
-                    i.SvcCode = r["SVCCODE"] + "";
-                    i.SvcDescription = r["SVCDESCRIPTION"] + "";
-
-                    // Added to duplicate the Stupid Business logic that turns on the BANOTE button in the web version
-                    // The UI on the phone will real the boolean to enable or disable that UI element
-
-                    if (i.SvcDescription.ToUpper().Contains("BEHAVIORAL ASSISTANCE"))
-                        i.BANote = true;
-                    else
-                        i.BANote = false;
-
-                    i.UnitType = r["UNITTYPE"] + "";
-                    if (!r.IsDBNull(8))
-                    {
-                        string v = r[8] + "";
-
-                        double d = 0.0;
-
-                        if (double.TryParse(v, out d))
-                        {
-                            i.CostPerUnit = d;
-                        }
-                        else
-                        {
-                            i.CostPerUnit = 0;
-                        }
-                    }
-                    
-
-                    i.ACTIVE = r["ACTIVE"] + "";
-                    i.AUTHREQ = r["AUTHREQ"] + "";
-                    i.RelatedSplitCode = r["RelatedSplitCode"] + "";
-
-                    if (r["BCBANOTEREQUIRED"] != System.DBNull.Value)
-                    {
-                        i.BCBANoteRequired = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
-                    }
-
-                    result.Add(i);
-                }
-                r.Close();
-                cmd.Dispose();
-                cn.Close();
-                cn.Dispose();
-            }
-            catch (Exception ex)
-            {
-                LogError("GetListOfServiceDescriptionsForMember", ex.Message);
-            }
-
-            return Json(result);
-        }
-
-
         public bool AuthenticateConsumerUser(string userName, string password)
         {
             bool result = false;
@@ -5719,6 +2401,389 @@ namespace CFCSMobileWebServices.Controllers
                 return null;
             }
 
+        }
+
+        // GET: api/Login/5
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
+
+        // POST: api/Login
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT: api/Login/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE: api/Login/5
+        public void Delete(int id)
+        {
+        }
+
+        public UserLogins InternalGetLoginDetails(string Username)
+        {
+            UserLogins log = new UserLogins();
+
+            try
+            {
+                //LogError("GetLoginDetails", "Made It Here");
+
+                string sql = "SELECT USERNAME,FIRSTNAME,LASTNAME,ORGANIZATION," +
+                    "PASSWORDCHANGEDATE,DEACTIVE,NOTE,ReadOnlyMemberDemo, " +
+                    "ReadOnlyAuthorizations,ReadOnlyProgressNotes,GlobalGroupAccess, tblUserLoginID,LastGlobalMesssageDate,LastWhatsNewDate, " +
+                    "Address1,Address2,City,State,ZipCode,Email2,Gender,Religion,Race,Email,ContactNum,CredentialType1,CredentialType2,ClinicalLicenseNumber,BCBANumber,IndividualNPINumber, " +
+                    "PhysicalAbuse,SexualAbuse,ADHD,AdoptionFoster,AngerManagement,AppliedBehavior,ArtTherapy,Autism,BehaviorModification, " +
+                    "CognitiveBehavior,DevDisabled,DomesticViolence,EatingDisorder,EMDR,EvidenceBased,FaithChrisitian,FaithJewish, " +
+                    "FaithOther,FamilyTherapy,GangInvolvement,JuvenileJustice,LearningDisability,LGBTIssues,ParentingSkills, " +
+                    "PlayTherapy,PTSD,SelfMutilatition,SexOffenders,SexualBoundaryIssues,SocialSkillsTraining,SubstanceAbuse, " +
+                    "TraumaIssues,VocationalSkillsTraining,AcceptTexts,LATITUDE,LONGITUDE,MAPGROUP,TOOLTIP,GEO,OON,CP1,CP2,CP3,CP4,CP5,CP6,CP7,CP8,CP9,CP10 " +
+                    "FROM TBLUSERLOGINS WHERE " +
+                    "USERNAME = @UNAME";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = Username;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                bool found = false;
+
+                while (r.Read())
+                {
+                    found = true;
+
+                    log.Username = r[0] + "";
+
+                    log.FirstName = r[1] + "";
+
+                    log.LastName = r[2] + "";
+
+                    log.Organization = r[3] + "";
+
+                    log.GlobalOrganization = GetGlobalProviderID();
+
+                    if (!r.IsDBNull(4))
+                        log.PasswordChangeDate = r.GetDateTime(4);
+                    else
+                        log.PasswordChangeDate = DateTime.MinValue;
+
+                    log.Deactive = r[5] + "";
+                    log.Note = r[6] + "";
+
+                    if (!r.IsDBNull(7))
+                    {
+                        if (r[7] + "" == "Y")
+                        {
+                            log.IsMemberDemoRO = true;
+                        }
+                        else
+                        {
+                            log.IsMemberDemoRO = false;
+                        }
+                    }
+                    else
+                    {
+                        log.IsMemberDemoRO = false;
+                    }
+
+                    if (!r.IsDBNull(8))
+                    {
+                        if (r[8] + "" == "Y")
+                        {
+                            log.IsAuthRO = true;
+                        }
+                        else
+                        {
+                            log.IsAuthRO = false;
+                        }
+                    }
+                    else
+                    {
+                        log.IsAuthRO = false;
+                    }
+
+                    if (!r.IsDBNull(9))
+                    {
+                        if (r[9] + "" == "Y")
+                        {
+                            log.IsProgressNotesRO = true;
+                        }
+                        else
+                        {
+                            log.IsProgressNotesRO = false;
+                        }
+                    }
+                    else
+                    {
+                        log.IsProgressNotesRO = false;
+                    }
+
+                    if (!r.IsDBNull(10))
+                    {
+                        if (r[10] + "" == "Y")
+                        {
+                            log.IsGroupAccessGlobal = true;
+                        }
+                        else
+                        {
+                            log.IsGroupAccessGlobal = false;
+                        }
+                    }
+                    else
+                    {
+                        log.IsGroupAccessGlobal = false;
+                    }
+
+                    log.UserID = Convert.ToInt32(r[11]);
+
+                    if (!r.IsDBNull(12))
+                        log.LastGlobalMesssageDate = r.GetDateTime(12);
+                    else
+                        log.LastGlobalMesssageDate = DateTime.MinValue;
+
+                    if (!r.IsDBNull(13))
+                        log.LastWhatsNewDate = r.GetDateTime(13);
+                    else
+                        log.LastWhatsNewDate = DateTime.MinValue;
+
+                    log.Address1 = r[14] + "";
+                    log.Address2 = r[15] + "";
+                    log.City = r[16] + "";
+                    log.State = r[17] + "";
+                    log.ZipCode = r[18] + "";
+                    log.Email2 = r[19] + "";
+                    log.Gender = r[20] + "";
+                    log.Religion = r[21] + "";
+                    log.Race = r[22] + "";
+                    log.Email = r[23] + "";
+                    log.ContactNum = r[24] + "";
+
+                    log.Hierarchy = GetListOfHierarchyFor(r[0] + "");
+                    log.Roles = GetListOfRolesFor(r[0] + "");
+                    log.Groups = GetListOfGroupsFor(r[0] + "");
+                    log.Regions = GetListOfRegionsFor(r[0] + "");
+                    log.CostCenters = GetListOfCostCentersFor(r[0] + "");
+                    log.ServiceIDS = GetListOfServiceIDsFor(r[0] + "");
+                    log.Competencies = GetListOfUserCompetencies(r[0] + "");
+                    log.Languages = GetListOfLanguagesFor(r[0] + "");
+
+                    log.CredentialType1 = r["CredentialType1"] + "";
+                    log.CredentialType2 = r["CredentialType2"] + "";
+                    log.ClinicalLicenseNumber = r["ClinicalLicenseNumber"] + "";
+                    log.BCBANumber = r["BCBANumber"] + "";
+                    log.IndividualNPINumber = r["IndividualNPINumber"] + "";
+                    if (r["PhysicalAbuse"].ToString() != "")
+                    { log.PhysicalAbuse = Convert.ToBoolean(r["PhysicalAbuse"]); }
+                    if (r["SexualAbuse"].ToString() != "")
+                    { log.SexualAbuse = Convert.ToBoolean(r["SexualAbuse"]); }
+                    if (r["ADHD"].ToString() != "")
+                    { log.ADHD = Convert.ToBoolean(r["ADHD"]); }
+                    if (r["AdoptionFoster"].ToString() != "")
+                    { log.AdoptionFoster = Convert.ToBoolean(r["AdoptionFoster"]); }
+                    if (r["AngerManagement"].ToString() != "")
+                    { log.AngerManagement = Convert.ToBoolean(r["AngerManagement"]); }
+                    if (r["AppliedBehavior"].ToString() != "")
+                    { log.AppliedBehavior = Convert.ToBoolean(r["AppliedBehavior"]); }
+                    if (r["ArtTherapy"].ToString() != "")
+                    { log.ArtTherapy = Convert.ToBoolean(r["ArtTherapy"]); }
+                    if (r["Autism"].ToString() != "")
+                    { log.Autism = Convert.ToBoolean(r["Autism"]); }
+                    if (r["BehaviorModification"].ToString() != "")
+                    { log.BehaviorModification = Convert.ToBoolean(r["BehaviorModification"]); }
+                    if (r["CognitiveBehavior"].ToString() != "")
+                    { log.CognitiveBehavior = Convert.ToBoolean(r["CognitiveBehavior"]); }
+                    if (r["DevDisabled"].ToString() != "")
+                    { log.DevDisabled = Convert.ToBoolean(r["DevDisabled"]); }
+                    if (r["DomesticViolence"].ToString() != "")
+                    { log.DomesticViolence = Convert.ToBoolean(r["DomesticViolence"]); }
+                    if (r["EatingDisorder"].ToString() != "")
+                    { log.EatingDisorder = Convert.ToBoolean(r["EatingDisorder"]); }
+                    if (r["EMDR"].ToString() != "")
+                    { log.EMDR = Convert.ToBoolean(r["EMDR"]); }
+                    if (r["EvidenceBased"].ToString() != "")
+                    { log.EvidenceBased = Convert.ToBoolean(r["EvidenceBased"]); }
+                    if (r["FaithChrisitian"].ToString() != "")
+                    { log.FaithChrisitian = Convert.ToBoolean(r["FaithChrisitian"]); }
+                    if (r["FaithJewish"].ToString() != "")
+                    { log.FaithJewish = Convert.ToBoolean(r["FaithJewish"]); }
+                    if (r["FaithOther"].ToString() != "")
+                    { log.FaithOther = Convert.ToBoolean(r["FaithOther"]); }
+                    if (r["FamilyTherapy"].ToString() != "")
+                    { log.FamilyTherapy = Convert.ToBoolean(r["FamilyTherapy"]); }
+                    if (r["GangInvolvement"].ToString() != "")
+                    { log.GangInvolvement = Convert.ToBoolean(r["GangInvolvement"]); }
+                    if (r["JuvenileJustice"].ToString() != "")
+                    { log.JuvenileJustice = Convert.ToBoolean(r["JuvenileJustice"]); }
+                    if (r["LearningDisability"].ToString() != "")
+                    { log.LearningDisability = Convert.ToBoolean(r["LearningDisability"]); }
+                    if (r["LGBTIssues"].ToString() != "")
+                    { log.LGBTIssues = Convert.ToBoolean(r["LGBTIssues"]); }
+                    if (r["ParentingSkills"].ToString() != "")
+                    { log.ParentingSkills = Convert.ToBoolean(r["ParentingSkills"]); }
+                    if (r["PlayTherapy"].ToString() != "")
+                    { log.PlayTherapy = Convert.ToBoolean(r["PlayTherapy"]); }
+                    if (r["PTSD"].ToString() != "")
+                    { log.PTSD = Convert.ToBoolean(r["PTSD"]); }
+                    if (r["SelfMutilatition"].ToString() != "")
+                    { log.SelfMutilatition = Convert.ToBoolean(r["SelfMutilatition"]); }
+                    if (r["SexOffenders"].ToString() != "")
+                    { log.SexOffenders = Convert.ToBoolean(r["SexOffenders"]); }
+                    if (r["SexualBoundaryIssues"].ToString() != "")
+                    { log.SexualBoundaryIssues = Convert.ToBoolean(r["SexualBoundaryIssues"]); }
+                    if (r["SocialSkillsTraining"].ToString() != "")
+                    { log.SocialSkillsTraining = Convert.ToBoolean(r["SocialSkillsTraining"]); }
+                    if (r["SubstanceAbuse"].ToString() != "")
+                    { log.SubstanceAbuse = Convert.ToBoolean(r["SubstanceAbuse"]); }
+                    if (r["TraumaIssues"].ToString() != "")
+                    { log.TraumaIssues = Convert.ToBoolean(r["TraumaIssues"]); }
+                    if (r["VocationalSkillsTraining"].ToString() != "")
+                    { log.VocationalSkillsTraining = Convert.ToBoolean(r["VocationalSkillsTraining"]); }
+                    if (r["AcceptTexts"].ToString() != "")
+                    { log.AcceptTexts = Convert.ToBoolean(r["AcceptTexts"]); }
+
+                    if (r["LATITUDE"] != null)
+                    { log.LATITUDE = Convert.ToDouble(r["LATITUDE"]); }
+                    if (r["LONGITUDE"] != null)
+                    { log.LONGITUDE = Convert.ToDouble(r["LONGITUDE"]); }
+                    log.MAPGROUP = r["MAPGROUP"] + "";
+                    log.TOOLTIP = r["TOOLTIP"] + "";
+                    log.GEO = r["GEO"] + "";
+                    log.OON = r["OON"] + "";
+                    log.Note = r["NOTE"] + "";
+                    //log.IpAddress = GetIPAddress();
+                    log.IpAddress = "Mobile Phone";// HttpContext.Current.Request.UserHostAddress;
+
+                    log.IsOrgAReferralTarget = true; //IsProviderOrganizationAReferralTarget(log.Organization);
+
+                    log.CP1 = r["CP1"] + "";
+                    log.CP2 = r["CP2"] + "";
+                    log.CP3 = r["CP3"] + "";
+                    log.CP4 = r["CP4"] + "";
+                    log.CP5 = r["CP5"] + "";
+                    log.CP6 = r["CP6"] + "";
+                    log.CP7 = r["CP7"] + "";
+                    log.CP8 = r["CP8"] + "";
+                    log.CP9 = r["CP9"] + "";
+                    log.CP10 = r["CP10"] + "";
+
+                    //if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserName"] + "" != "" + log.Username)
+                    //{
+                    //    // only do this once per session
+                    //    HttpContext.Current.Session["UserName"] = log.Username;
+                    //    HttpContext.Current.Session["FirstName"] = log.FirstName;
+                    //    HttpContext.Current.Session["LastName"] = log.LastName;
+                    //    HttpContext.Current.Session["Organization"] = log.Organization;
+                    //    HttpContext.Current.Session["UserID"] = log.UserID;
+
+                    //    //log.IpAddress = HttpContext.Current.Request.UserHostAddress;
+                    //    //HttpContext.Current.Session["userLogin"] = log;
+                    //}
+
+
+
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+
+                if (!found) // maybe we have a consumer/member login
+                {
+                    sql = "SELECT [Username],[CP1],[CP2],[CP3],[CP4],[CP5],[CP6],[CP7],[CP8],[CP9],[CP10],[MemberID] " +
+                        "FROM [tblUserConsumer] where USERNAME = @UNAME";
+
+                    SqlConnection cn2 = new SqlConnection(DBCON());
+                    cn2.Open();
+
+                    SqlCommand cmd2 = new SqlCommand(sql, cn2);
+                    cmd2.Parameters.Add("@UNAME", SqlDbType.VarChar, 20, "USERNAME").Value = Username;
+                    cmd2.CommandTimeout = 500;
+
+                    SqlDataReader r2 = cmd2.ExecuteReader();
+
+                    while (r2.Read())
+                    {
+                        log.Username = r2["Username"] + "";
+
+                        log.FirstName = r2["Username"] + "";
+
+                        log.LastName = "";
+
+                        CodedDescriptor rr = new CodedDescriptor();
+                        rr.code = "CONS";
+                        rr.description = "CONSUMER LOGIN";
+
+                        log.Roles = new List<CodedDescriptor>();
+
+                        log.Roles.Add(rr);
+
+                        CodedDescriptor hh = new CodedDescriptor();
+                        hh.code = "CONS";
+                        hh.description = "CONSUMER LOGIN";
+
+                        log.Hierarchy = new List<CodedDescriptor>();
+
+                        log.Hierarchy.Add(hh);
+
+                        log.IpAddress = "Mobile Phone";//HttpContext.Current.Request.UserHostAddress;
+
+                        log.CP1 = r2["CP1"] + "";
+                        log.CP2 = r2["CP2"] + "";
+                        log.CP3 = r2["CP3"] + "";
+                        log.CP4 = r2["CP4"] + "";
+                        log.CP5 = r2["CP5"] + "";
+                        log.CP6 = r2["CP6"] + "";
+                        log.CP7 = r2["CP7"] + "";
+                        log.CP8 = r2["CP8"] + "";
+                        log.CP9 = r2["CP9"] + "";
+                        log.CP10 = r2["CP10"] + "";
+                        log.MEMBERID = r2["MemberID"] + "";
+                    }
+                    r2.Close();
+                    cmd2.Dispose();
+                    cn2.Close();
+                    cn2.Dispose();
+
+                }
+
+
+                //LogError("GetLoginDetails", "Made It Here2");
+
+                // Trigger for any auto processing stuff
+
+                // If username is primary developer "LWATSON" then trigger auto processing stuff
+
+                if (Username.ToUpper() == "LWATSON")
+                {
+                    // do the nasty
+
+                    //TryAndSetAllALTsandLONGsinthePOITable();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("GetLoginDetails", ex.Message);
+
+                log.FirstName = ex.Message;
+                log.LastName = ex.Message;
+                log.Organization = ex.Message;
+            }
+
+            //LogError("GetLoginDetails", "Made It Here3");
+
+            return log;
+        }
+
+        public void LogSystemError(string errorUrl, string errorMessage, string stackTrace)
+        {
+            LogError(errorUrl, errorMessage + "\n" + stackTrace);
         }
 
     }
