@@ -531,4 +531,45 @@ namespace CFCSMobile
         public bool BCBANoteRequired = false;
         public bool BANote = false;
     }
+
+    public class AuthServiceForDisplay
+    {
+        public AuthServiceForDisplay(AuthorizedService svc)
+        {
+            TheAuth = svc;
+        }
+
+        public AuthorizedService TheAuth = null;
+
+        public override string ToString()
+        {
+            if (TheAuth == null)
+            {
+                return "Auth Not Defined";
+            }
+            else
+            {
+                return TheAuth.COSTCENTERDESC;
+            }
+        }
+
+    }
+
+    public class SvcForAuth
+    {
+        public string SVCID = "";
+        public string COSTCENTER = "";
+        public string SVCCODE = "";
+        public string SVCDESCRIPTION = "";
+        public string UNITTYPE = "";
+        public string UBNITTYPEDESCRIPTION = "";
+        public string BCBANOTEREQ = "";
+
+        public override string ToString()
+        {
+            return SVCDESCRIPTION;
+        }
+
+    }
+
 }

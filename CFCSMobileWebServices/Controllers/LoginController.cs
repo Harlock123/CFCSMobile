@@ -626,6 +626,147 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
+        [Route("api/Login/GetSvcForAuth")]
+        [HttpGet]
+        public JsonResult<List<AuthorizedService>> GetServiceForAuth()
+        {
+            List<AuthorizedService> result = new List<AuthorizedService>();
+
+            string IDNUM = "";
+
+            try
+            {
+                var req = Request;
+
+                var rhead = req.Headers;
+
+                if (rhead.Contains("IDNUM"))
+                {
+                    IDNUM = rhead.GetValues("IDNUM").First();
+                }
+
+
+                string sql = "SELECT DISTINCT B.mauthid,B.Providerid as 'PID'," +
+                    "coalesce((SELECT TOP 1 SUBPROVIDERNAME FROM TBLPROVIDERSUBPROVIDER A WHERE A.SUBPROVIDERID = B.PROVIDERID)," +
+                    "(SELECT TOP 1 PROVIDERNAME FROM TBLPROVIDERSUBPROVIDER A WHERE A.PROVIDERID = B.PROVIDERID)) as 'PNAME', " +
+                    "B.STARTDATE,B.ENDDATE,B.COSTCENTER,C.SvcDescription as 'COSTCENTERDESC'," +
+                    "B.UNITS,B.DOLLARS,B.ACCEPTED,B.REMAININGUNITS,B.CREATEUSER,D.[DESCRIPTION] as 'FUNDER', " +
+                    "B.AUTHNUMBER, B.CONNECTEDNPI, B.HPW, B.CASEMANAGER, B.LINKEDAUTHNUMBER,B.FUNDER as 'FUNDERID', C.UNITTYPE,C.RelatedSplitCode, B.DSPRATE " +
+                    "FROM TBLMEMBERAUTHORIZEDSERVICES B  " +
+                    "LEFT OUTER JOIN tblLOOKUPSERVICES C ON LTRIM(RTRIM(B.COSTCENTER)) = CONVERT(varchar(5), C.SVCID) " +
+                    "LEFT OUTER JOIN TBLLOOKUPFUNDERS D ON B.FUNDER = D.CODE " +
+                    "WHERE SSN = @SSN AND B.STARTDATE <= GETDATE() AND B.ENDDATE >= GETDATE() " +
+                    "AND B.PROVIDERID IN (SELECT PROVIDERID from tblProviderSubProvider UNION SELECT SUBPROVIDERID FROM tblProviderSubProvider) " +
+                    "ORDER BY B.STARTDATE DESC ,B.ENDDATE DESC";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@SSN", SqlDbType.VarChar).Value = IDNUM;
+                cmd.CommandTimeout = 500;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    AuthorizedService svc = new AuthorizedService();
+
+                    svc.mauthID = r.GetInt64(0);
+                    svc.PROVIDERID = r["PID"] + "";
+                    svc.PROVIDERNAME = r["PNAME"] + "";
+
+                    DateTime d = Convert.ToDateTime(null);
+
+                    if (DateTime.TryParse(r["STARTDATE"] + "", out d))
+                        svc.STARTDATE = d;
+
+                    if (DateTime.TryParse(r["ENDDATE"] + "", out d))
+                        svc.ENDDATE = d;
+
+                    svc.COSTCENTER = r["COSTCENTER"] + "";
+                    svc.COSTCENTERDESC = r["COSTCENTERDESC"] + "";
+
+                    int i = 0;
+
+                    if (int.TryParse(r["UNITS"] + "", out i))
+                        svc.UNITS = i;
+
+                    double dd = 0.0;
+                    if (double.TryParse(r["DOLLARS"] + "", out dd))
+                        svc.DOLLARS = dd;
+
+                    svc.ACCEPTED = r["ACCEPTED"] + "";
+
+                    if (int.TryParse(r["REMAININGUNITS"] + "", out i))
+                        svc.REMAININGUNITS = i;
+
+                    svc.CREATEUSER = r["CREATEUSER"] + "";
+                    svc.FUNDER = r["FUNDER"] + "";
+                    svc.FUNDERID = r["FUNDERID"] + "";
+
+                    svc.AUTHNUMBER = r["AUTHNUMBER"] + "";
+                    svc.CONNECTEDNPI = r["CONNECTEDNPI"] + "";
+
+                    int hpw = 0;
+                    if (int.TryParse(r["HPW"] + "", out hpw))
+                        svc.HPW = hpw;
+
+                    svc.CASEMANAGER = r["CASEMANAGER"] + "";
+                    svc.LINKEDAUTHNUMBER = r["LINKEDAUTHNUMBER"] + "";
+
+                    string utype = r["UNITTYPE"] + "";
+                    int unittype = 0;
+                    if (int.TryParse(utype, out unittype))
+                    {
+                        //if (utype == "01")
+                        //{ unittype = Convert.ToInt32("15"); }
+                        //else if (utype == "02")
+                        //{ unittype = Convert.ToInt32("30"); }
+                        //else if (utype == "03")
+                        //{ unittype = Convert.ToInt32("45"); }
+                        //else if (utype == "04")
+                        //{ unittype = Convert.ToInt32("60"); }
+                        //else if (utype == "05")
+                        //{ unittype = Convert.ToInt32("1"); }
+
+                        double ut = 0;
+                        ut = GetUnitType(utype);
+                        unittype = Convert.ToInt32(ut);
+
+                        svc.UNITTYPE = unittype;
+                    }
+
+                    svc.RelatedSplitCode = r["RelatedSplitCode"] + "";
+
+                    double rate = 0.0;
+                    if (double.TryParse(r["DSPRATE"] + "", out rate))
+                        svc.DSPRATE = rate;
+
+                    result.Add(svc);
+
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetAuthsAvailableForMember", ex.Message);
+
+                AuthorizedService svc = new AuthorizedService();
+
+                svc.PROVIDERNAME = ex.Message;
+
+                svc.COSTCENTERDESC = ex.Message;
+
+                result.Add(svc);
+            }
+
+            return Json(result);
+        }
+
 
         [Route("api/Login/MemberObservers")]
         [HttpGet]
@@ -3199,6 +3340,24 @@ namespace CFCSMobileWebServices.Controllers
         public DateTime UpdateDate;
         public string UpdatedBy = "";
         public string ZipCode = "";
+    }
+
+    public class SvcForAuth
+    {
+        public string SVCID = "";
+        public string COSTCENTER = "";
+        public string SVCCODE = "";
+        public string SVCDESCRIPTION = "";
+        public string UNITTYPE = "";
+        public string UBNITTYPEDESCRIPTION = "";
+        public string BCBANOTEREQ = "";
+
+        // Needed on the UI side
+        //public override string ToString()
+        //{
+        //    return SVCDESCRIPTION;
+        //}
+
     }
 
     public class AuthorizedService

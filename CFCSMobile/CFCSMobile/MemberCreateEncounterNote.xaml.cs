@@ -8,6 +8,10 @@ using CFCSMobile.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using System.Net.Http;
+using Newtonsoft.Json;
+
+
 namespace CFCSMobile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
@@ -28,6 +32,7 @@ namespace CFCSMobile
 
             lstMemberStuff.Children.Add(SelectedMember);
 
+            GetAuths();
         }
 
 
@@ -41,6 +46,46 @@ namespace CFCSMobile
             Application.Current.Properties.Clear();
             Application.Current.MainPage = new Login();
         }
+
+        async void GetAuths()
+        {
+            string URL = Settings.BASEURL;//"";
+            string u = SelectedMember.TheData.SSN;
+
+            //ActWorking.IsVisible = true;
+            //ActWorking.IsRunning = true;
+
+            URL += "/Login/GetAuthsForNow";
+
+            HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
+
+
+            var response = await c.GetStringAsync(URL);
+
+            var theresult = JsonConvert.DeserializeObject<List<AuthorizedService>>(response);
+
+            var TheList = new List<AuthServiceForDisplay>();
+
+            foreach (AuthorizedService s in theresult)
+            {
+
+                AuthServiceForDisplay sd = new AuthServiceForDisplay(s);
+
+                TheList.Add(sd);
+
+            }
+
+            AvailableAuths.ItemsSource = TheList;
+
+            //ActWorking.IsVisible = false;
+            //ActWorking.IsRunning = false;
+
+            //lvMYCASELOAD.ItemsSource = theresult;
+
+        }
+
 
         private async void TheSaveButton_Clicked(object sender, EventArgs e)
         {
