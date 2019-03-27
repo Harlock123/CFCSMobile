@@ -54,7 +54,8 @@
                 
                     <Label Text="Select from available authorizations" FontSize="Small"></Label>
                     <Picker x:Name="AvailableAuths" BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"
-                            Title="Available Authorizations" FontSize="Small">
+                            Title="Available Authorizations" FontSize="Small"
+                            SelectedIndexChanged="AvailableAuths_SelectedIndexChanged">
                     </Picker>
                     
                     <Label Text="Select from applicable services" FontSize="Small"></Label>

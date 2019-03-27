@@ -18,6 +18,7 @@ namespace CFCSMobile
 	public partial class MemberCreateEncounterNote : ContentPage
 	{
         private CFCSMobile.Controls.MemberPlacard SelectedMember = null;
+        private AuthServiceForDisplay TheSelectedAuth = null;
 
         public MemberCreateEncounterNote ()
 		{
@@ -45,6 +46,32 @@ namespace CFCSMobile
         {
             Application.Current.Properties.Clear();
             Application.Current.MainPage = new Login();
+        }
+
+        async void GetService(string SVCID)
+        {
+            string URL = Settings.BASEURL;//"";
+            string u = SVCID;
+
+            //ActWorking.IsVisible = true;
+            //ActWorking.IsRunning = true;
+
+            URL += "/Login/GetSvcForAuth";
+
+            HttpClient c = new HttpClient();
+            c.DefaultRequestHeaders.Add("LOGIN", Settings.USERNAME);
+            c.DefaultRequestHeaders.Add("IDNUM", u);
+
+            var response = await c.GetStringAsync(URL);
+
+            var theresult = JsonConvert.DeserializeObject<SvcForAuth>(response);
+
+            List<SvcForAuth> TheList = new List<SvcForAuth>();
+
+            TheList.Add(theresult);
+
+            AvailableServices.ItemsSource = TheList;
+            AvailableServices.SelectedIndex = 0; // pick thge first and should be the only one
         }
 
         async void GetAuths()
@@ -146,6 +173,13 @@ namespace CFCSMobile
 
         }
 
+        private void AvailableAuths_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TheSelectedAuth = (AuthServiceForDisplay)AvailableAuths.SelectedItem;
 
+            GetService(TheSelectedAuth.TheAuth.COSTCENTER);
+
+
+        }
     }
 }

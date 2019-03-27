@@ -651,7 +651,7 @@ namespace CFCSMobileWebServices.Controllers
                     "tblLOOKUPSERVICES.SvcDescription,tblLOOKUPSERVICES.UnitType," +
                     "tblLOOKUPSERVICES.BCBANOTEREQUIRED,LT0.DESCRIPTON AS 'UnitType_DESCRIPTON' " +
                     "FROM tblLOOKUPSERVICES " +
-                    ":LEFT OUTER JOIN tblLOOKUPUNITS AS LT0 " +
+                    "LEFT OUTER JOIN tblLOOKUPUNITS AS LT0 " +
                     "ON '0' + tblLOOKUPSERVICES.UnitType = LT0.CODE " +
                     "WHERE CONVERT(VARCHAR(5),SVCID) = @IDNUM";
 
