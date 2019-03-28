@@ -39,7 +39,7 @@ namespace CFCSMobile
 
         private void btnBack_Clicked(object sender, EventArgs e)
         {
-            Application.Current.MainPage = new MemberCollateralNotes(SelectedMember);
+            Application.Current.MainPage = new MemberEncounterNotes(SelectedMember);
         }
 
         private void btnLogout_Clicked(object sender, EventArgs e)
