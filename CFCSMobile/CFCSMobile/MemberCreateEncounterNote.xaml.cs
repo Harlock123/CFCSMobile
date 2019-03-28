@@ -179,6 +179,14 @@ namespace CFCSMobile
 
             GetService(TheSelectedAuth.TheAuth.COSTCENTER);
 
+            dtpSD.Date = DateTime.Now;
+            dtpSD.MinimumDate = DateTime.Now;
+            dtpSD.MaximumDate = TheSelectedAuth.TheAuth.ENDDATE;
+
+            //dtpED.MinimumDate = DateTime.Now;
+            //dtpED.MaximumDate = TheSelectedAuth.TheAuth.ENDDATE;
+
+            //lblUnits.Text = "Units (" + TheSelectedAuth.TheAuth.REMAININGUNITS.ToString() + " max)";
 
         }
     }

@@ -54,49 +54,31 @@
                 
                     <Label Text="Select from available authorizations" FontSize="Small"></Label>
                     <Picker x:Name="AvailableAuths" BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"
-                            Title="Available Authorizations" FontSize="Small"
+                            Title="{x:OnPlatform Default='Available Authorizations',Android='Available Authorizations', UWP=''}" FontSize="Small"
                             SelectedIndexChanged="AvailableAuths_SelectedIndexChanged">
                     </Picker>
                     
                     <Label Text="Select from applicable services" FontSize="Small"></Label>
                     <Picker x:Name="AvailableServices" BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"
-                            Title="Available Services" FontSize="Small">
+                            Title="{x:OnPlatform Default='Available Services',Android='Available Services', UWP=''}" FontSize="Small">
                     </Picker>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                         
                         <StackLayout Orientation="Vertical">
-                            <Label Text="Start Date" FontSize="Small"></Label>
-                            <DatePicker x:Name="dtpSD" FontSize="Small"
+                            <Label Text="Start Date" FontSize="Small"></Label>                            
+                            <DatePicker x:Name="dtpSD" FontSize="Small" 
                                         BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"></DatePicker>
                         </StackLayout>
                         
-                        <StackLayout Orientation="Vertical">
+                        <!--<StackLayout Orientation="Vertical">
                             <Label Text="End Date" FontSize="Small"></Label>
                             <DatePicker x:Name="dtpED" FontSize="Small"
                                         BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"></DatePicker>
-                        </StackLayout>
+                        </StackLayout>-->
                         
                         <StackLayout Orientation="Vertical">
-                            <Label Text="Units" FontSize="Small"></Label>
-                            <Picker x:Name="pkUnits" FontSize="Small"
-                                    BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}">
-                                <Picker.Items>
-                                    
-                                    <x:String>1</x:String>
-                                    <x:String>2</x:String>
-                                    <x:String>3</x:String>
-                                    <x:String>4</x:String>
-                                    <x:String>5</x:String>
-                                    <x:String>6</x:String>
-                                    <x:String>7</x:String>
-                                    <x:String>8</x:String>
-                                    <x:String>9</x:String>
-                                    <x:String>10</x:String>
-                                    <x:String>11</x:String>
-                                    <x:String>12</x:String>
-                                    
-                                </Picker.Items>
-                            </Picker>
+                            <Label x:Name="lblUnits" Text="Time in Minutes" FontSize="Small"></Label>
+                            <Entry x:Name="txtMinutes" Placeholder="minutes" />
                         </StackLayout>
                         
                         
@@ -106,7 +88,7 @@
                     
                     <Label Text="Select Direct Service Provider" FontSize="Small"></Label>
                     <Picker x:Name="AvailableDSPs" BackgroundColor="{x:Static base:Settings.EditFieldBackgroundColor}"
-                            Title="Available DSPs" FontSize="Small">
+                            Title="{x:OnPlatform Default='Available DSPs',Android='Available DSPs', UWP=''}" FontSize="Small">
                     </Picker>
                     
                     <Label Text="Enter a notation about this encounter" FontSize="Small"></Label>

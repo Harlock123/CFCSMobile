@@ -7,6 +7,120 @@ namespace CFCSMobileWebServices.Controllers
 {
     #region Extra Classes
 
+    public class MemberEncounter
+    {
+        public long tblMemberEncountersID { get; set; }
+        public string SSN { get; set; }
+        public DateTime EncounterDate { get; set; }
+        public DateTime EncounterStartTime { get; set; }
+        public DateTime EncounterEndTime { get; set; }
+        public string TypeOfServiceDeliverySite { get; set; }
+        public string ServiceDelivered { get; set; }
+        public bool IsGroupService { get; set; }
+        public bool IsIndividualService { get; set; }
+        public string DeliverySiteAddress1 { get; set; }
+        public string DeliverySiteAddress2 { get; set; }
+        public string DeliverySiteAddress3 { get; set; }
+        public string DeliverySiteCity { get; set; }
+        public string DeliverySiteState { get; set; }
+        public string DeliverySiteZipCode { get; set; }
+        public string DeliverySiteCounty { get; set; }
+        public string DeliverySitePhone { get; set; }
+        public bool IsGuardian { get; set; }
+        public bool IsResponsibleParty { get; set; }
+        public string GuardianResponsiblePerson { get; set; }
+        public string GuardianPersonAddress1 { get; set; }
+        public string GuardianPersonAddress2 { get; set; }
+        public string GuardianPersonAddress3 { get; set; }
+        public string GuardianPersonCity { get; set; }
+        public string GuardianPersonState { get; set; }
+        public string GuardianPersonZipCode { get; set; }
+        public string GuardianPersonCounty { get; set; }
+        public string GuardianPersonRelationship { get; set; }
+        public DateTime DateEncounterSigned { get; set; }
+        public string EncounterStatus { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime BilledDate { get; set; }
+        public DateTime PaidDate { get; set; }
+        public string CheckNumber { get; set; }
+        public string AuthNumber { get; set; }
+        public int ProgressNoteID { get; set; }
+        public string NeedsFixingComment { get; set; }
+        public string Notation { get; set; }
+        public long BANoteID { get; set; }
+        public string ACTID { get; set; }
+        public double ChargedAmount { get; set; }
+        public double PaidAmount { get; set; }
+        public DateTime ConsumerBilledDate { get; set; }
+        public DateTime ConsumerPaidDate { get; set; }
+        public string ConsumerCheckNumber { get; set; }
+        public double ConsumerChargedAmount { get; set; }
+        public double ConsumerPaidAmount { get; set; }
+        public bool SUBMITTED { get; set; }
+        public DateTime SUBMITTEDDATE { get; set; }
+        public long ROLLUPID { get; set; }
+        public int BCBAID { get; set; }
+
+
+        public MemberEncounter()
+        {
+            tblMemberEncountersID = 0;
+            SSN = "";
+            EncounterDate = Convert.ToDateTime(null);
+            EncounterStartTime = Convert.ToDateTime(null);
+            EncounterEndTime = Convert.ToDateTime(null);
+            TypeOfServiceDeliverySite = "";
+            ServiceDelivered = "";
+            IsGroupService = false;
+            IsIndividualService = false;
+            DeliverySiteAddress1 = "";
+            DeliverySiteAddress2 = "";
+            DeliverySiteAddress3 = "";
+            DeliverySiteCity = "";
+            DeliverySiteState = "";
+            DeliverySiteZipCode = "";
+            DeliverySiteCounty = "";
+            DeliverySitePhone = "";
+            IsGuardian = false;
+            IsResponsibleParty = false;
+            GuardianResponsiblePerson = "";
+            GuardianPersonAddress1 = "";
+            GuardianPersonAddress2 = "";
+            GuardianPersonAddress3 = "";
+            GuardianPersonCity = "";
+            GuardianPersonState = "";
+            GuardianPersonZipCode = "";
+            GuardianPersonCounty = "";
+            GuardianPersonRelationship = "";
+            DateEncounterSigned = Convert.ToDateTime(null);
+            EncounterStatus = "";
+            CreatedDate = Convert.ToDateTime(null);
+            CreatedBy = "";
+            BilledDate = Convert.ToDateTime(null);
+            PaidDate = Convert.ToDateTime(null);
+            CheckNumber = "";
+            AuthNumber = "";
+            ProgressNoteID = 0;
+            NeedsFixingComment = "";
+            Notation = "";
+            BANoteID = 0;
+            ACTID = "";
+            ChargedAmount = 0.0;
+            PaidAmount = 0.0;
+            ConsumerBilledDate = Convert.ToDateTime(null);
+            ConsumerPaidDate = Convert.ToDateTime(null);
+            ConsumerCheckNumber = "";
+            ConsumerChargedAmount = 0.0;
+            ConsumerPaidAmount = 0.0;
+            SUBMITTED = false;
+            SUBMITTEDDATE = Convert.ToDateTime(null);
+            ROLLUPID = 0;
+            BCBAID = 0;
+        }
+
+    }
+
 
     public class CodedDescriptor
     {
