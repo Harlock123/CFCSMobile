@@ -113,16 +113,49 @@ namespace CFCSMobile
 
         }
 
+        private bool ValidateUI()
+        {
+            bool result = true;
+
+            if (AvailableAuths.SelectedItem == null)
+                result = false;
+
+            if (AvailableServices.SelectedItem == null)
+                result = false;
+
+            if (AvailableDSPs.SelectedItem == null)
+                result = false;
+
+            if (txtMinutes.Text + "" == "")
+                result = false;
+            else
+            {
+                int mins = 0;
+                if (!int.TryParse(txtMinutes.Text, out mins))
+                    result = false;
+            }
+
+            if (txtNotation.Text + "" == "")
+            {
+                result = false;
+            }
+
+
+            return result;
+        }
+
 
         private async void TheSaveButton_Clicked(object sender, EventArgs e)
         {
             // do something here
 
-            //if (!ValiddatedUI())
-            //{
-            //    await DisplayAlert("Big trouble in little china",
-            //        "You must select a Note Type, a Contact Type, a Contact date, and finally enter a comment or narrative about this contact note...", "Understood");
-            //}
+
+
+            if (!ValidateUI())
+            {
+                await DisplayAlert("Big trouble in little china",
+                    "You must select an Authorization, Service, Encounter Date, Number of Minutes spent, and a bit of Narrative for the encounter", "Understood");
+            }
             //else
             //{
 
