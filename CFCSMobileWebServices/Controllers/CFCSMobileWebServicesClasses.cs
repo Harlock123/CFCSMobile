@@ -408,6 +408,17 @@ namespace CFCSMobileWebServices.Controllers
 
     }
 
+    public class MobileSubmittedEncounter
+    {
+        public string WHO = "";
+        public string FORWHO = "";
+        public string AUTH = "";
+        public string SVC = "";
+        public DateTime WHEN;
+        public int MINUTES = 0;
+        public string NARRATIVE = "";
+    }
+
     public class AuthorizedService
     {
         public string ACCEPTED = "";

@@ -71,7 +71,7 @@ namespace CFCSMobile
             TheList.Add(theresult);
 
             AvailableServices.ItemsSource = TheList;
-            AvailableServices.SelectedIndex = 0; // pick thge first and should be the only one
+            AvailableServices.SelectedIndex = 0; // pick the first and should be the only one
         }
 
         async void GetAuths()
@@ -182,6 +182,10 @@ namespace CFCSMobile
             dtpSD.Date = DateTime.Now;
             dtpSD.MinimumDate = DateTime.Now;
             dtpSD.MaximumDate = TheSelectedAuth.TheAuth.ENDDATE;
+
+            AvailableDSPs.Items.Add(Settings.USERNAME);
+            AvailableDSPs.SelectedIndex = 0;
+
 
             //dtpED.MinimumDate = DateTime.Now;
             //dtpED.MaximumDate = TheSelectedAuth.TheAuth.ENDDATE;
