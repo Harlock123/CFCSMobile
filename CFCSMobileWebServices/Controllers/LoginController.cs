@@ -1838,6 +1838,17 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
+        [Route("api/Login/SaveEncounter")]
+        [HttpPost]
+        public JsonResult<Boolean> SaveEncounter([FromBody] MobileSubmittedEncounter payload)
+        {
+            bool result = true;
+
+
+            return Json(result);
+        }
+
+
         [Route("api/Login/SaveNote")]
         [HttpPost]
         public JsonResult<Boolean> SaveNote([FromBody] MemberProgressNotes payload)

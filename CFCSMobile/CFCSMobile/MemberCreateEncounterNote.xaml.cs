@@ -147,63 +147,60 @@ namespace CFCSMobile
 
         private async void TheSaveButton_Clicked(object sender, EventArgs e)
         {
-            // do something here
-
-
-
+            
             if (!ValidateUI())
             {
                 await DisplayAlert("Big trouble in little china",
                     "You must select an Authorization, Service, Encounter Date, Number of Minutes spent, and a bit of Narrative for the encounter", "Understood");
             }
-            //else
-            //{
+            else
+            {
 
-            //    string URL = Settings.BASEURL;//"";
-            //    string u = SelectedMember.TheData.SSN;
+                string URL = Settings.BASEURL;
+                string u = SelectedMember.TheData.SSN;
 
-            //    URL += "/Login/SaveNote";
+                URL += "/Login/SaveEncounter";
 
-            //    MemberProgressNotes mpn = new MemberProgressNotes();
-            //    mpn.SSN = u;
-            //    mpn.AUTHOR = Settings.USERNAME;
-            //    mpn.CONTACTDATE = ContactDate.Date;
-            //    mpn.NOTATION = ContactNarrative.Text;
+                MobileSubmittedEncounter mob = new MobileSubmittedEncounter();
 
-            //    CodedDescriptor c1 = (CodedDescriptor)NoteTypePicker.SelectedItem;
-            //    CodedDescriptor c2 = (CodedDescriptor)ContactTypePicker.SelectedItem;
-
-            //    //mpn.CONTACTTYPEDESCRIPTION = c2.code;
-            //    mpn.NOTECONTACTDESC = c2.code;
-            //    mpn.NOTETYPEDESC = c1.code;
-            //    mpn.mpnID = -1; // Adding a new note
-
-            //    string TheObjectTurnedIntoAString = JsonConvert.SerializeObject(mpn);
-
-            //    HttpClient c = new HttpClient();
-
-            //    var TheContent = new StringContent(TheObjectTurnedIntoAString, Encoding.UTF8, "application/json");
+                mob.WHO = Settings.USERNAME;
+                mob.FORWHO = SelectedMember.TheData.SSN;
 
 
-            //    var response = await c.PostAsync(URL, TheContent);
+                mob.AUTH = TheSelectedAuth.TheAuth.AUTHNUMBER + "";
+                mob.MINUTES = int.Parse(txtMinutes.Text);
 
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        // Yeah we made it
+                mob.WHEN = dtpSD.Date;
 
-            //        await DisplayAlert("Status...", "The Contact was written to the system", "OK");
-            //        Application.Current.MainPage = new MemberCollateralNotes(SelectedMember);
+                mob.NARRATIVE = txtNotation.Text + "";
 
-            //    }
-            //    else
-            //    {
-            //        await DisplayAlert("Status...", "There was a problem in saving The Contact to the system", "OK");
-            //        //Application.Current.MainPage = new MemberCollateralNotes(SelectedMember);
-            //    }
+                SvcForAuth a = (SvcForAuth)AvailableServices.SelectedItem;
 
-            //    //var theresult = JsonConvert.DeserializeObject<Boolean>(response);
-            //}
+                mob.SVC = a.SVCID;
 
+                string TheObjectTurnedIntoAString = JsonConvert.SerializeObject(mob);
+
+                HttpClient c = new HttpClient();
+
+                var TheContent = new StringContent(TheObjectTurnedIntoAString, Encoding.UTF8, "application/json");
+
+                var response = await c.PostAsync(URL, TheContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Yeah we made it
+
+                    await DisplayAlert("Status...", "The Encounter was written to the system", "OK");
+                    Application.Current.MainPage = new MemberEncounterNotes(SelectedMember);
+
+                }
+                else
+                {
+                    await DisplayAlert("Status...", "There was a problem in saving The Encounter to the system", "OK");
+                    //Application.Current.MainPage = new MemberCollateralNotes(SelectedMember);
+                }
+
+            }
         }
 
         private void AvailableAuths_SelectedIndexChanged(object sender, EventArgs e)
