@@ -1844,6 +1844,73 @@ namespace CFCSMobileWebServices.Controllers
         {
             bool result = true;
 
+            try
+            {
+                // First we want to insert the progress note into the record and fetch the ID
+
+                tblMemberProgressNotes pn = new tblMemberProgressNotes(DBCON());
+
+                pn.NOTATION = payload.NARRATIVE;
+                pn.NOTECONTACTTYPE = "02"; // FACE TO FACE
+                pn.NOTETYPE = "13"; // Encounter Note
+                pn.CREATEDATE = ServerDateTime();
+                pn.CONTACTDATE = payload.WHEN;
+                pn.CREATEDBY = payload.WHO;
+                pn.SSN = payload.FORWHO;
+
+                pn.Add();
+
+                MemberAddress madd = GetMemberAddress(payload.WHO);
+                MemberDetailsShort mds = GetCompleteMemberDetails(payload.WHO, payload.WHO + "-Writing Encounter", "MOBILE PLATFORM");
+
+                tblMemberEncounters menc = new tblMemberEncounters(DBCON());
+
+                menc.SSN = payload.FORWHO;
+
+                DateTime d = Convert.ToDateTime(payload.WHEN.ToShortDateString()); // trim off the time if its there
+
+                menc.EncounterDate = d;
+                menc.EncounterStartTime = d;
+                menc.EncounterEndTime = d.AddMinutes((double)payload.MINUTES);
+                menc.TypeOfServiceDeliverySite = "01";
+                menc.DeliverySiteAddress1 = madd.Address1 + "";
+                menc.DeliverySiteAddress2 = madd.Address2 + "";
+                menc.DeliverySiteAddress3 = madd.Address3 + "";
+                menc.DeliverySiteCity = madd.City + "";
+                menc.DeliverySiteCounty = madd.County + "";
+                menc.DeliverySiteState = madd.State + "";
+                menc.DeliverySiteState = mds.Phone1 + "";
+                menc.DeliverySiteZipCode = madd.ZipCode + "";
+                menc.EncounterStatus = "01";
+                menc.IsGuardian = false;
+                menc.IsResponsibleParty = false;
+                menc.Notation = payload.NARRATIVE;
+                menc.ProgressNoteID = (int)pn.mpnID; // we should make this a LONG in the database
+                menc.ChargedAmount = 0;
+                menc.PaidAmount = 0;
+                menc.ConsumerChargedAmount = 0;
+                menc.ConsumerPaidAmount = 0;
+                menc.SUBMITTED = false;
+                menc.BCBAID = 0;
+
+                menc.Add();
+
+                // here we should fetch the auth and decrement units on it based on Payload minutes and Auth Unit Type..
+
+                // cleanup Isle 3
+
+                menc = null;
+                mds = null;
+                madd = null;
+                pn = null;
+
+
+            }
+            catch
+            {
+                result = false;
+
+            }
 
             return Json(result);
         }
