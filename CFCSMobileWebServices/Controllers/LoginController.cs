@@ -1861,7 +1861,7 @@ namespace CFCSMobileWebServices.Controllers
                 pn.Add();
 
                 MemberAddress madd = GetMemberAddress(payload.WHO);
-                MemberDetailsShort mds = GetCompleteMemberDetails(payload.WHO, payload.WHO + "-Writing Encounter", "MOBILE PLATFORM");
+                MemberDetailsShort mds = GetCompleteMemberDetails(payload.FORWHO, payload.WHO + "-Writing Encounter", "MOBILE PLATFORM");
 
                 tblMemberEncounters menc = new tblMemberEncounters(DBCON());
 
@@ -1869,6 +1869,10 @@ namespace CFCSMobileWebServices.Controllers
 
                 DateTime d = Convert.ToDateTime(payload.WHEN.ToShortDateString()); // trim off the time if its there
 
+                Console.WriteLine(payload.AUTH);
+
+                menc.ServiceDelivered = payload.SVC;
+                menc.AuthNumber = payload.AUTH;
                 menc.EncounterDate = d;
                 menc.EncounterStartTime = d;
                 menc.EncounterEndTime = d.AddMinutes((double)payload.MINUTES);
@@ -1882,6 +1886,8 @@ namespace CFCSMobileWebServices.Controllers
                 menc.DeliverySiteState = mds.Phone1 + "";
                 menc.DeliverySiteZipCode = madd.ZipCode + "";
                 menc.EncounterStatus = "01";
+                menc.IsGroupService = false;
+                menc.IsIndividualService = true;
                 menc.IsGuardian = false;
                 menc.IsResponsibleParty = false;
                 menc.Notation = payload.NARRATIVE;
@@ -1892,6 +1898,8 @@ namespace CFCSMobileWebServices.Controllers
                 menc.ConsumerPaidAmount = 0;
                 menc.SUBMITTED = false;
                 menc.BCBAID = 0;
+                menc.CreatedBy = payload.WHO;
+                menc.CreatedDate = ServerDateTime();
 
                 menc.Add();
 
