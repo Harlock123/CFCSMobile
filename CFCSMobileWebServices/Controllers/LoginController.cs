@@ -1860,7 +1860,7 @@ namespace CFCSMobileWebServices.Controllers
 
                 pn.Add();
 
-                MemberAddress madd = GetMemberAddress(payload.WHO);
+                //MemberAddress madd = GetMemberAddress(payload.WHO);
                 MemberDetailsShort mds = GetCompleteMemberDetails(payload.FORWHO, payload.WHO + "-Writing Encounter", "MOBILE PLATFORM");
 
                 tblMemberEncounters menc = new tblMemberEncounters(DBCON());
@@ -1877,14 +1877,14 @@ namespace CFCSMobileWebServices.Controllers
                 menc.EncounterStartTime = d;
                 menc.EncounterEndTime = d.AddMinutes((double)payload.MINUTES);
                 menc.TypeOfServiceDeliverySite = "01";
-                menc.DeliverySiteAddress1 = madd.Address1 + "";
-                menc.DeliverySiteAddress2 = madd.Address2 + "";
-                menc.DeliverySiteAddress3 = madd.Address3 + "";
-                menc.DeliverySiteCity = madd.City + "";
-                menc.DeliverySiteCounty = madd.County + "";
-                menc.DeliverySiteState = madd.State + "";
-                menc.DeliverySiteState = mds.Phone1 + "";
-                menc.DeliverySiteZipCode = madd.ZipCode + "";
+                menc.DeliverySiteAddress1 = mds.memberAddress.Address1 + "";
+                menc.DeliverySiteAddress2 = mds.memberAddress.Address2 + "";
+                menc.DeliverySiteAddress3 = mds.memberAddress.Address3 + "";
+                menc.DeliverySiteCity = mds.memberAddress.City + "";
+                menc.DeliverySiteCounty = mds.memberAddress.County + "";
+                menc.DeliverySiteState = mds.memberAddress.State + "";
+                menc.DeliverySitePhone = mds.Phone1 + "";
+                menc.DeliverySiteZipCode = mds.memberAddress.ZipCode + "";
                 menc.EncounterStatus = "01";
                 menc.IsGroupService = false;
                 menc.IsIndividualService = true;
@@ -1909,7 +1909,7 @@ namespace CFCSMobileWebServices.Controllers
 
                 menc = null;
                 mds = null;
-                madd = null;
+                //madd = null;
                 pn = null;
 
 
