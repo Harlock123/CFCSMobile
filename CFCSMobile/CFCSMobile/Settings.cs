@@ -14,8 +14,9 @@ namespace CFCSMobile
 
         //static public string BASEURL = "http://192.168.1.191/CFCSMobileWebServices/api"; // Machine At Home
 
-        static public string BASEURL = "http://172.16.176.128/CFCSMobileWebServices/api"; // VM Running on New Mac in NAT Mode
+        //static public string BASEURL = "http://172.16.176.128/CFCSMobileWebServices/api"; // VM Running on New Mac in NAT Mode
 
+        static public string BASEURL = "http://192.168.12.55/CFCSMobileWebServices/api"; // MSI Big Boy In office wired lan
 
         //static public string BASEURL = "http://192.168.1.9/CFCSMobileWebServices/api"; // VM In Scrantoin Office At Home
 
