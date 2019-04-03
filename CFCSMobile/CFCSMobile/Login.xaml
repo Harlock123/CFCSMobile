@@ -32,7 +32,8 @@
 
                 <Image Grid.Row="0" VerticalOptions="Start" 
                        HorizontalOptions="Center" HeightRequest="150"
-                       Source="{OnPlatform Default='CFCSMainLogo.png',UWP='Assets/CFCSMainLogo.png'}">
+                       
+                        Source="{OnPlatform Default='LCTLogo.png',UWP='Assets/LCTLogo.png'}">
                
                 </Image>
 
