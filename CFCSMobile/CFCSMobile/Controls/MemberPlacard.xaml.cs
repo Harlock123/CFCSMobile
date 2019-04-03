@@ -34,6 +34,13 @@ namespace CFCSMobile.Controls
 
             MemberAddress.ValueText = m.Address1 + " " + m.Address2.Trim() + " " + m.City.Trim() + " " + m.State + "  " + m.ZipCode; 
 
+            if (MemberAddress.ValueText.Length > 37)
+            {
+                // reduce thge fontsize to help long addresses fit better
+
+                MemberAddress.ValueFontSize = MemberAddress.ValueFontSize - 2;
+            }
+
             if (s.Gender == "M")
             {
                 switch (Device.RuntimePlatform)
