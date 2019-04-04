@@ -40,7 +40,7 @@
 
                 <Button WidthRequest="40" HeightRequest="40" 
                             HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
-                            Image="{x:OnPlatform Default='system-log-out.png',Android='systemlogout.png', UWP='Assets/system-log-out.png'}"
+                            Image="{x:OnPlatform Default='exit.png',Android='exit.png', UWP='Assets/exit.png'}"
                             Clicked="Handle_Clicked"  x:Name="btnLogout" >
 
                 </Button>

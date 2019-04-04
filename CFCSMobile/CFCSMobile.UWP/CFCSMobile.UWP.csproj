@@ -103,7 +103,10 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\back.png" />
     <Content Include="Assets\CFCSMainLogo.png" />
+    <Content Include="Assets\envelope.png" />
+    <Content Include="Assets\exit.png" />
     <Content Include="Assets\FeMale.png" />
     <Content Include="Assets\goprevious.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
@@ -112,6 +115,7 @@
     <Content Include="Assets\LCTLogo.png" />
     <Content Include="Assets\mail-message-new.png" />
     <Content Include="Assets\Male.png" />
+    <Content Include="Assets\motd.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SmallTile.scale-400.png" />
