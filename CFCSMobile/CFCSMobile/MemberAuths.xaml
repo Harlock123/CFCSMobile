@@ -44,7 +44,7 @@
                 <StackLayout x:Name="lstMemberStuff" HeightRequest="60" Orientation="Vertical"></StackLayout>
             </ScrollView>
             
-            <ScrollView Grid.Row="2" x:Name="svAuths" Orientation="Vertical">
+            <ScrollView Grid.Row="2" x:Name="svAuths" Orientation="Vertical" Padding="5,0,5,0">
                 <StackLayout x:Name="lstAuths" Orientation="Vertical"></StackLayout>
             </ScrollView>
 
