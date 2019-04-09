@@ -22,6 +22,9 @@
     <local:LabledDateControl x:Name="MessageType" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
                              TitleText="Message Type:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
+    <local:LabledDateControl x:Name="MessageSource" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                             TitleText="Message Source:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
     <local:LabledDateControl x:Name="CreateDate" Grid.Row="2" Grid.Column="0" TitleText="Created:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
