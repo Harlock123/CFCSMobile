@@ -156,5 +156,10 @@ namespace CFCSMobile
         {
             DisplayAlert("Message of the day", Settings.MOTD, "OK");
         }
+
+        private void Handle_MESSAGESClicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new UserMessages();
+        }
     }
 }

@@ -582,4 +582,24 @@ namespace CFCSMobile
         public int MINUTES = 0;
         public string NARRATIVE = "";
     }
+
+    public class UserMessage
+    {
+        public string BODY { get; set; }
+        public string BODYSHORT { get; set; }
+        public DateTime DATECREATED { get; set; }
+        public string DESTINATION { get; set; }
+        public string MESSAGETYPE { get; set; }
+        public long msgID { get; set; }
+        public string READSTATUS { get; set; }
+        public string SOURCE { get; set; }
+        public List<Client> SELECTEDCLIENTS { get; set; }
+    }
+
+    public class Client
+    {
+        public int ID { get; set; }
+        public string UserName { get; set; }
+    }
+
 }

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      x:Class="CFCSMobile.Controls.UserMESSAGE"
+      xmlns:local="clr-namespace:CFCSMobile.Controls"
+      HorizontalOptions="FillAndExpand"
+      x:Name="theGrid">
+    
+    <Grid.RowDefinitions>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="12"/>
+        <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <local:LabledDateControl x:Name="MessageType" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                             TitleText="Message Type:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <local:LabledDateControl x:Name="CreateDate" Grid.Row="2" Grid.Column="0" TitleText="Created:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <local:LabledDateControl x:Name="LBL" Grid.Row="3" Grid.Column="0" TitleText="Message Detail:" 
+                             TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+
+    <Editor x:Name="NarrativeShort" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" 
+            InputTransparent="True" BackgroundColor="White" AutoSize="TextChanges" Margin="4,0,4,4"></Editor>
+
+
+</Grid>

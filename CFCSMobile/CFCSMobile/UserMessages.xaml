@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CFCSMobile.UserMessages"
+             xmlns:local="clr-namespace:CFCSMobile" 
+             xmlns:controls="clr-namespace:CFCSMobile.Controls"
+             BackgroundColor="Beige">
+    <Grid>
+        <Grid.Margin>
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS" Value="0,30,0,0" />
+                <!--<On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />-->
+            </OnPlatform>
+        </Grid.Margin>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Grid.Row="0" Orientation="Horizontal">
+
+            <Label x:Name="lblWelcome" Text="Welcome {fname} {lname}" 
+                       VerticalOptions="Center"
+                       TextColor="Black"
+                       FontSize="Small" FontAttributes="Italic"></Label>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+
+                <ImageButton WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                            Source="{x:OnPlatform Default='back.png',Android='back.png', UWP='Assets/back.png'}"
+                            Clicked="Handle_MOTDClicked"  x:Name="btnMOTD" IsVisible="True" BackgroundColor="Beige" >
+                </ImageButton>
+
+                <ImageButton WidthRequest="40" HeightRequest="40" 
+                            HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                            Source="{x:OnPlatform Default='exit.png',Android='exit.png', UWP='Assets/exit.png'}"
+                            Clicked="Handle_Clicked"  x:Name="btnLogout" BackgroundColor="Beige" >
+
+                </ImageButton>
+            </StackLayout>
+
+
+        </StackLayout>
+
+
+        <ScrollView Grid.Row="2" x:Name="svMYMESSAGES" Orientation="Vertical">
+            <StackLayout x:Name="lstMyCaseLoad" Orientation="Vertical"></StackLayout>
+        </ScrollView>
+
+
+
+    </Grid>
+
+</ContentPage>

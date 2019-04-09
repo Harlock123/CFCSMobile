@@ -2272,8 +2272,99 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
+        [Route("api/Login/GetMessagesFor")]
+        [HttpGet]
+        public JsonResult<List<UserMessage>> GetMessagesForLogin()
+        {
 
+            string uname = "UNSET";
 
+            var req = Request;
+
+            var rhead = req.Headers;
+
+            if (rhead.Contains("LOGIN"))
+            {
+                uname = rhead.GetValues("LOGIN").First();
+            }
+
+            List<UserMessage> result = GetMessagesFor(uname, false);
+            
+            return Json(result);
+
+        }
+
+        public List<UserMessage> GetMessagesFor(string uname, bool readalready)
+        {
+            List<UserMessage> result = new List<UserMessage>();
+
+            try
+            {
+                string sql = "SELECT MSGID,SOURCE,DATECREATED,MESSAGETYPE,(SELECT DESCRIPTION FROM TBLLOOKUPMESSAGETYPE WHERE MESSAGETYPE = CODE) as 'TYPEDESC'," +
+                    "READSTATUS,BODY FROM TBLUSERMESSAGES WHERE DESTINATION = @DEST ";
+
+                if (!readalready)
+                {
+                    sql += "AND READSTATUS = 'N' ";
+                }
+                else
+                {
+                    sql += "AND READSTATUS <> 'N' ";
+                }
+
+                sql += "ORDER BY DATECREATED DESC";
+
+                SqlConnection cn = new SqlConnection(DBCON());
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.CommandTimeout = 500;
+                cmd.Parameters.Add("@DEST", SqlDbType.VarChar, 20).Value = uname;
+
+                SqlDataReader r = cmd.ExecuteReader();
+
+                while (r.Read())
+                {
+                    UserMessage m = new UserMessage();
+
+                    m.msgID = r.GetInt64(0);
+                    m.SOURCE = r[1] + "";
+                    m.DESTINATION = uname;
+                    m.MESSAGETYPE = r[4] + "";
+
+                    DateTime d = Convert.ToDateTime(null);
+
+                    if (DateTime.TryParse(r[2] + "", out d))
+                        m.DATECREATED = d;
+
+                    m.READSTATUS = r[5] + "";
+
+                    m.BODY = r[6] + "";
+                    m.BODYSHORT = Elipsis(m.BODY, 200);
+
+                    result.Add(m);
+                }
+                r.Close();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogError("GetMessagesFor", ex.Message);
+
+                UserMessage m = new UserMessage();
+                m.BODY = ex.Message;
+                m.MESSAGETYPE = "01"; // System Message
+
+                result.Add(m);
+            }
+
+            //Thread.Sleep(TimeSpan.FromSeconds(400));
+
+            return result;
+        }
+        
         public MemberAddress GetMemberAddress(string IDNUM)
         {
             MemberAddress mem = new MemberAddress();

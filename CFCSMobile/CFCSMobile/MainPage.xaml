@@ -34,7 +34,12 @@
 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
 
-                    <ImageButton WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                <ImageButton WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
+                            Source="{x:OnPlatform Default='envelope.png',Android='envelope.png', UWP='Assets/envelope.png'}"
+                            Clicked="Handle_MESSAGESClicked"  x:Name="btnMESSAGES" IsVisible="True" BackgroundColor="Beige" >
+                </ImageButton>
+
+                <ImageButton WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Padding="{x:OnPlatform Default='0,0,0,0'}" BorderWidth="0"
                             Source="{x:OnPlatform Default='motd.png',Android='motd.png', UWP='Assets/motd.png'}"
                             Clicked="Handle_MOTDClicked"  x:Name="btnMOTD" IsVisible="True" BackgroundColor="Beige" >
                     </ImageButton>
