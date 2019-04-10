@@ -196,4 +196,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\envelope.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\FlagAsRead.png" />
+  </ItemGroup>
 </Project>

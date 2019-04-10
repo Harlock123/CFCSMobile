@@ -36,5 +36,10 @@ namespace CFCSMobile.Controls
             else
                 theGrid.BackgroundColor = Settings.OddColor;
         }
+
+        private void ImageButton_Clicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Setting MSG as read ID:" + TheMSG.msgID.ToString());
+        }
     }
 }

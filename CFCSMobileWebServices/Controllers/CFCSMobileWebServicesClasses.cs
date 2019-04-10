@@ -2642,6 +2642,501 @@ namespace CFCSMobileWebServices.Controllers
         #endregion
     }
 
+    public partial class tblUserMessages : INotifyPropertyChanged
+    {
+
+        #region Declarations
+        string _classDatabaseConnectionString = "";
+        string _bulkinsertPath = "";
+
+        SqlConnection _cn = new SqlConnection();
+        SqlCommand _cmd = new SqlCommand();
+
+        // Backing Variables for Properties
+        long _msgID = 0;
+        string _SOURCE = "";
+        string _DESTINATION = "";
+        DateTime _DATECREATED = Convert.ToDateTime(null);
+        string _MESSAGETYPE = "";
+        string _READSTATUS = "";
+        string _BODY = "";
+
+        #endregion
+
+        #region Properties
+
+        public string classDatabaseConnectionString
+        {
+            get { return _classDatabaseConnectionString; }
+            set { _classDatabaseConnectionString = value; }
+        }
+
+        public string bulkinsertPath
+        {
+            get { return _bulkinsertPath; }
+            set { _bulkinsertPath = value; }
+        }
+
+        public long msgID
+        {
+            get { return _msgID; }
+            set
+            {
+                _msgID = value;
+                RaisePropertyChanged("msgID");
+            }
+        }
+
+        public string SOURCE
+        {
+            get { return _SOURCE; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _SOURCE = value.Substring(0, 20); }
+                else
+                {
+                    _SOURCE = value;
+                    RaisePropertyChanged("SOURCE");
+                }
+            }
+        }
+
+        public string DESTINATION
+        {
+            get { return _DESTINATION; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _DESTINATION = value.Substring(0, 20); }
+                else
+                {
+                    _DESTINATION = value;
+                    RaisePropertyChanged("DESTINATION");
+                }
+            }
+        }
+
+        public DateTime DATECREATED
+        {
+            get { return _DATECREATED; }
+            set
+            {
+                _DATECREATED = value;
+                RaisePropertyChanged("DATECREATED");
+            }
+        }
+
+        public string MESSAGETYPE
+        {
+            get { return _MESSAGETYPE; }
+            set
+            {
+                if (value != null && value.Length > 5)
+                { _MESSAGETYPE = value.Substring(0, 5); }
+                else
+                {
+                    _MESSAGETYPE = value;
+                    RaisePropertyChanged("MESSAGETYPE");
+                }
+            }
+        }
+
+        public string READSTATUS
+        {
+            get { return _READSTATUS; }
+            set
+            {
+                if (value != null && value.Length > 1)
+                { _READSTATUS = value.Substring(0, 1); }
+                else
+                {
+                    _READSTATUS = value;
+                    RaisePropertyChanged("READSTATUS");
+                }
+            }
+        }
+
+        public string BODY
+        {
+            get { return _BODY; }
+            set
+            {
+                if (value != null && value.Length > 2000)
+                { _BODY = value.Substring(0, 2000); }
+                else
+                {
+                    _BODY = value;
+                    RaisePropertyChanged("BODY");
+                }
+            }
+        }
+
+
+        #endregion
+
+        #region Implement INotifyPropertyChanged 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        #region Constructor
+
+        public tblUserMessages()
+        {
+            // Constructor code goes here.
+            Initialize();
+        }
+
+        public tblUserMessages(string DSN)
+        {
+            // Constructor code goes here.
+            Initialize();
+            classDatabaseConnectionString = DSN;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Initialize()
+        {
+            _msgID = 0;
+            _SOURCE = "";
+            _DESTINATION = "";
+            _DATECREATED = Convert.ToDateTime(null);
+            _MESSAGETYPE = "";
+            _READSTATUS = "";
+            _BODY = "";
+        }
+
+        public void CopyFields(SqlDataReader r)
+        {
+            try
+            {
+                if (!Convert.IsDBNull(r["msgID"]))
+                {
+                    _msgID = Convert.ToInt64(r["msgID"]);
+                }
+                if (!Convert.IsDBNull(r["SOURCE"]))
+                {
+                    _SOURCE = r["SOURCE"] + "";
+                }
+                if (!Convert.IsDBNull(r["DESTINATION"]))
+                {
+                    _DESTINATION = r["DESTINATION"] + "";
+                }
+                if (!Convert.IsDBNull(r["DATECREATED"]))
+                {
+                    _DATECREATED = Convert.ToDateTime(r["DATECREATED"]);
+                }
+                if (!Convert.IsDBNull(r["MESSAGETYPE"]))
+                {
+                    _MESSAGETYPE = r["MESSAGETYPE"] + "";
+                }
+                if (!Convert.IsDBNull(r["READSTATUS"]))
+                {
+                    _READSTATUS = r["READSTATUS"] + "";
+                }
+                if (!Convert.IsDBNull(r["BODY"]))
+                {
+                    _BODY = r["BODY"] + "";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.CopyFields " + ex.ToString()));
+            }
+        }
+
+        public bool RecExists(System.Int64 idx)
+        {
+            bool Result = false;
+            try
+            {
+                string sql = "Select count(*) from tblUserMessages WHERE msgID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    if (r.GetInt32(0) > 0)
+                    {
+                        Result = true;
+                    }
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.RecExists " + ex.ToString()));
+            }
+
+            return Result;
+        }
+
+        public void Add()
+        {
+            try
+            {
+                string sql = GetParameterSQL();
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                if (this._SOURCE == null || this._SOURCE == "" || this._SOURCE == string.Empty)
+                {
+                    cmd.Parameters.Add("@SOURCE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SOURCE", System.Data.SqlDbType.VarChar).Value = this._SOURCE;
+                }
+                if (this._DESTINATION == null || this._DESTINATION == "" || this._DESTINATION == string.Empty)
+                {
+                    cmd.Parameters.Add("@DESTINATION", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@DESTINATION", System.Data.SqlDbType.VarChar).Value = this._DESTINATION;
+                }
+                cmd.Parameters.Add("@DATECREATED", System.Data.SqlDbType.DateTime).Value = getDateOrNull(this._DATECREATED);
+                if (this._MESSAGETYPE == null || this._MESSAGETYPE == "" || this._MESSAGETYPE == string.Empty)
+                {
+                    cmd.Parameters.Add("@MESSAGETYPE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@MESSAGETYPE", System.Data.SqlDbType.VarChar).Value = this._MESSAGETYPE;
+                }
+                if (this._READSTATUS == null || this._READSTATUS == "" || this._READSTATUS == string.Empty)
+                {
+                    cmd.Parameters.Add("@READSTATUS", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@READSTATUS", System.Data.SqlDbType.VarChar).Value = this._READSTATUS;
+                }
+                if (this._BODY == null || this._BODY == "" || this._BODY == string.Empty)
+                {
+                    cmd.Parameters.Add("@BODY", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@BODY", System.Data.SqlDbType.VarChar).Value = this._BODY;
+                }
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                if (msgID < 1)
+                {
+                    SqlCommand cmd2 = new SqlCommand("SELECT @@IDENTITY", cn);
+                    System.Int64 ii = Convert.ToInt64(cmd2.ExecuteScalar());
+                    cmd2.Cancel();
+                    cmd2.Dispose();
+                    _msgID = ii;
+                }
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.Add " + ex.ToString()));
+            }
+        }
+
+        public void Update()
+        {
+            try
+            {
+                string sql = GetParameterSQL();
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                if (this._SOURCE == null || this._SOURCE == "" || this._SOURCE == string.Empty)
+                {
+                    cmd.Parameters.Add("@SOURCE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SOURCE", System.Data.SqlDbType.VarChar).Value = this._SOURCE;
+                }
+                if (this._DESTINATION == null || this._DESTINATION == "" || this._DESTINATION == string.Empty)
+                {
+                    cmd.Parameters.Add("@DESTINATION", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@DESTINATION", System.Data.SqlDbType.VarChar).Value = this._DESTINATION;
+                }
+                cmd.Parameters.Add("@DATECREATED", System.Data.SqlDbType.DateTime).Value = getDateOrNull(this._DATECREATED);
+                if (this._MESSAGETYPE == null || this._MESSAGETYPE == "" || this._MESSAGETYPE == string.Empty)
+                {
+                    cmd.Parameters.Add("@MESSAGETYPE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@MESSAGETYPE", System.Data.SqlDbType.VarChar).Value = this._MESSAGETYPE;
+                }
+                if (this._READSTATUS == null || this._READSTATUS == "" || this._READSTATUS == string.Empty)
+                {
+                    cmd.Parameters.Add("@READSTATUS", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@READSTATUS", System.Data.SqlDbType.VarChar).Value = this._READSTATUS;
+                }
+                if (this._BODY == null || this._BODY == "" || this._BODY == string.Empty)
+                {
+                    cmd.Parameters.Add("@BODY", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@BODY", System.Data.SqlDbType.VarChar).Value = this._BODY;
+                }
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                if (msgID < 1)
+                {
+                    SqlCommand cmd2 = new SqlCommand("SELECT @@IDENTITY", cn);
+                    System.Int64 ii = Convert.ToInt64(cmd2.ExecuteScalar());
+                    cmd2.Cancel();
+                    cmd2.Dispose();
+                    _msgID = ii;
+                }
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.Update " + ex.ToString()));
+            }
+        }
+
+        public void Delete()
+        {
+            try
+            {
+                string sql = "Delete from tblUserMessages WHERE msgID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = this._msgID;
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.Delete " + ex.ToString()));
+            }
+        }
+
+        public void Read(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblUserMessages WHERE msgID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    this.CopyFields(r);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.Read " + ex.ToString()));
+            }
+        }
+
+        public DataSet ReadAsDataSet(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblUserMessages WHERE msgID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "tblUserMessages");
+                da.Dispose();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblUserMessages.ReadAsDataSet " + ex.ToString()));
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private string GetParameterSQL()
+        {
+            string sql = "";
+            if (_msgID < 1)
+            {
+                sql = "INSERT INTO tblUserMessages";
+                sql += "(";
+                sql += "[SOURCE], [DESTINATION], [DATECREATED], [MESSAGETYPE], [READSTATUS], [BODY])";
+                sql += " VALUES (";
+                sql += "@SOURCE,@DESTINATION,@DATECREATED,@MESSAGETYPE,@READSTATUS,@BODY)";
+            }
+            else
+            {
+                sql = "UPDATE tblUserMessages SET ";
+                sql += "[SOURCE] = @SOURCE, [DESTINATION] = @DESTINATION, [DATECREATED] = @DATECREATED,";
+                sql += "[MESSAGETYPE] = @MESSAGETYPE, [READSTATUS] = @READSTATUS, [BODY] = @BODY";
+                sql += "";
+                sql += " WHERE msgID = " + _msgID.ToString();
+            }
+            return sql;
+        }
+
+        private object getDateOrNull(DateTime d)
+        {
+            if (d == Convert.ToDateTime(null))
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return d;
+            }
+        }
+        #endregion
+    }
+
+
 
 
     #endregion

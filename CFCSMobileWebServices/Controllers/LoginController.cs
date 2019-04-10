@@ -1980,6 +1980,37 @@ namespace CFCSMobileWebServices.Controllers
         }
 
 
+        [Route("api/Login/FlagMessageAsRead")]
+        [HttpPost]
+        public JsonResult<bool> FlagMessageAsRead([FromBody] string MessageID)
+        {
+            bool result = true;
+
+            try
+            {
+                tblUserMessages theMSG = new tblUserMessages(DBCON());
+
+                long msgid = 0;
+
+                if (long.TryParse(MessageID, out msgid))
+                {
+
+                    theMSG.Read(msgid);
+                    theMSG.READSTATUS = "Y";
+                    theMSG.Update();
+
+                }
+
+                theMSG = null;
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return Json(result);
+        }
+
         [Route("api/Login/SaveNote")]
         [HttpPost]
         public JsonResult<Boolean> SaveNote([FromBody] MemberProgressNotes payload)
