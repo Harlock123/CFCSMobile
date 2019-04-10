@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using System.ComponentModel;
 
 namespace CFCSMobileWebServices.Controllers
 {
@@ -1056,6 +1059,1590 @@ namespace CFCSMobileWebServices.Controllers
         public int ID { get; set; }
         public string UserName { get; set; }
     }
+
+    public partial class tblMemberAuthorizedServices : INotifyPropertyChanged
+    {
+
+        #region Declarations
+        string _classDatabaseConnectionString = "";
+        string _bulkinsertPath = "";
+
+        SqlConnection _cn = new SqlConnection();
+        SqlCommand _cmd = new SqlCommand();
+
+        // Backing Variables for Properties
+        long _mauthID = 0;
+        string _SSN = "";
+        string _PROVIDERID = "";
+        DateTime _STARTDATE = Convert.ToDateTime(null);
+        DateTime _ENDDATE = Convert.ToDateTime(null);
+        string _COSTCENTER = "";
+        int _UNITS = 0;
+        double _DOLLARS = 0.0;
+        DateTime _CREATEDATE = Convert.ToDateTime(null);
+        string _CREATEUSER = "";
+        string _ACCEPTED = "";
+        int _REMAININGUNITS = 0;
+        string _FUNDER = "";
+        string _PROGRAM = "";
+        string _AUTHNUMBER = "";
+        string _CONNECTEDNPI = "";
+        int _HPW = 0;
+        string _CASEMANAGER = "";
+
+        #endregion
+
+        #region Properties
+
+        public string classDatabaseConnectionString
+        {
+            get { return _classDatabaseConnectionString; }
+            set { _classDatabaseConnectionString = value; }
+        }
+
+        public string bulkinsertPath
+        {
+            get { return _bulkinsertPath; }
+            set { _bulkinsertPath = value; }
+        }
+
+        public long mauthID
+        {
+            get { return _mauthID; }
+            set
+            {
+                _mauthID = value;
+                RaisePropertyChanged("mauthID");
+            }
+        }
+
+        public string SSN
+        {
+            get { return _SSN; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _SSN = value.Substring(0, 20); }
+                else
+                {
+                    _SSN = value;
+                    RaisePropertyChanged("SSN");
+                }
+            }
+        }
+
+        public string PROVIDERID
+        {
+            get { return _PROVIDERID; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _PROVIDERID = value.Substring(0, 20); }
+                else
+                {
+                    _PROVIDERID = value;
+                    RaisePropertyChanged("PROVIDERID");
+                }
+            }
+        }
+
+        public DateTime STARTDATE
+        {
+            get { return _STARTDATE; }
+            set
+            {
+                _STARTDATE = value;
+                RaisePropertyChanged("STARTDATE");
+            }
+        }
+
+        public DateTime ENDDATE
+        {
+            get { return _ENDDATE; }
+            set
+            {
+                _ENDDATE = value;
+                RaisePropertyChanged("ENDDATE");
+            }
+        }
+
+        public string COSTCENTER
+        {
+            get { return _COSTCENTER; }
+            set
+            {
+                if (value != null && value.Length > 5)
+                { _COSTCENTER = value.Substring(0, 5); }
+                else
+                {
+                    _COSTCENTER = value;
+                    RaisePropertyChanged("COSTCENTER");
+                }
+            }
+        }
+
+        public int UNITS
+        {
+            get { return _UNITS; }
+            set
+            {
+                _UNITS = value;
+                RaisePropertyChanged("UNITS");
+            }
+        }
+
+        public double DOLLARS
+        {
+            get { return _DOLLARS; }
+            set
+            {
+                _DOLLARS = value;
+                RaisePropertyChanged("DOLLARS");
+            }
+        }
+
+        public DateTime CREATEDATE
+        {
+            get { return _CREATEDATE; }
+            set
+            {
+                _CREATEDATE = value;
+                RaisePropertyChanged("CREATEDATE");
+            }
+        }
+
+        public string CREATEUSER
+        {
+            get { return _CREATEUSER; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _CREATEUSER = value.Substring(0, 20); }
+                else
+                {
+                    _CREATEUSER = value;
+                    RaisePropertyChanged("CREATEUSER");
+                }
+            }
+        }
+
+        public string ACCEPTED
+        {
+            get { return _ACCEPTED; }
+            set
+            {
+                if (value != null && value.Length > 1)
+                { _ACCEPTED = value.Substring(0, 1); }
+                else
+                {
+                    _ACCEPTED = value;
+                    RaisePropertyChanged("ACCEPTED");
+                }
+            }
+        }
+
+        public int REMAININGUNITS
+        {
+            get { return _REMAININGUNITS; }
+            set
+            {
+                _REMAININGUNITS = value;
+                RaisePropertyChanged("REMAININGUNITS");
+            }
+        }
+
+        public string FUNDER
+        {
+            get { return _FUNDER; }
+            set
+            {
+                if (value != null && value.Length > 5)
+                { _FUNDER = value.Substring(0, 5); }
+                else
+                {
+                    _FUNDER = value;
+                    RaisePropertyChanged("FUNDER");
+                }
+            }
+        }
+
+        public string PROGRAM
+        {
+            get { return _PROGRAM; }
+            set
+            {
+                if (value != null && value.Length > 5)
+                { _PROGRAM = value.Substring(0, 5); }
+                else
+                {
+                    _PROGRAM = value;
+                    RaisePropertyChanged("PROGRAM");
+                }
+            }
+        }
+
+        public string AUTHNUMBER
+        {
+            get { return _AUTHNUMBER; }
+            set
+            {
+                if (value != null && value.Length > 50)
+                { _AUTHNUMBER = value.Substring(0, 50); }
+                else
+                {
+                    _AUTHNUMBER = value;
+                    RaisePropertyChanged("AUTHNUMBER");
+                }
+            }
+        }
+
+        public string CONNECTEDNPI
+        {
+            get { return _CONNECTEDNPI; }
+            set
+            {
+                if (value != null && value.Length > 50)
+                { _CONNECTEDNPI = value.Substring(0, 50); }
+                else
+                {
+                    _CONNECTEDNPI = value;
+                    RaisePropertyChanged("CONNECTEDNPI");
+                }
+            }
+        }
+
+        public int HPW
+        {
+            get { return _HPW; }
+            set
+            {
+                _HPW = value;
+                RaisePropertyChanged("HPW");
+            }
+        }
+
+        public string CASEMANAGER
+        {
+            get { return _CASEMANAGER; }
+            set
+            {
+                if (value != null && value.Length > 20)
+                { _CASEMANAGER = value.Substring(0, 20); }
+                else
+                {
+                    _CASEMANAGER = value;
+                    RaisePropertyChanged("CASEMANAGER");
+                }
+            }
+        }
+
+
+        #endregion
+
+        #region Implement INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        #region Constructor
+
+        public tblMemberAuthorizedServices()
+        {
+            // Constructor code goes here.
+            Initialize();
+        }
+
+        public tblMemberAuthorizedServices(string DSN)
+        {
+            // Constructor code goes here.
+            Initialize();
+            classDatabaseConnectionString = DSN;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Initialize()
+        {
+            _mauthID = 0;
+            _SSN = "";
+            _PROVIDERID = "";
+            _STARTDATE = Convert.ToDateTime(null);
+            _ENDDATE = Convert.ToDateTime(null);
+            _COSTCENTER = "";
+            _UNITS = 0;
+            _DOLLARS = 0.0;
+            _CREATEDATE = Convert.ToDateTime(null);
+            _CREATEUSER = "";
+            _ACCEPTED = "";
+            _REMAININGUNITS = 0;
+            _FUNDER = "";
+            _PROGRAM = "";
+            _AUTHNUMBER = "";
+            _CONNECTEDNPI = "";
+            _HPW = 0;
+            _CASEMANAGER = "";
+        }
+
+        public void CopyFields(SqlDataReader r)
+        {
+            try
+            {
+                if (!Convert.IsDBNull(r["mauthID"]))
+                {
+                    _mauthID = Convert.ToInt64(r["mauthID"]);
+                }
+                if (!Convert.IsDBNull(r["SSN"]))
+                {
+                    _SSN = r["SSN"] + "";
+                }
+                if (!Convert.IsDBNull(r["PROVIDERID"]))
+                {
+                    _PROVIDERID = r["PROVIDERID"] + "";
+                }
+                if (!Convert.IsDBNull(r["STARTDATE"]))
+                {
+                    _STARTDATE = Convert.ToDateTime(r["STARTDATE"]);
+                }
+                if (!Convert.IsDBNull(r["ENDDATE"]))
+                {
+                    _ENDDATE = Convert.ToDateTime(r["ENDDATE"]);
+                }
+                if (!Convert.IsDBNull(r["COSTCENTER"]))
+                {
+                    _COSTCENTER = r["COSTCENTER"] + "";
+                }
+                if (!Convert.IsDBNull(r["UNITS"]))
+                {
+                    _UNITS = Convert.ToInt32(r["UNITS"]);
+                }
+                if (!Convert.IsDBNull(r["DOLLARS"]))
+                {
+                    _DOLLARS = Convert.ToDouble(r["DOLLARS"]);
+                }
+                if (!Convert.IsDBNull(r["CREATEDATE"]))
+                {
+                    _CREATEDATE = Convert.ToDateTime(r["CREATEDATE"]);
+                }
+                if (!Convert.IsDBNull(r["CREATEUSER"]))
+                {
+                    _CREATEUSER = r["CREATEUSER"] + "";
+                }
+                if (!Convert.IsDBNull(r["ACCEPTED"]))
+                {
+                    _ACCEPTED = r["ACCEPTED"] + "";
+                }
+                if (!Convert.IsDBNull(r["REMAININGUNITS"]))
+                {
+                    _REMAININGUNITS = Convert.ToInt32(r["REMAININGUNITS"]);
+                }
+                if (!Convert.IsDBNull(r["FUNDER"]))
+                {
+                    _FUNDER = r["FUNDER"] + "";
+                }
+                if (!Convert.IsDBNull(r["PROGRAM"]))
+                {
+                    _PROGRAM = r["PROGRAM"] + "";
+                }
+                if (!Convert.IsDBNull(r["AUTHNUMBER"]))
+                {
+                    _AUTHNUMBER = r["AUTHNUMBER"] + "";
+                }
+                if (!Convert.IsDBNull(r["CONNECTEDNPI"]))
+                {
+                    _CONNECTEDNPI = r["CONNECTEDNPI"] + "";
+                }
+                if (!Convert.IsDBNull(r["HPW"]))
+                {
+                    _HPW = Convert.ToInt32(r["HPW"]);
+                }
+                if (!Convert.IsDBNull(r["CASEMANAGER"]))
+                {
+                    _CASEMANAGER = r["CASEMANAGER"] + "";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.CopyFields " + ex.ToString()));
+            }
+        }
+
+        public void Add()
+        {
+            try
+            {
+                string sql = GetParameterSQL();
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                if (this._SSN == null || this._SSN == "" || this._SSN == string.Empty)
+                {
+                    cmd.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SSN", System.Data.SqlDbType.VarChar).Value = this._SSN;
+                }
+                if (this._PROVIDERID == null || this._PROVIDERID == "" || this._PROVIDERID == string.Empty)
+                {
+                    cmd.Parameters.Add("@PROVIDERID", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@PROVIDERID", System.Data.SqlDbType.VarChar).Value = this._PROVIDERID;
+                }
+                cmd.Parameters.Add("@STARTDATE", System.Data.SqlDbType.DateTime).Value = getDateOrNull(this._STARTDATE);
+                cmd.Parameters.Add("@ENDDATE", System.Data.SqlDbType.DateTime).Value = getDateOrNull(this._ENDDATE);
+                if (this._COSTCENTER == null || this._COSTCENTER == "" || this._COSTCENTER == string.Empty)
+                {
+                    cmd.Parameters.Add("@COSTCENTER", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@COSTCENTER", System.Data.SqlDbType.VarChar).Value = this._COSTCENTER;
+                }
+                cmd.Parameters.Add("@UNITS", System.Data.SqlDbType.Int).Value = this._UNITS;
+                cmd.Parameters.Add("@DOLLARS", System.Data.SqlDbType.Money).Value = this._DOLLARS;
+                cmd.Parameters.Add("@CREATEDATE", System.Data.SqlDbType.DateTime).Value = getDateOrNull(this._CREATEDATE);
+                if (this._CREATEUSER == null || this._CREATEUSER == "" || this._CREATEUSER == string.Empty)
+                {
+                    cmd.Parameters.Add("@CREATEUSER", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CREATEUSER", System.Data.SqlDbType.VarChar).Value = this._CREATEUSER;
+                }
+                if (this._ACCEPTED == null || this._ACCEPTED == "" || this._ACCEPTED == string.Empty)
+                {
+                    cmd.Parameters.Add("@ACCEPTED", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@ACCEPTED", System.Data.SqlDbType.VarChar).Value = this._ACCEPTED;
+                }
+                cmd.Parameters.Add("@REMAININGUNITS", System.Data.SqlDbType.Int).Value = this._REMAININGUNITS;
+                if (this._FUNDER == null || this._FUNDER == "" || this._FUNDER == string.Empty)
+                {
+                    cmd.Parameters.Add("@FUNDER", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@FUNDER", System.Data.SqlDbType.VarChar).Value = this._FUNDER;
+                }
+                if (this._PROGRAM == null || this._PROGRAM == "" || this._PROGRAM == string.Empty)
+                {
+                    cmd.Parameters.Add("@PROGRAM", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@PROGRAM", System.Data.SqlDbType.VarChar).Value = this._PROGRAM;
+                }
+                if (this._AUTHNUMBER == null || this._AUTHNUMBER == "" || this._AUTHNUMBER == string.Empty)
+                {
+                    cmd.Parameters.Add("@AUTHNUMBER", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@AUTHNUMBER", System.Data.SqlDbType.VarChar).Value = this._AUTHNUMBER;
+                }
+                if (this._CONNECTEDNPI == null || this._CONNECTEDNPI == "" || this._CONNECTEDNPI == string.Empty)
+                {
+                    cmd.Parameters.Add("@CONNECTEDNPI", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CONNECTEDNPI", System.Data.SqlDbType.VarChar).Value = this._CONNECTEDNPI;
+                }
+                cmd.Parameters.Add("@HPW", System.Data.SqlDbType.Int).Value = this._HPW;
+                if (this._CASEMANAGER == null || this._CASEMANAGER == "" || this._CASEMANAGER == string.Empty)
+                {
+                    cmd.Parameters.Add("@CASEMANAGER", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CASEMANAGER", System.Data.SqlDbType.VarChar).Value = this._CASEMANAGER;
+                }
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                if (mauthID < 1)
+                {
+                    SqlCommand cmd2 = new SqlCommand("SELECT @@IDENTITY", cn);
+                    System.Int64 ii = Convert.ToInt64(cmd2.ExecuteScalar());
+                    cmd2.Cancel();
+                    cmd2.Dispose();
+                    _mauthID = ii;
+                }
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.Add " + ex.ToString()));
+            }
+        }
+
+        public void Update()
+        {
+            try
+            {
+                Add();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.Update " + ex.ToString()));
+            }
+        }
+
+        public void Delete()
+        {
+            try
+            {
+                string sql = "Delete from tblMemberAuthorizedServices WHERE mauthID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = this._mauthID;
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.Delete " + ex.ToString()));
+            }
+        }
+
+        public void Read(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblMemberAuthorizedServices WHERE mauthID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    this.CopyFields(r);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.Read " + ex.ToString()));
+            }
+        }
+
+        public DataSet ReadAsDataSet(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblMemberAuthorizedServices WHERE mauthID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "tblMemberAuthorizedServices");
+                da.Dispose();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.ReadAsDataSet " + ex.ToString()));
+            }
+        }
+
+        public void Read(string AuthNumber)
+        {
+            try
+            {
+                string sql = "Select * from tblMemberAuthorizedServices WHERE AUTHNUMBER = @AuthNumber";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@AuthNumber", System.Data.SqlDbType.VarChar).Value = AuthNumber;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    this.CopyFields(r);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.Read " + ex.ToString()));
+            }
+        }
+
+        public DataSet ReadAsDataSet(string AuthNumber)
+        {
+            try
+            {
+                string sql = "Select * from tblMemberAuthorizedServices WHERE AuthNumber = @AuthNumber";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@AuthNumber", System.Data.SqlDbType.VarChar).Value = AuthNumber;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "tblMemberAuthorizedServices");
+                da.Dispose();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblMemberAuthorizedServices.ReadAsDataSet " + ex.ToString()));
+            }
+        }
+        #endregion
+
+        #region Private Methods
+
+        private string GetParameterSQL()
+        {
+            string sql = "";
+            if (_mauthID < 1)
+            {
+                sql = "INSERT INTO tblMemberAuthorizedServices";
+                sql += "(";
+                sql += "[SSN], [PROVIDERID], [STARTDATE], [ENDDATE], [COSTCENTER], [UNITS], [DOLLARS],";
+                sql += "[CREATEDATE], [CREATEUSER], [ACCEPTED], [REMAININGUNITS], [FUNDER], [PROGRAM],";
+                sql += "[AUTHNUMBER], [CONNECTEDNPI], [HPW], [CASEMANAGER])";
+                sql += "VALUES (";
+                sql += "@SSN,@PROVIDERID,@STARTDATE,@ENDDATE,@COSTCENTER,@UNITS,@DOLLARS,@CREATEDATE,";
+                sql += "@CREATEUSER,@ACCEPTED,@REMAININGUNITS,@FUNDER,@PROGRAM,@AUTHNUMBER,@CONNECTEDNPI,";
+                sql += "@HPW,@CASEMANAGER)";
+            }
+            else
+            {
+                sql = "UPDATE tblMemberAuthorizedServices SET ";
+                sql += "[SSN] = @SSN, [PROVIDERID] = @PROVIDERID, [STARTDATE] = @STARTDATE, [ENDDATE] = @ENDDATE,";
+                sql += "[COSTCENTER] = @COSTCENTER, [UNITS] = @UNITS, [DOLLARS] = @DOLLARS, [CREATEDATE] = @CREATEDATE,";
+                sql += "[CREATEUSER] = @CREATEUSER, [ACCEPTED] = @ACCEPTED, [REMAININGUNITS] = @REMAININGUNITS,";
+                sql += "[FUNDER] = @FUNDER, [PROGRAM] = @PROGRAM, [AUTHNUMBER] = @AUTHNUMBER, [CONNECTEDNPI] = @CONNECTEDNPI,";
+                sql += "[HPW] = @HPW, [CASEMANAGER] = @CASEMANAGER";
+                sql += " WHERE mauthID = " + _mauthID.ToString();
+            }
+            return sql;
+        }
+
+        private object getDateOrNull(DateTime d)
+        {
+            if (d == Convert.ToDateTime(null))
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return d;
+            }
+        }
+        #endregion
+    }
+
+    public partial class tblLOOKUPSERVICES : INotifyPropertyChanged
+    {
+
+        #region Declarations
+        string _classDatabaseConnectionString = "";
+        string _bulkinsertPath = "";
+
+        SqlConnection _cn = new SqlConnection();
+        SqlCommand _cmd = new SqlCommand();
+
+        // Backing Variables for Properties
+        long _SvcID = 0;
+        string _Funder = "";
+        string _CostCenter = "";
+        string _SvcCode = "";
+        string _SvcDescription = "";
+        string _UnitType = "";
+        double _CostPerUnit = 0.0;
+        string _ACTIVE = "";
+        string _AUTHREQ = "";
+        string _COPAY = "";
+        string _Modifier1 = "";
+        string _Modifier2 = "";
+        string _Modifier3 = "";
+        string _Modifier4 = "";
+        int _AUTOUNIT = 0;
+        int _ROUNDRULE = 0;
+        string _RelatedSplitCode = "";
+        bool _BCBANOTEREQUIRED = false;
+
+        #endregion
+
+        #region Properties
+
+        public string classDatabaseConnectionString
+        {
+            get { return _classDatabaseConnectionString; }
+            set { _classDatabaseConnectionString = value; }
+        }
+
+        public string bulkinsertPath
+        {
+            get { return _bulkinsertPath; }
+            set { _bulkinsertPath = value; }
+        }
+
+        public long SvcID
+        {
+            get { return _SvcID; }
+            set
+            {
+                _SvcID = value;
+                RaisePropertyChanged("SvcID");
+            }
+        }
+
+        public string Funder
+        {
+            get { return _Funder; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _Funder = value.Substring(0, 10); }
+                else
+                {
+                    _Funder = value;
+                    RaisePropertyChanged("Funder");
+                }
+            }
+        }
+
+        public string CostCenter
+        {
+            get { return _CostCenter; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _CostCenter = value.Substring(0, 10); }
+                else
+                {
+                    _CostCenter = value;
+                    RaisePropertyChanged("CostCenter");
+                }
+            }
+        }
+
+        public string SvcCode
+        {
+            get { return _SvcCode; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _SvcCode = value.Substring(0, 10); }
+                else
+                {
+                    _SvcCode = value;
+                    RaisePropertyChanged("SvcCode");
+                }
+            }
+        }
+
+        public string SvcDescription
+        {
+            get { return _SvcDescription; }
+            set
+            {
+                if (value != null && value.Length > 100)
+                { _SvcDescription = value.Substring(0, 100); }
+                else
+                {
+                    _SvcDescription = value;
+                    RaisePropertyChanged("SvcDescription");
+                }
+            }
+        }
+
+        public string UnitType
+        {
+            get { return _UnitType; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _UnitType = value.Substring(0, 10); }
+                else
+                {
+                    _UnitType = value;
+                    RaisePropertyChanged("UnitType");
+                }
+            }
+        }
+
+        public double CostPerUnit
+        {
+            get { return _CostPerUnit; }
+            set
+            {
+                _CostPerUnit = value;
+                RaisePropertyChanged("CostPerUnit");
+            }
+        }
+
+        public string ACTIVE
+        {
+            get { return _ACTIVE; }
+            set
+            {
+                if (value != null && value.Length > 1)
+                { _ACTIVE = value.Substring(0, 1); }
+                else
+                {
+                    _ACTIVE = value;
+                    RaisePropertyChanged("ACTIVE");
+                }
+            }
+        }
+
+        public string AUTHREQ
+        {
+            get { return _AUTHREQ; }
+            set
+            {
+                if (value != null && value.Length > 1)
+                { _AUTHREQ = value.Substring(0, 1); }
+                else
+                {
+                    _AUTHREQ = value;
+                    RaisePropertyChanged("AUTHREQ");
+                }
+            }
+        }
+
+        public string COPAY
+        {
+            get { return _COPAY; }
+            set
+            {
+                if (value != null && value.Length > 1)
+                { _COPAY = value.Substring(0, 1); }
+                else
+                {
+                    _COPAY = value;
+                    RaisePropertyChanged("COPAY");
+                }
+            }
+        }
+
+        public string Modifier1
+        {
+            get { return _Modifier1; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _Modifier1 = value.Substring(0, 10); }
+                else
+                {
+                    _Modifier1 = value;
+                    RaisePropertyChanged("Modifier1");
+                }
+            }
+        }
+
+        public string Modifier2
+        {
+            get { return _Modifier2; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _Modifier2 = value.Substring(0, 10); }
+                else
+                {
+                    _Modifier2 = value;
+                    RaisePropertyChanged("Modifier2");
+                }
+            }
+        }
+
+        public string Modifier3
+        {
+            get { return _Modifier3; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _Modifier3 = value.Substring(0, 10); }
+                else
+                {
+                    _Modifier3 = value;
+                    RaisePropertyChanged("Modifier3");
+                }
+            }
+        }
+
+        public string Modifier4
+        {
+            get { return _Modifier4; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _Modifier4 = value.Substring(0, 10); }
+                else
+                {
+                    _Modifier4 = value;
+                    RaisePropertyChanged("Modifier4");
+                }
+            }
+        }
+
+        public int AUTOUNIT
+        {
+            get { return _AUTOUNIT; }
+            set
+            {
+                _AUTOUNIT = value;
+                RaisePropertyChanged("AUTOUNIT");
+            }
+        }
+
+        public int ROUNDRULE
+        {
+            get { return _ROUNDRULE; }
+            set
+            {
+                _ROUNDRULE = value;
+                RaisePropertyChanged("ROUNDRULE");
+            }
+        }
+
+        public string RelatedSplitCode
+        {
+            get { return _RelatedSplitCode; }
+            set
+            {
+                if (value != null && value.Length > 10)
+                { _RelatedSplitCode = value.Substring(0, 10); }
+                else
+                {
+                    _RelatedSplitCode = value;
+                    RaisePropertyChanged("RelatedSplitCode");
+                }
+            }
+        }
+
+        public bool BCBANOTEREQUIRED
+        {
+            get { return _BCBANOTEREQUIRED; }
+            set
+            {
+                _BCBANOTEREQUIRED = value;
+                RaisePropertyChanged("BCBANOTEREQUIRED");
+            }
+        }
+
+
+        #endregion
+
+        #region Implement INotifyPropertyChanged 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        #region Constructor
+
+        public tblLOOKUPSERVICES()
+        {
+            // Constructor code goes here.
+            Initialize();
+        }
+
+        public tblLOOKUPSERVICES(string DSN)
+        {
+            // Constructor code goes here.
+            Initialize();
+            classDatabaseConnectionString = DSN;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Initialize()
+        {
+            _SvcID = 0;
+            _Funder = "";
+            _CostCenter = "";
+            _SvcCode = "";
+            _SvcDescription = "";
+            _UnitType = "";
+            _CostPerUnit = 0.0;
+            _ACTIVE = "";
+            _AUTHREQ = "";
+            _COPAY = "";
+            _Modifier1 = "";
+            _Modifier2 = "";
+            _Modifier3 = "";
+            _Modifier4 = "";
+            _AUTOUNIT = 0;
+            _ROUNDRULE = 0;
+            _RelatedSplitCode = "";
+            _BCBANOTEREQUIRED = false;
+        }
+
+        public void CopyFields(SqlDataReader r)
+        {
+            try
+            {
+                if (!Convert.IsDBNull(r["SvcID"]))
+                {
+                    _SvcID = Convert.ToInt64(r["SvcID"]);
+                }
+                if (!Convert.IsDBNull(r["Funder"]))
+                {
+                    _Funder = r["Funder"] + "";
+                }
+                if (!Convert.IsDBNull(r["CostCenter"]))
+                {
+                    _CostCenter = r["CostCenter"] + "";
+                }
+                if (!Convert.IsDBNull(r["SvcCode"]))
+                {
+                    _SvcCode = r["SvcCode"] + "";
+                }
+                if (!Convert.IsDBNull(r["SvcDescription"]))
+                {
+                    _SvcDescription = r["SvcDescription"] + "";
+                }
+                if (!Convert.IsDBNull(r["UnitType"]))
+                {
+                    _UnitType = r["UnitType"] + "";
+                }
+                if (!Convert.IsDBNull(r["CostPerUnit"]))
+                {
+                    _CostPerUnit = Convert.ToDouble(r["CostPerUnit"]);
+                }
+                if (!Convert.IsDBNull(r["ACTIVE"]))
+                {
+                    _ACTIVE = r["ACTIVE"] + "";
+                }
+                if (!Convert.IsDBNull(r["AUTHREQ"]))
+                {
+                    _AUTHREQ = r["AUTHREQ"] + "";
+                }
+                if (!Convert.IsDBNull(r["COPAY"]))
+                {
+                    _COPAY = r["COPAY"] + "";
+                }
+                if (!Convert.IsDBNull(r["Modifier1"]))
+                {
+                    _Modifier1 = r["Modifier1"] + "";
+                }
+                if (!Convert.IsDBNull(r["Modifier2"]))
+                {
+                    _Modifier2 = r["Modifier2"] + "";
+                }
+                if (!Convert.IsDBNull(r["Modifier3"]))
+                {
+                    _Modifier3 = r["Modifier3"] + "";
+                }
+                if (!Convert.IsDBNull(r["Modifier4"]))
+                {
+                    _Modifier4 = r["Modifier4"] + "";
+                }
+                if (!Convert.IsDBNull(r["AUTOUNIT"]))
+                {
+                    _AUTOUNIT = Convert.ToInt32(r["AUTOUNIT"]);
+                }
+                if (!Convert.IsDBNull(r["ROUNDRULE"]))
+                {
+                    _ROUNDRULE = Convert.ToInt32(r["ROUNDRULE"]);
+                }
+                if (!Convert.IsDBNull(r["RelatedSplitCode"]))
+                {
+                    _RelatedSplitCode = r["RelatedSplitCode"] + "";
+                }
+                if (!Convert.IsDBNull(r["BCBANOTEREQUIRED"]))
+                {
+                    _BCBANOTEREQUIRED = Convert.ToBoolean(r["BCBANOTEREQUIRED"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.CopyFields " + ex.ToString()));
+            }
+        }
+
+        public bool RecExists(System.Int64 idx)
+        {
+            bool Result = false;
+            try
+            {
+                string sql = "Select count(*) from tblLOOKUPSERVICES WHERE SvcID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    if (r.GetInt32(0) > 0)
+                    {
+                        Result = true;
+                    }
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.RecExists " + ex.ToString()));
+            }
+
+            return Result;
+        }
+
+        public void Add()
+        {
+            try
+            {
+                string sql = GetParameterSQL();
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                if (this._Funder == null || this._Funder == "" || this._Funder == string.Empty)
+                {
+                    cmd.Parameters.Add("@Funder", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Funder", System.Data.SqlDbType.VarChar).Value = this._Funder;
+                }
+                if (this._CostCenter == null || this._CostCenter == "" || this._CostCenter == string.Empty)
+                {
+                    cmd.Parameters.Add("@CostCenter", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CostCenter", System.Data.SqlDbType.VarChar).Value = this._CostCenter;
+                }
+                if (this._SvcCode == null || this._SvcCode == "" || this._SvcCode == string.Empty)
+                {
+                    cmd.Parameters.Add("@SvcCode", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SvcCode", System.Data.SqlDbType.VarChar).Value = this._SvcCode;
+                }
+                if (this._SvcDescription == null || this._SvcDescription == "" || this._SvcDescription == string.Empty)
+                {
+                    cmd.Parameters.Add("@SvcDescription", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SvcDescription", System.Data.SqlDbType.VarChar).Value = this._SvcDescription;
+                }
+                if (this._UnitType == null || this._UnitType == "" || this._UnitType == string.Empty)
+                {
+                    cmd.Parameters.Add("@UnitType", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@UnitType", System.Data.SqlDbType.VarChar).Value = this._UnitType;
+                }
+                cmd.Parameters.Add("@CostPerUnit", System.Data.SqlDbType.Money).Value = this._CostPerUnit;
+                if (this._ACTIVE == null || this._ACTIVE == "" || this._ACTIVE == string.Empty)
+                {
+                    cmd.Parameters.Add("@ACTIVE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@ACTIVE", System.Data.SqlDbType.VarChar).Value = this._ACTIVE;
+                }
+                if (this._AUTHREQ == null || this._AUTHREQ == "" || this._AUTHREQ == string.Empty)
+                {
+                    cmd.Parameters.Add("@AUTHREQ", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@AUTHREQ", System.Data.SqlDbType.VarChar).Value = this._AUTHREQ;
+                }
+                if (this._COPAY == null || this._COPAY == "" || this._COPAY == string.Empty)
+                {
+                    cmd.Parameters.Add("@COPAY", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@COPAY", System.Data.SqlDbType.VarChar).Value = this._COPAY;
+                }
+                if (this._Modifier1 == null || this._Modifier1 == "" || this._Modifier1 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier1", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier1", System.Data.SqlDbType.VarChar).Value = this._Modifier1;
+                }
+                if (this._Modifier2 == null || this._Modifier2 == "" || this._Modifier2 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier2", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier2", System.Data.SqlDbType.VarChar).Value = this._Modifier2;
+                }
+                if (this._Modifier3 == null || this._Modifier3 == "" || this._Modifier3 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier3", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier3", System.Data.SqlDbType.VarChar).Value = this._Modifier3;
+                }
+                if (this._Modifier4 == null || this._Modifier4 == "" || this._Modifier4 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier4", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier4", System.Data.SqlDbType.VarChar).Value = this._Modifier4;
+                }
+                cmd.Parameters.Add("@AUTOUNIT", System.Data.SqlDbType.Int).Value = this._AUTOUNIT;
+                cmd.Parameters.Add("@ROUNDRULE", System.Data.SqlDbType.Int).Value = this._ROUNDRULE;
+                if (this._RelatedSplitCode == null || this._RelatedSplitCode == "" || this._RelatedSplitCode == string.Empty)
+                {
+                    cmd.Parameters.Add("@RelatedSplitCode", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@RelatedSplitCode", System.Data.SqlDbType.VarChar).Value = this._RelatedSplitCode;
+                }
+                cmd.Parameters.Add("@BCBANOTEREQUIRED", System.Data.SqlDbType.Bit).Value = this._BCBANOTEREQUIRED;
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                if (SvcID < 1)
+                {
+                    SqlCommand cmd2 = new SqlCommand("SELECT @@IDENTITY", cn);
+                    System.Int64 ii = Convert.ToInt64(cmd2.ExecuteScalar());
+                    cmd2.Cancel();
+                    cmd2.Dispose();
+                    _SvcID = ii;
+                }
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.Add " + ex.ToString()));
+            }
+        }
+
+        public void Update()
+        {
+            try
+            {
+                string sql = GetParameterSQL();
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                if (this._Funder == null || this._Funder == "" || this._Funder == string.Empty)
+                {
+                    cmd.Parameters.Add("@Funder", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Funder", System.Data.SqlDbType.VarChar).Value = this._Funder;
+                }
+                if (this._CostCenter == null || this._CostCenter == "" || this._CostCenter == string.Empty)
+                {
+                    cmd.Parameters.Add("@CostCenter", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CostCenter", System.Data.SqlDbType.VarChar).Value = this._CostCenter;
+                }
+                if (this._SvcCode == null || this._SvcCode == "" || this._SvcCode == string.Empty)
+                {
+                    cmd.Parameters.Add("@SvcCode", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SvcCode", System.Data.SqlDbType.VarChar).Value = this._SvcCode;
+                }
+                if (this._SvcDescription == null || this._SvcDescription == "" || this._SvcDescription == string.Empty)
+                {
+                    cmd.Parameters.Add("@SvcDescription", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@SvcDescription", System.Data.SqlDbType.VarChar).Value = this._SvcDescription;
+                }
+                if (this._UnitType == null || this._UnitType == "" || this._UnitType == string.Empty)
+                {
+                    cmd.Parameters.Add("@UnitType", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@UnitType", System.Data.SqlDbType.VarChar).Value = this._UnitType;
+                }
+                cmd.Parameters.Add("@CostPerUnit", System.Data.SqlDbType.Money).Value = this._CostPerUnit;
+                if (this._ACTIVE == null || this._ACTIVE == "" || this._ACTIVE == string.Empty)
+                {
+                    cmd.Parameters.Add("@ACTIVE", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@ACTIVE", System.Data.SqlDbType.VarChar).Value = this._ACTIVE;
+                }
+                if (this._AUTHREQ == null || this._AUTHREQ == "" || this._AUTHREQ == string.Empty)
+                {
+                    cmd.Parameters.Add("@AUTHREQ", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@AUTHREQ", System.Data.SqlDbType.VarChar).Value = this._AUTHREQ;
+                }
+                if (this._COPAY == null || this._COPAY == "" || this._COPAY == string.Empty)
+                {
+                    cmd.Parameters.Add("@COPAY", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@COPAY", System.Data.SqlDbType.VarChar).Value = this._COPAY;
+                }
+                if (this._Modifier1 == null || this._Modifier1 == "" || this._Modifier1 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier1", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier1", System.Data.SqlDbType.VarChar).Value = this._Modifier1;
+                }
+                if (this._Modifier2 == null || this._Modifier2 == "" || this._Modifier2 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier2", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier2", System.Data.SqlDbType.VarChar).Value = this._Modifier2;
+                }
+                if (this._Modifier3 == null || this._Modifier3 == "" || this._Modifier3 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier3", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier3", System.Data.SqlDbType.VarChar).Value = this._Modifier3;
+                }
+                if (this._Modifier4 == null || this._Modifier4 == "" || this._Modifier4 == string.Empty)
+                {
+                    cmd.Parameters.Add("@Modifier4", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Modifier4", System.Data.SqlDbType.VarChar).Value = this._Modifier4;
+                }
+                cmd.Parameters.Add("@AUTOUNIT", System.Data.SqlDbType.Int).Value = this._AUTOUNIT;
+                cmd.Parameters.Add("@ROUNDRULE", System.Data.SqlDbType.Int).Value = this._ROUNDRULE;
+                if (this._RelatedSplitCode == null || this._RelatedSplitCode == "" || this._RelatedSplitCode == string.Empty)
+                {
+                    cmd.Parameters.Add("@RelatedSplitCode", System.Data.SqlDbType.VarChar).Value = DBNull.Value;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@RelatedSplitCode", System.Data.SqlDbType.VarChar).Value = this._RelatedSplitCode;
+                }
+                cmd.Parameters.Add("@BCBANOTEREQUIRED", System.Data.SqlDbType.Bit).Value = this._BCBANOTEREQUIRED;
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                if (SvcID < 1)
+                {
+                    SqlCommand cmd2 = new SqlCommand("SELECT @@IDENTITY", cn);
+                    System.Int64 ii = Convert.ToInt64(cmd2.ExecuteScalar());
+                    cmd2.Cancel();
+                    cmd2.Dispose();
+                    _SvcID = ii;
+                }
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.Update " + ex.ToString()));
+            }
+        }
+
+        public void Delete()
+        {
+            try
+            {
+                string sql = "Delete from tblLOOKUPSERVICES WHERE SvcID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = this._SvcID;
+                cmd.ExecuteNonQuery();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.Delete " + ex.ToString()));
+            }
+        }
+
+        public void Read(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblLOOKUPSERVICES WHERE SvcID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    this.CopyFields(r);
+                }
+                r.Close();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.Read " + ex.ToString()));
+            }
+        }
+
+        public void Read(string idx)
+        {
+            try
+            {
+                System.Int64 theidx = -1;
+
+                if (long.TryParse(idx, out theidx))
+                {
+                    Read(theidx);
+                }
+                else
+                {
+                    Initialize();
+                }
+
+            }
+            catch
+            {
+                Initialize();
+
+            }
+        }
+
+        public DataSet ReadAsDataSet(System.Int64 idx)
+        {
+            try
+            {
+                string sql = "Select * from tblLOOKUPSERVICES WHERE SvcID = @ID";
+                SqlConnection cn = new SqlConnection(_classDatabaseConnectionString);
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.BigInt).Value = idx;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "tblLOOKUPSERVICES");
+                da.Dispose();
+                cmd.Cancel();
+                cmd.Dispose();
+                cn.Close();
+                cn.Dispose();
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("tblLOOKUPSERVICES.ReadAsDataSet " + ex.ToString()));
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private string GetParameterSQL()
+        {
+            string sql = "";
+            if (_SvcID < 1)
+            {
+                sql = "INSERT INTO tblLOOKUPSERVICES";
+                sql += "(";
+                sql += "[Funder], [CostCenter], [SvcCode], [SvcDescription], [UnitType], [CostPerUnit],";
+                sql += "[ACTIVE], [AUTHREQ], [COPAY], [Modifier1], [Modifier2], [Modifier3], [Modifier4],";
+                sql += "[AUTOUNIT], [ROUNDRULE], [RelatedSplitCode], [BCBANOTEREQUIRED])";
+                sql += " VALUES (";
+                sql += "@Funder,@CostCenter,@SvcCode,@SvcDescription,@UnitType,@CostPerUnit,@ACTIVE,";
+                sql += "@AUTHREQ,@COPAY,@Modifier1,@Modifier2,@Modifier3,@Modifier4,@AUTOUNIT,@ROUNDRULE,";
+                sql += "@RelatedSplitCode,@BCBANOTEREQUIRED)";
+            }
+            else
+            {
+                sql = "UPDATE tblLOOKUPSERVICES SET ";
+                sql += "[Funder] = @Funder, [CostCenter] = @CostCenter, [SvcCode] = @SvcCode, [SvcDescription] = @SvcDescription,";
+                sql += "[UnitType] = @UnitType, [CostPerUnit] = @CostPerUnit, [ACTIVE] = @ACTIVE,";
+                sql += "[AUTHREQ] = @AUTHREQ, [COPAY] = @COPAY, [Modifier1] = @Modifier1, [Modifier2] = @Modifier2,";
+                sql += "[Modifier3] = @Modifier3, [Modifier4] = @Modifier4, [AUTOUNIT] = @AUTOUNIT,";
+                sql += "[ROUNDRULE] = @ROUNDRULE, [RelatedSplitCode] = @RelatedSplitCode, [BCBANOTEREQUIRED] = @BCBANOTEREQUIRED";
+                sql += "";
+                sql += " WHERE SvcID = " + _SvcID.ToString();
+            }
+            return sql;
+        }
+
+        private object getDateOrNull(DateTime d)
+        {
+            if (d == Convert.ToDateTime(null))
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return d;
+            }
+        }
+        #endregion
+    }
+
+
 
     #endregion
 

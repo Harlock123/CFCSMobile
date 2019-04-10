@@ -1905,7 +1905,63 @@ namespace CFCSMobileWebServices.Controllers
 
                 // here we should fetch the auth and decrement units on it based on Payload minutes and Auth Unit Type..
 
+                tblMemberAuthorizedServices TheAuth = new tblMemberAuthorizedServices(DBCON());
+                tblLOOKUPSERVICES TheSvc = new tblLOOKUPSERVICES(DBCON());
+
+                TheAuth.Read(payload.AUTH); // fetch the auth by the Authnumber as opposed to the Auth ID using the Overload
+                TheSvc.Read(payload.SVC); // Fetch the associated service using the String version of the read overload
+
+                int RemainingUnits = TheAuth.REMAININGUNITS;
+
+                int u = 0;
+
+                switch (TheSvc.UnitType.Trim())
+                {
+                    case "1":
+
+                        u = payload.MINUTES + 8;
+                        u = u / 15;
+
+                        TheAuth.REMAININGUNITS -= u;
+
+                        break;
+                    case "2":
+                        u = payload.MINUTES + 15;
+                        u = u / 30;
+
+                        TheAuth.REMAININGUNITS -= u;
+
+                        break;
+                    case "3":
+                        u = payload.MINUTES + 23;
+                        u = u / 45;
+
+                        TheAuth.REMAININGUNITS -= u;
+
+                        break;
+                    case "4":
+                        u = payload.MINUTES + 30;
+                        u = u / 60;
+
+                        TheAuth.REMAININGUNITS -= u;
+
+                        break;
+                    case "5":
+                        TheAuth.REMAININGUNITS -= -1;
+
+                        break;
+                    default:
+
+                        break;
+                }
+
+                TheAuth.Update();
+
+
                 // cleanup Isle 3
+
+                TheSvc = null;
+                TheAuth = null;
 
                 menc = null;
                 mds = null;
