@@ -12,6 +12,7 @@
         <RowDefinition Height="20"/>
         <RowDefinition Height="20"/>
         <RowDefinition Height="20"/>
+        <RowDefinition Height="20"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -43,8 +44,8 @@
            Text=""/>
            
     <local:LabledDateControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="lblAddress" TitleText="Address:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl Grid.Row="2" Grid.Column="0" x:Name="lblWorkPhone" TitleText="Work:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl Grid.Row="2" Grid.Column="1" x:Name="lblCellPhone" TitleText="Cell:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
-    <local:LabledDateControl Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" x:Name="lblEmail" TitleText="Email:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="lblEmail" TitleText="Email:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl Grid.Row="3" Grid.Column="0" x:Name="lblWorkPhone" TitleText="Work:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
+    <local:LabledDateControl Grid.Row="3" Grid.Column="1" x:Name="lblCellPhone" TitleText="Cell:" TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
     
 </Grid>
