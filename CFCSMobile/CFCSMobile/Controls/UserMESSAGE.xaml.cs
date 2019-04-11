@@ -35,9 +35,15 @@ namespace CFCSMobile.Controls
         {
 
             if (evenodd % 2 == 0)
+            {
                 theGrid.BackgroundColor = Settings.EvenColor;
+                FlagAsReadButton.BackgroundColor = Settings.EvenColor;
+            }
             else
+            {
                 theGrid.BackgroundColor = Settings.OddColor;
+                FlagAsReadButton.BackgroundColor = Settings.OddColor;
+            }
         }
 
         private async void ImageButton_Clicked(object sender, EventArgs e)

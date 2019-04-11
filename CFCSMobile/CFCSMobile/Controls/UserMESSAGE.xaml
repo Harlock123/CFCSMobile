@@ -31,7 +31,8 @@
     <local:LabledDateControl x:Name="LBL" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TitleText="Message Detail:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
-    <ImageButton Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" HeightRequest="40" WidthRequest="40" HorizontalOptions="End" Padding="0,0,14,0"
+    <ImageButton x:Name="FlagAsReadButton" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" 
+                 HeightRequest="40" WidthRequest="40" HorizontalOptions="End" Padding="0,0,14,0"
                  Source="{x:OnPlatform Default='FlagAsRead.png',Android='FlagAsRead.png', UWP='Assets/FlagAsRead.png'}"
                  Clicked="ImageButton_Clicked"></ImageButton>
 
