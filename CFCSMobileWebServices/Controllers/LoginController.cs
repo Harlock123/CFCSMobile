@@ -1979,7 +1979,7 @@ namespace CFCSMobileWebServices.Controllers
             return Json(result);
         }
 
-
+        
         [Route("api/Login/FlagMessageAsRead")]
         [HttpPost]
         public JsonResult<bool> FlagMessageAsRead([FromBody] string MessageID)

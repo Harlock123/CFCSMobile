@@ -42,6 +42,7 @@ namespace CFCSMobile
 
         static public Color EvenColor = Color.FromHex("#FFB0EEB0");
         static public Color OddColor = Color.LightYellow;
+        static public Color ErrorColor = Color.LightPink;
 
         static public Color ReferralBackgroundColor = Color.FromHex("#C8F1FC");
 

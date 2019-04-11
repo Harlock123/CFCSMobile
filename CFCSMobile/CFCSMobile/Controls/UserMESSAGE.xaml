@@ -28,7 +28,7 @@
     <local:LabledDateControl x:Name="CreateDate" Grid.Row="2" Grid.Column="0" TitleText="Created:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
-    <local:LabledDateControl x:Name="LBL" Grid.Row="3" Grid.Column="0" TitleText="Message Detail:" 
+    <local:LabledDateControl x:Name="LBL" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TitleText="Message Detail:" 
                              TitleFontSize="10" ValueFontSize="12"></local:LabledDateControl>
 
     <ImageButton Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" HeightRequest="40" WidthRequest="40" HorizontalOptions="End" Padding="0,0,14,0"
